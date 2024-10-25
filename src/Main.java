@@ -1,13 +1,28 @@
-import presentation.IDE;
+package presentation;
+
+import application.EditorController;
+import domain.JavaAutoCompleteService;
+import domain.JavaCodeRunnerService;
+import domain.JavaSyntaxHighlighterService;
+import infrastructure.FileService;
 
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        // Launch the IDE in the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
-            IDE ide = new IDE();
-            ide.setVisible(true); // Make sure the IDE window is visible
+            // Initialize language-specific services
+            var autoCompleteService = new JavaAutoCompleteService();
+            var codeRunnerService = new JavaCodeRunnerService();
+            var syntaxHighlighterService = new JavaSyntaxHighlighterService();
+            var fileService = new FileService();
+
+            // Create EditorController with language-specific services
+            var editorController = new EditorController(autoCompleteService, codeRunnerService, syntaxHighlighterService, fileService);
+
+            // Create and display the IDE
+            IDE ide = new IDE(editorController);
+            ide.setVisible(true);
         });
     }
 }

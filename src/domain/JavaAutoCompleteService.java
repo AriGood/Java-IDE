@@ -1,15 +1,23 @@
 package domain;
 
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class JavaAutoCompleteService extends AutoCompleteService {
-    private final String[] keywords = {"class", "public", "private", "protected", "void", "static", "if", "else", "for", "while"};
+
+    private static final List<String> JAVA_KEYWORDS = Arrays.asList(
+            "public", "private", "protected", "class", "void", "int", "String", "if", "else", "while", "for", "return"
+    );
 
     @Override
-    public void enableAutoComplete(JTextComponent textComponent, JPopupMenu popup) {
-        // Logic to gather auto-complete suggestions based on current text
-        String currentText = textComponent.getText();
-        showPopup(popup, textComponent, keywords); // Show keywords as suggestions
+    protected List<String> getSuggestions(String prefix) {
+        List<String> matchingSuggestions = new ArrayList<>();
+        for (String keyword : JAVA_KEYWORDS) {
+            if (keyword.startsWith(prefix)) {
+                matchingSuggestions.add(keyword);
+            }
+        }
+        return matchingSuggestions;
     }
 }

@@ -5,21 +5,24 @@ import application.EditorController;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyAdapter;
 
 public class IDE extends JFrame {
-    private JTextPane editor;
-    private JTextArea outputArea;
-    private JPopupMenu autoCompletePopup;
+    private final JTextPane editor;
+    private final JTextArea outputArea;
+    private final JPopupMenu autoCompletePopup;
+
     private final EditorController editorController;
 
-    // Timer for debounce
-    private Timer debounceTimer;
+    public IDE(EditorController editorController) {
+        this.editorController = editorController;
+        editor = new JTextPane();
+        outputArea = new JTextArea();
+        autoCompletePopup = new JPopupMenu();
 
-    public IDE() {
-        editorController = new EditorController(); // Initialize the editor controller
         setupUI();
     }
 
@@ -28,10 +31,6 @@ public class IDE extends JFrame {
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        editor = new JTextPane();
-        outputArea = new JTextArea();
-        autoCompletePopup = new JPopupMenu();
 
         editor.setFont(new Font("Monospaced", Font.PLAIN, 12));
         outputArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -45,17 +44,18 @@ public class IDE extends JFrame {
         editor.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                resetDebounceTimer();
+                deferSyntaxHighlighting();
+                showAutoCompletePopup();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                resetDebounceTimer();
+                deferSyntaxHighlighting();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                resetDebounceTimer();
+                deferSyntaxHighlighting();
             }
         });
 
@@ -64,56 +64,33 @@ public class IDE extends JFrame {
         runButton.addActionListener(e -> runCode());
         add(runButton, BorderLayout.SOUTH);
 
-        // Initialize the debounce timer
-        debounceTimer = new Timer(300, new ActionListener() {
+        // Set up key listener for auto-complete selection with Tab
+        editor.addKeyListener(new KeyAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                // Execute highlighting in a separate thread to avoid locking the UI
-                SwingUtilities.invokeLater(() -> {
-                    highlightSyntax();
-                    showAutoCompletePopup();
-                });
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_TAB && autoCompletePopup.isVisible()) {
+                    if (autoCompletePopup.getComponentCount() > 0) {
+                        ((JMenuItem) autoCompletePopup.getComponent(0)).doClick();
+                    }
+                    e.consume();
+                }
             }
         });
-        debounceTimer.setRepeats(false); // Only execute once per timer reset
     }
 
-    private void resetDebounceTimer() {
-        if (debounceTimer.isRunning()) {
-            debounceTimer.restart(); // Restart the timer if already running
-        } else {
-            debounceTimer.start(); // Start the timer if not running
-        }
+    private void deferSyntaxHighlighting() {
+        SwingUtilities.invokeLater(this::highlightSyntax);
     }
 
     private void highlightSyntax() {
-        // Check if the document is already being modified to avoid IllegalStateException
-        try {
-            editorController.highlightSyntax(editor);
-        } catch (IllegalStateException e) {
-            // Handle the case where modifications are attempted during notification
-            e.printStackTrace();
-        }
+        editorController.highlightSyntax(editor);
     }
 
     private void showAutoCompletePopup() {
-        if (autoCompletePopup.isVisible()) {
-            autoCompletePopup.setVisible(false);
-        }
-
-        String text = editor.getText();
-        // Here, you can implement logic to get suggestions based on the current input
         editorController.handleAutoComplete(editor, autoCompletePopup);
     }
 
     private void runCode() {
         editorController.runCode(editor, outputArea);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            IDE ide = new IDE();
-            ide.setVisible(true);
-        });
     }
 }
