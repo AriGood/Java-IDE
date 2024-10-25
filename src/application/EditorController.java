@@ -13,6 +13,7 @@ public class EditorController {
     private final domain.AutoCompleteService autoCompleteService;
     private final FileService fileService;
 
+
     public EditorController() {
         this.autoCompleteService = new domain.AutoCompleteService();
         this.fileService = new FileService();

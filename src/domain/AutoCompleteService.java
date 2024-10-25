@@ -1,95 +1,47 @@
 package domain;
 
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class AutoCompleteService {
-    // Define keywords for auto-complete (can be expanded)
-    private final String[] keywords = {
-            "public", "private", "protected", "class", "void", "static", "final",
-            "int", "double", "float", "String", "new", "return", "if", "else",
-            "for", "while", "try", "catch", "import", "package", "boolean",
-            "true", "false"
-    };
 
     public void enableAutoComplete(JTextComponent textComponent, JPopupMenu popup) {
-        // Register a KeyListener to detect input and trigger suggestions
+        // Sample suggestions for demonstration
+        String[] suggestions = {"public", "private", "protected", "class", "void", "int", "String", "if", "else"};
+
         textComponent.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                try {
-                    String typedWord = getLastWord(textComponent);
-                    if (!typedWord.isEmpty()) {
-                        // Get matching suggestions and show popup if found
-                        List<String> suggestions = getSuggestions(typedWord);
-                        if (!suggestions.isEmpty()) {
-                            showSuggestions(textComponent, popup, suggestions);
-                        } else {
-                            popup.setVisible(false);
+                String text = textComponent.getText();
+                String lastWord = getLastWord(text);
+                if (lastWord.length() > 0) {
+                    popup.removeAll(); // Clear previous suggestions
+
+                    for (String suggestion : suggestions) {
+                        if (suggestion.startsWith(lastWord)) {
+                            JMenuItem item = new JMenuItem(suggestion);
+                            item.addActionListener(actionEvent -> {
+                                textComponent.setText(text.substring(0, text.length() - lastWord.length()) + suggestion + " ");
+                                popup.setVisible(false); // Hide the popup after selection
+                            });
+                            popup.add(item);
                         }
                     }
-                } catch (BadLocationException ex) {
-                    ex.printStackTrace();
+
+                    if (popup.getComponentCount() > 0) {
+                        popup.show(textComponent, textComponent.getCaret().getMagicCaretPosition().x, textComponent.getCaret().getMagicCaretPosition().y);
+                    }
+                } else {
+                    popup.setVisible(false);
                 }
             }
         });
     }
 
-    private String getLastWord(JTextComponent textComponent) throws BadLocationException {
-        int caretPosition = textComponent.getCaretPosition();
-        int wordStart = javax.swing.text.Utilities.getWordStart(textComponent, caretPosition);
-        return textComponent.getText(wordStart, caretPosition - wordStart).trim();
-    }
-
-    private List<String> getSuggestions(String prefix) {
-        List<String> suggestions = new ArrayList<>();
-        for (String keyword : keywords) {
-            if (keyword.startsWith(prefix)) {
-                suggestions.add(keyword);
-            }
-        }
-        return suggestions;
-    }
-
-    private void showSuggestions(JTextComponent textComponent, JPopupMenu popup, List<String> suggestions) {
-        popup.removeAll();
-
-        // Create menu items for each suggestion
-        for (String suggestion : suggestions) {
-            JMenuItem item = new JMenuItem(suggestion);
-            item.addActionListener(e -> {
-                try {
-                    insertAutoCompleteSuggestion(textComponent, suggestion);
-                    popup.setVisible(false);
-                } catch (BadLocationException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            popup.add(item);
-        }
-
-        // Show popup near the caret position
-        try {
-            int caretPosition = textComponent.getCaretPosition();
-            int x = textComponent.modelToView(caretPosition).x;
-            int y = textComponent.modelToView(caretPosition).y + textComponent.getFontMetrics(textComponent.getFont()).getHeight();
-            popup.show(textComponent, x, y);
-            popup.setVisible(true);
-        } catch (BadLocationException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void insertAutoCompleteSuggestion(JTextComponent textComponent, String suggestion) throws BadLocationException {
-        int caretPosition = textComponent.getCaretPosition();
-        int wordStart = javax.swing.text.Utilities.getWordStart(textComponent, caretPosition);
-
-        // Replace the current word with the suggestion
-        textComponent.getDocument().remove(wordStart, caretPosition - wordStart);
-        textComponent.getDocument().insertString(wordStart, suggestion, null);
+    private String getLastWord(String text) {
+        String[] words = text.split("\\s+");
+        return words[words.length - 1];
     }
 }
