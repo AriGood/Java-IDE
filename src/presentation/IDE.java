@@ -1,138 +1,119 @@
 package presentation;
 
 import application.EditorController;
-import application.SyntaxHighlighter;
-import domain.AutoCompleteService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class IDE {
-    private final JFrame frame;
-    private final JTextPane editor;
-    private final JPopupMenu popup;
+public class IDE extends JFrame {
+    private JTextPane editor;
+    private JTextArea outputArea;
+    private JPopupMenu autoCompletePopup;
     private final EditorController editorController;
-    private final JTextArea outputArea;
-    private final AutoCompleteService autoCompleteService;
+
+    // Timer for debounce
+    private Timer debounceTimer;
 
     public IDE() {
-        frame = new JFrame("Minimal IDE");
-        editor = new JTextPane();
-        popup = new JPopupMenu();
-        outputArea = new JTextArea();
-        editorController = new EditorController();
-        autoCompleteService = new AutoCompleteService();
-
-        setupEditor();
-        setupFrame();
-        loadCodeFromFile();  // Load code from TempProgram.java when the IDE starts
+        editorController = new EditorController(); // Initialize the editor controller
+        setupUI();
     }
 
-    private void setupEditor() {
-        editor.setFont(new Font("Monospaced", Font.PLAIN, 12)); // Set font for better visibility
-        SyntaxHighlighter syntaxHighlighter = new SyntaxHighlighter(editor);
+    private void setupUI() {
+        setTitle("Simple IDE");
+        setSize(800, 600);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
+        editor = new JTextPane();
+        outputArea = new JTextArea();
+        autoCompletePopup = new JPopupMenu();
+
+        editor.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        outputArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        outputArea.setEditable(false);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JScrollPane(editor), new JScrollPane(outputArea));
+        splitPane.setDividerLocation(400);
+        add(splitPane);
+
+        // Set up syntax highlighting
         editor.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                syntaxHighlighter.highlight();
-                editorController.handleAutoComplete(editor, popup); // Call to handle auto-complete
+                resetDebounceTimer();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                syntaxHighlighter.highlight();
+                resetDebounceTimer();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                // Not needed for plain text
+                resetDebounceTimer();
             }
         });
 
-        // Add key listener for triggering auto-complete and handling Tab key
-//        editor.addKeyListener(new KeyAdapter() {
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//                if (e.getKeyCode() == KeyEvent.VK_TAB) {
-//                    // Check if the auto-complete popup is visible
-//                    if (popup.isVisible()) {
-//                        // Get the first component in the popup
-//                        Component[] items = popup.getComponents();
-//                        if (items.length > 0 && items[0] instanceof JMenuItem) {
-//                            // Cast the first item to JMenuItem and simulate a click
-//                            JMenuItem firstItem = (JMenuItem) items[0];
-//                            firstItem.doClick(); // Simulate clicking the first suggestion
-//
-//                            // Optionally, you can set the text of the editor to the selected suggestion
-//                            String selectedText = firstItem.getText();
-//                            int caretPosition = editor.getCaretPosition();
-//                            try {
-//                                // Insert the selected text at the caret position
-//                                editor.getDocument().insertString(caretPosition, selectedText, null);
-//                            } catch (Exception ex) {
-//                                ex.printStackTrace();
-//                            }
-//
-//                            e.consume(); // Prevent further processing of the Tab key
-//                        }
-//                    }
-//                }
-//            }
-//        });
+        // Add a button to run the code
+        JButton runButton = new JButton("Run Code");
+        runButton.addActionListener(e -> runCode());
+        add(runButton, BorderLayout.SOUTH);
 
-    }
-
-    private void setupFrame() {
-        frame.setLayout(new BorderLayout());
-
-        // Add editor in the center
-        frame.add(new JScrollPane(editor), BorderLayout.CENTER);
-
-        // Add output area at the bottom
-        outputArea.setEditable(false);
-        frame.add(new JScrollPane(outputArea), BorderLayout.SOUTH);
-        outputArea.setPreferredSize(new Dimension(800, 200));
-
-        // Add Run button
-        JPanel buttonPanel = new JPanel();
-        JButton runButton = new JButton("Run");
-        runButton.addActionListener(e -> editorController.runCode(editor, outputArea));
-        buttonPanel.add(runButton);
-        frame.add(buttonPanel, BorderLayout.NORTH);
-
-        // Final settings
-        frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-    }
-
-    private void loadCodeFromFile() {
-        File file = new File("Main.java");
-        if (file.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                StringBuilder fileContent = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    fileContent.append(line).append("\n");
-                }
-                editor.setText(fileContent.toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(frame, "Error loading code from file: " + e.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
+        // Initialize the debounce timer
+        debounceTimer = new Timer(300, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Execute highlighting in a separate thread to avoid locking the UI
+                SwingUtilities.invokeLater(() -> {
+                    highlightSyntax();
+                    showAutoCompletePopup();
+                });
             }
+        });
+        debounceTimer.setRepeats(false); // Only execute once per timer reset
+    }
+
+    private void resetDebounceTimer() {
+        if (debounceTimer.isRunning()) {
+            debounceTimer.restart(); // Restart the timer if already running
+        } else {
+            debounceTimer.start(); // Start the timer if not running
         }
     }
 
+    private void highlightSyntax() {
+        // Check if the document is already being modified to avoid IllegalStateException
+        try {
+            editorController.highlightSyntax(editor);
+        } catch (IllegalStateException e) {
+            // Handle the case where modifications are attempted during notification
+            e.printStackTrace();
+        }
+    }
+
+    private void showAutoCompletePopup() {
+        if (autoCompletePopup.isVisible()) {
+            autoCompletePopup.setVisible(false);
+        }
+
+        String text = editor.getText();
+        // Here, you can implement logic to get suggestions based on the current input
+        editorController.handleAutoComplete(editor, autoCompletePopup);
+    }
+
+    private void runCode() {
+        editorController.runCode(editor, outputArea);
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(IDE::new);
+        SwingUtilities.invokeLater(() -> {
+            IDE ide = new IDE();
+            ide.setVisible(true);
+        });
     }
 }
