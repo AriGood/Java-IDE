@@ -38,9 +38,12 @@ Mon 2 Dec, Tue 3 Dec
 Team Members, GitHub usernames & corresponding user stories - Group 121
 
 Team story:
-Mark wants to make a Java program for his class. He opens the IDE and installs the addons needed for his program. 
+George creates a new Java file, opens it, writes some code on it, saves it and then closes it. He then opens it again and runs it. 
+(edit as we go)
+
+(Mark wants to make a Java program for his class. He opens the IDE and installs the addons needed for his program. 
 He cloned a repository from git and opened the README file for instructions. 
-After completing all TODOS, he staged, committed, and pushed his changes to the remote repository.
+After completing all TODOS, he staged, committed, and pushed his changes to the remote repository.)
 
 Maria Burcea - marburcea:
 Jennifer wants to be able to use an IDE that highlights her syntax and errors while she codes a Java program, 
