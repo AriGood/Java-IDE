@@ -1,4 +1,4 @@
-Team Members, GitHub usernames & corresponding user stories
+Team Members, GitHub usernames & corresponding user stories - Group 121
 
 Team story:
 Mark wants to make a Java program for his class. He opens the IDE and installs the addons needed for his program. 
