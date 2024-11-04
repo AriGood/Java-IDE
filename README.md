@@ -11,4 +11,10 @@ and also provides her autocompletion options to simplify coding, and so she does
 
 Ari Good - arigood
 Bill wants to be able to use a simple ide with nice window mangment that will flage errors well he codes.
-he also wants to be able to run commands in the terminal to test code and creat dirictories.
+he also wants to be able to run commands in the terminal to test code and creat directories.
+
+Dario Sanchez - dariosanp
+Norbit wants to make a Java program for a client. He creates a new Java file and writes the main class.
+He creates and programs new testing files. He runs into an error during the coding process and uses the debugger to troubleshoot his code.
+He was able to fix his code and his customer was happy with the program.
+
