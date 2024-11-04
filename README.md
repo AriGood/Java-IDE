@@ -1,3 +1,39 @@
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TODO LIST
+Fri 8 Nov
+
+    [] Use cases described for each user story and user interations identified (each interaction becomes an Interactor with a Controller and Presenter)
+    [] All the Views sketched by hand (or using a software tool like Figma or your favourite drawing program)
+    [] A first "team use case" implemented, tested, and pushed to repo
+        Your team should have a minimal program which you can demo for your TA in the following lab 
+    [] Entities decided on: what's the data you need to manipulate from your problem domain?
+    [] Be able to make calls to the API your team has chosen.
+
+Fri 15 Nov
+
+    [] All View and View Model code written except for actionPerformed methods
+        Pair program for this so that two people know the details of each View and View Model.
+    [] In-memory data access objects created although perhaps not yet implemented to facilitate testing
+    [] Builder written that creates the views — run the program and make sure each view looks okay (you might edit the build method between runs to show a different view or create multiple main classes / methods)
+    [] Code for individual use cases begun with at least one unit test per Interactor
+
+Fri 22 Nov
+
+    [] Use cases mostly complete and test coverage over 75% for code in the Use Case and Entity layers
+        You don't need to test your Controllers, Presenters, Views, View Models, or Data Access objects
+    [] Be ready to demo your latest program to your TA in the next lab to get final feedback ahead of presentations!
+
+Fri 29 Nov
+
+    [] Team code review done to ensure Clean Architecture and that all user stories are implemented — refactor as needed!
+    [] 100% test coverage for code in the Use Case and Entity layers.
+    [] Team presentation drafted and practiced
+
+Mon 2 Dec, Tue 3 Dec
+
+    [] Team presentations during lab time (Tue is Makeup Monday)
+        More details to be posted, but be ready to talk about and demonstrate the user story you were responsible for implementing + your team's overall experience     working on the project together!
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Team Members, GitHub usernames & corresponding user stories - Group 121
 
 Team story:
@@ -23,4 +59,4 @@ Tracy wants to manage files and run Java programs directly through an integrated
 Yara Alkurdi - yaraalkurdi:
 Jessica, while developing her Java program, wants to use a Terminal within her IDE, so that she can run commands, scan output, and manage multiple command sessions through tabs, while viewing the output directly via System.out, to efficiently debug and test her code.
 
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
