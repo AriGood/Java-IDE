@@ -51,7 +51,7 @@ Bill wants to be able to use a simple ide with nice window management that will 
 
 Dario Sanchez - dariosanp:
 Norbit wants to make a Java program for a client. He runs into an error during the coding process and uses the debugger to troubleshoot his code. He was able to see the values of his variables and
-was able to fix his code and his customer was happy with the program.
+fixed his code so his customer was happy with the program.
 
 Mariana Novoa - mariana-novoa:
 Tracy wants to manage files and run Java programs directly through an integrated terminal, so that she can create, delete, and run files without leaving the IDE.
