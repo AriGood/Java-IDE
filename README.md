@@ -50,9 +50,8 @@ Ari Good - arigood:
 Bill wants to be able to use a simple ide with nice window management that will flag errors well he codes. He also wants to be able to run commands in the terminal to test code and create directories. 
 
 Dario Sanchez - dariosanp:
-Norbit wants to make a Java program for a client. He creates a new Java file and writes the main class.
-He creates and programs new testing files. He runs into an error during the coding process and uses the debugger to troubleshoot his code.
-He was able to fix his code and his customer was happy with the program.
+Norbit wants to make a Java program for a client. He runs into an error during the coding process and uses the debugger to troubleshoot his code. He was able to see the values of his variables and
+was able to fix his code and his customer was happy with the program.
 
 Mariana Novoa - mariana-novoa:
 Tracy wants to manage files and run Java programs directly through an integrated terminal, so that she can create, delete, and run files without leaving the IDE.
