@@ -17,7 +17,8 @@ Norbit wants to make a Java program for a client. He creates a new Java file and
 He creates and programs new testing files. He runs into an error during the coding process and uses the debugger to troubleshoot his code.
 He was able to fix his code and his customer was happy with the program.
 
-Tracy wants to manage files and run Java programs directly through an integrated terminal, so that she can create, delete, and run files without leaving the IDE. [Mariana]
+Mariana Novoa - mariana-novoa:
+Tracy wants to manage files and run Java programs directly through an integrated terminal, so that she can create, delete, and run files without leaving the IDE.
 
 
 
