@@ -153,7 +153,6 @@ as to not break something.
         lineNumbersPane.setBackground(Color.LIGHT_GRAY);
         editorScrollPane.setRowHeaderView(this.lineNumbersPane);
         return editorScrollPane;
-        return null;
     }
 
 }
