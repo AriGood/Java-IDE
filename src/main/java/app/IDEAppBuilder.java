@@ -14,7 +14,7 @@ import view.NoteView;
 /**
  * Builder for the Note Application.
  */
-public class NoteAppBuilder {
+public class IDEAppBuilder {
     public static final int HEIGHT = 300;
     public static final int WIDTH = 400;
     private NoteDataAccessInterface noteDAO;
@@ -27,7 +27,7 @@ public class NoteAppBuilder {
      * @param noteDataAccess the DAO to use
      * @return this builder
      */
-    public NoteAppBuilder addNoteDAO(NoteDataAccessInterface noteDataAccess) {
+    public IDEAppBuilder addNoteDAO(NoteDataAccessInterface noteDataAccess) {
         noteDAO = noteDataAccess;
         return this;
     }
@@ -39,7 +39,7 @@ public class NoteAppBuilder {
      * @return this builder
      * @throws RuntimeException if this method is called before addNoteView
      */
-    public NoteAppBuilder addNoteUseCase() {
+    public IDEAppBuilder addNoteUseCase() {
         final NoteOutputBoundary noteOutputBoundary = new NotePresenter(noteViewModel);
         noteInteractor = new NoteInteractor(
                 noteDAO, noteOutputBoundary);
@@ -56,7 +56,7 @@ public class NoteAppBuilder {
      * Creates the NoteView and underlying NoteViewModel.
      * @return this builder
      */
-    public NoteAppBuilder addNoteView() {
+    public IDEAppBuilder addNoteView() {
         noteViewModel = new NoteViewModel();
         noteView = new NoteView(noteViewModel);
         return this;

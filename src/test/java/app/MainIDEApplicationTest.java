@@ -11,7 +11,7 @@ import java.awt.*;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.*;
 
-public class MainNoteApplicationTest {
+public class MainIDEApplicationTest {
 
     private JFrame app;
 
@@ -35,7 +35,7 @@ public class MainNoteApplicationTest {
             }
         };
 
-        final NoteAppBuilder builder = new NoteAppBuilder();
+        final IDEAppBuilder builder = new IDEAppBuilder();
         app = builder.addNoteDAO(noteDataAccess)
                 .addNoteView()
                 .addNoteUseCase().build();
