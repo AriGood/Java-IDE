@@ -49,6 +49,7 @@ public class MainIDEApplication {
         final NoteDataAccessInterface noteDataAccess = new DBNoteDataAccessObject();
 
         final IDEAppBuilder builder = new IDEAppBuilder();
+        builder.build().setVisible(true);
 
         /*
         builder.addNoteDAO(noteDataAccess)
