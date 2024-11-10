@@ -16,28 +16,35 @@ import java.util.Arrays;
 public class FileTreeGenerator {
     //TODO: check if this actually works. It automatically generates JTree from chosen direcotry structure...
     private JTree fileTree;
-    private JScrollPane fileScrollPane;
     //made root an instance variable so we can update the tree.
-    private DefaultMutableTreeNode rootNode;
+    private DefaultMutableTreeNode treeRootNode;
     //made the directory an instance variable to recycle it in create, delete, and save.
-    private File directory;
+    private final File directory;
 
-    public FileTreeGenerator() {
-        chooseDiretory();
+    public FileTreeGenerator(File projectDirectory) {
+        directory = projectDirectory;
     }
 
-    private void chooseDiretory() {
+    /* Reformatted the way this class works by outsourcing any swing operations
+    to the app builder. That way "FileTreeGenerator" only performs tree opperations.
+    public void chooseDiretory() {
         JFileChooser fileChooser = new JFileChooser();
+        //Changed the directory chooser Title at the top.
+        fileChooser.setDialogTitle("Select a Project to Open");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int option = fileChooser.showOpenDialog(null);
 
         if (option == JFileChooser.APPROVE_OPTION) {
             //refactored to the instance variable.
             directory = fileChooser.getSelectedFile();
-            rootNode = createNodesFromDirectory(directory);
-            fileTree = new JTree(rootNode);
-            fileScrollPane = new JScrollPane(fileTree);
         }
+    }
+     */
+
+    public JTree createFileTree(File directory) {
+        treeRootNode = createNodesFromDirectory(directory);
+        fileTree = new JTree(treeRootNode);
+        return fileTree;
     }
 
     private DefaultMutableTreeNode createNodesFromDirectory(File directory) {
@@ -60,9 +67,6 @@ public class FileTreeGenerator {
         return directory;
     }
 
-    public JScrollPane getFileScrollPane() {
-        return fileScrollPane;
-    }
 
     public void createFile(File parent) {
         String fileName = JOptionPane.showInputDialog(null, "File name:", "File", JOptionPane.QUESTION_MESSAGE);
@@ -75,7 +79,7 @@ public class FileTreeGenerator {
         try {
             if (newFile.createNewFile()) {
                 DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newFile.getName());
-                DefaultMutableTreeNode parentNode = findNodeByName(parent.getName(), rootNode);
+                DefaultMutableTreeNode parentNode = findNodeByName(parent.getName(), treeRootNode);
                 if (parentNode != null) {
                     parentNode.add(newNode);
                     ((DefaultTreeModel) fileTree.getModel()).reload(parentNode);
@@ -108,10 +112,6 @@ public class FileTreeGenerator {
     }
 
     public void deleteFile(File parentDirectory) {
-        //TODO
-    }
-
-    public void saveFile(File parentDirectory) {
         //TODO
     }
 
