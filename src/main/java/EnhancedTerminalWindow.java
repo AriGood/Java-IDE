@@ -30,7 +30,7 @@ public class EnhancedTerminalWindow extends JFrame {
         commandHistory = new ArrayList<>();
         historyIndex = -1;
 
-        // Key listener for command history
+        // Listener for command history
         inputField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
