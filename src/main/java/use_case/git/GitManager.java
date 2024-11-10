@@ -2,11 +2,15 @@ package use_case.git;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.eclipse.jgit.api.Status;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GitManager {
 
@@ -118,6 +122,95 @@ public class GitManager {
      */
     public File getCurrentDirectory() {
         return currentDirectory;
+    }
+
+    /**
+     * Add specific files to the staging area.
+     * @param filePaths List of file paths to add to staging.
+     * @throws GitAPIException if adding files fails.
+     */
+    public void addFiles(List<String> filePaths) throws GitAPIException {
+        if (currentRepository == null) {
+            throw new IllegalStateException("No repository available to add files.");
+        }
+
+        for (String filePath : filePaths) {
+            currentRepository.add().addFilepattern(filePath).call();
+        }
+    }
+
+    /**
+     * Remove specific files from the repository.
+     * @param filePaths List of file paths to remove.
+     * @throws GitAPIException if removing files fails.
+     */
+    public void removeFiles(List<String> filePaths) throws GitAPIException {
+        if (currentRepository == null) {
+            throw new IllegalStateException("No repository available to remove files.");
+        }
+
+        for (String filePath : filePaths) {
+            currentRepository.rm().addFilepattern(filePath).call();
+        }
+    }
+
+    /**
+     * Get the status of the current repository (modified, staged, untracked files).
+     * @return Status object containing repository state information.
+     * @throws GitAPIException if status retrieval fails.
+     */
+    public Status getStatus() throws GitAPIException {
+        if (currentRepository == null) {
+            throw new IllegalStateException("No repository available to get status.");
+        }
+
+        return currentRepository.status().call();
+    }
+
+    /**
+     * Get a list of recent commits from the current branch.
+     * @param maxCount The maximum number of commits to retrieve.
+     * @return List of RevCommit objects representing recent commits.
+     * @throws GitAPIException if commit retrieval fails.
+     */
+    public List<RevCommit> getCommitHistory(int maxCount) throws GitAPIException {
+        if (currentRepository == null) {
+            throw new IllegalStateException("No repository available to get commit history.");
+        }
+
+        Iterable<RevCommit> commits = currentRepository.log().setMaxCount(maxCount).call();
+        List<RevCommit> commitList = new ArrayList<>();
+        for (RevCommit commit : commits) {
+            commitList.add(commit);
+        }
+        return commitList;
+    }
+
+    /**
+     * Revert unstaged changes to tracked files in the working directory.
+     * @throws GitAPIException if revert operation fails.
+     */
+    public void revertUnstagedChanges() throws GitAPIException {
+        if (currentRepository == null) {
+            throw new IllegalStateException("No repository available to revert changes.");
+        }
+
+        currentRepository.checkout().setAllPaths(true).call();
+    }
+
+    /**
+     * Merge a branch into the current branch.
+     * @param branchName The name of the branch to merge into the current branch.
+     * @throws GitAPIException if merge operation fails.
+     */
+    public void mergeBranch(String branchName) throws GitAPIException, IOException {
+        if (currentRepository == null) {
+            throw new IllegalStateException("No repository available to merge branches.");
+        }
+
+        currentRepository.merge()
+                .include(currentRepository.getRepository().resolve(branchName))
+                .call();
     }
 
     /**
