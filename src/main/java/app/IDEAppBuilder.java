@@ -92,6 +92,7 @@ as to not break something.
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setTitle("IDE Application");
         frame.setSize(WIDTH, HEIGHT);
+        chooseDiretory();
 
         frame.setJMenuBar(makeMenuBar());
 
@@ -100,11 +101,11 @@ as to not break something.
         frame.add(makeTerminalPanel(), BorderLayout.SOUTH);
 
 
-        JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.fileScrollPane, this.editorScrollPane);
+        JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, editorScrollPane);
         leftRightSplitPane.setDividerLocation(300);
 
 
-        JSplitPane topBottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, leftRightSplitPane, this.terminalScrollPane);
+        JSplitPane topBottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, leftRightSplitPane, terminalScrollPane);
         topBottomSplitPane.setDividerLocation(400);
 
 
@@ -120,9 +121,8 @@ as to not break something.
     }
 
     private JScrollPane makeFilePanel() {
-        use_case.FileManagement.FileTreeGenerator filePane = new use_case.FileManagement.FileTreeGenerator();
-        directory = filePane.getDirectory();
-        fileScrollPane = filePane.getFileScrollPane();
+        use_case.FileManagement.FileTreeGenerator fileTreeGenerator = new use_case.FileManagement.FileTreeGenerator(directory);
+        fileScrollPane = new JScrollPane(fileTreeGenerator.createFileTree(directory));
         return fileScrollPane;
     }
 
@@ -155,6 +155,32 @@ as to not break something.
         lineNumbersPane = new JTextArea(strBuilder.toString());
         lineNumbersPane.setEditable(false);
         lineNumbersPane.setBackground(Color.LIGHT_GRAY);
+        editorScrollPane.setRowHeaderView(lineNumbersPane);
+        return editorScrollPane;
+    }
+
+    public void chooseDiretory() {
+        JFileChooser fileChooser = new JFileChooser();
+        //Changed the directory chooser Title at the top.
+        fileChooser.setDialogTitle("Select a Project to Open");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int option = fileChooser.showOpenDialog(null);
+
+        if (option == JFileChooser.APPROVE_OPTION) {
+            //refactored to the instance variable.
+            directory = fileChooser.getSelectedFile();
+        }
+    }
+
+    public File getDirectory() {
+        return directory;
+    }
+
+    public JScrollPane getTerminalScrollPane() {
+        return terminalScrollPane;
+    }
+
+    public JScrollPane getEditorScrollPane() {
         editorScrollPane.setRowHeaderView(lineNumbersPane);
         return editorScrollPane;
     }
