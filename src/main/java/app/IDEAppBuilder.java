@@ -2,13 +2,13 @@ package app;
 
 import javax.swing.*;
 
-import interface_adapter.note.NoteController;
+import interface_adapter.note.IdeController;
 import interface_adapter.note.NotePresenter;
 import interface_adapter.note.NoteViewModel;
 import use_case.note.NoteDataAccessInterface;
 import use_case.note.NoteInteractor;
 import use_case.note.NoteOutputBoundary;
-import view.NoteView;
+import view.IdeView;
 
 import java.awt.*;
 import java.io.File;
@@ -30,7 +30,7 @@ public class IDEAppBuilder {
     //Starter code instance variables.
     private NoteDataAccessInterface noteDAO;
     private NoteViewModel noteViewModel = new NoteViewModel();
-    private NoteView noteView;
+    private IdeView ideView;
     private NoteInteractor noteInteractor;
 
 
@@ -50,7 +50,7 @@ as to not break something.
     }
 
     /**
-     * Creates the objects for the Note Use Case and connects the NoteView to its
+     * Creates the objects for the Note Use Case and connects the IdeView to its
      * controller.
      * <p>This method must be called after addNoteView!</p>
      * @return this builder
@@ -61,21 +61,21 @@ as to not break something.
         noteInteractor = new NoteInteractor(
                 noteDAO, noteOutputBoundary);
 
-        final NoteController controller = new NoteController(noteInteractor);
-        if (noteView == null) {
+        final IdeController controller = new IdeController(noteInteractor);
+        if (ideView == null) {
             throw new RuntimeException("addNoteView must be called before addNoteUseCase");
         }
-        noteView.setNoteController(controller);
+        ideView.setNoteController(controller);
         return this;
     }
 
     /**
-     * Creates the NoteView and underlying NoteViewModel.
+     * Creates the IdeView and underlying NoteViewModel.
      * @return this builder
      */
     public IDEAppBuilder addNoteView() {
         noteViewModel = new NoteViewModel();
-        noteView = new NoteView(noteViewModel);
+        ideView = new IdeView(noteViewModel);
         return this;
     }
 

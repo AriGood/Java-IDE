@@ -13,29 +13,26 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import interface_adapter.note.NoteController;
+import interface_adapter.note.IdeController;
 import interface_adapter.note.NoteState;
 import interface_adapter.note.NoteViewModel;
 
 /**
  * The View for when the user is viewing a note in the program.
  */
-public class NoteView extends JPanel implements ActionListener, PropertyChangeListener {
+public class IdeView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private final NoteViewModel noteViewModel;
-
-    private final JLabel noteName = new JLabel("note for jonathan_calver2");
-    private final JTextArea noteInputField = new JTextArea();
+    private final JTextArea ideInputField = new JTextArea();
 
     private final JButton saveButton = new JButton("Save");
     private final JButton refreshButton = new JButton("Refresh");
-    private NoteController noteController;
+    private IdeController ideController;
 
-    public NoteView(NoteViewModel noteViewModel) {
+    public IdeView(NoteViewModel noteViewModel) {
 
-        noteName.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.noteViewModel = noteViewModel;
-        this.noteViewModel.addPropertyChangeListener(this);
+        JLabel ideName = new JLabel("note for jonathan_calver2");
+        ideName.setAlignmentX(Component.CENTER_ALIGNMENT);
+        noteViewModel.addPropertyChangeListener(this);
 
         final JPanel buttons = new JPanel();
         buttons.add(saveButton);
@@ -44,7 +41,7 @@ public class NoteView extends JPanel implements ActionListener, PropertyChangeLi
         saveButton.addActionListener(
                 evt -> {
                     if (evt.getSource().equals(saveButton)) {
-                        noteController.execute(noteInputField.getText());
+                        ideController.execute(ideInputField.getText());
 
                     }
                 }
@@ -53,7 +50,7 @@ public class NoteView extends JPanel implements ActionListener, PropertyChangeLi
         refreshButton.addActionListener(
                 evt -> {
                     if (evt.getSource().equals(refreshButton)) {
-                        noteController.execute(null);
+                        ideController.execute(null);
 
                     }
                 }
@@ -61,8 +58,8 @@ public class NoteView extends JPanel implements ActionListener, PropertyChangeLi
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        this.add(noteName);
-        this.add(noteInputField);
+        this.add(ideName);
+        this.add(ideInputField);
         this.add(buttons);
     }
 
@@ -85,11 +82,11 @@ public class NoteView extends JPanel implements ActionListener, PropertyChangeLi
     }
 
     private void setFields(NoteState state) {
-        noteInputField.setText(state.getNote());
+        ideInputField.setText(state.getNote());
     }
 
-    public void setNoteController(NoteController controller) {
-        this.noteController = controller;
+    public void setNoteController(IdeController controller) {
+        this.ideController = controller;
     }
 }
 

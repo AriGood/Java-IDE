@@ -5,11 +5,11 @@ import use_case.note.NoteInputBoundary;
 /**
  * Controller for our Note related Use Cases.
  */
-public class NoteController {
+public class IdeController {
 
     private final NoteInputBoundary noteInteractor;
 
-    public NoteController(NoteInputBoundary noteInteractor) {
+    public IdeController(NoteInputBoundary noteInteractor) {
         this.noteInteractor = noteInteractor;
     }
 
