@@ -1,5 +1,9 @@
 package app;
 
+import data_access.AutoCompleteBST;
+import use_case.AutoCompleteOperations.AutoCompleteOperations;
+import data_access.AutoCompleteBST;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -14,6 +18,7 @@ public class IDEAppBuilder {
 
     private JScrollPane terminalScrollPane;
     private JTextArea codeEditor;
+    private AutoCompleteOperations autoCompleteOperations;
     private JScrollPane editorScrollPane;
     private JScrollPane fileScrollPane;
     private JTextArea lineNumbersPane;
@@ -92,6 +97,12 @@ public class IDEAppBuilder {
         lineNumbersPane.setBackground(Color.LIGHT_GRAY);
         editorScrollPane.setRowHeaderView(lineNumbersPane);
         return editorScrollPane;
+    }
+
+    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
+        JPopupMenu popup = new JPopupMenu();
+        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
+        autoCompleteOperations.enableAutoComplete(codeEditor, popup);
     }
 
     public JTextArea getCodeEditor() {
