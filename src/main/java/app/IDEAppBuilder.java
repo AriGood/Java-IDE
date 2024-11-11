@@ -148,10 +148,14 @@ as to not break something.
     private JScrollPane makeEditorPanel() {
         JTextArea codeEditor = new JTextArea();
         editorScrollPane = new JScrollPane(codeEditor);
-        lineNumbersPane = new JTextArea("1\n");
+        StringBuilder strBuilder = new StringBuilder();
+        for (int i = 1; i <= 500; i++) {
+            strBuilder.append(i).append("\n");
+        }
+        lineNumbersPane = new JTextArea(strBuilder.toString());
         lineNumbersPane.setEditable(false);
         lineNumbersPane.setBackground(Color.LIGHT_GRAY);
-        editorScrollPane.setRowHeaderView(this.lineNumbersPane);
+        editorScrollPane.setRowHeaderView(lineNumbersPane);
         return editorScrollPane;
     }
 
