@@ -1,9 +1,12 @@
 package app;
 
+import entity.Tab;
+
 import javax.swing.*;
 
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Builder for the Note Application.
@@ -11,6 +14,7 @@ import java.io.File;
 public class IDEAppBuilder {
     public static final int HEIGHT = 600;
     public static final int WIDTH = 800;
+    public ArrayList<Tab> tabs = null;
 
     private JScrollPane terminalScrollPane;
     private JScrollPane editorScrollPane;
