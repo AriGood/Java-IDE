@@ -20,68 +20,11 @@ public class IDEAppBuilder {
     public static final int HEIGHT = 600;
     public static final int WIDTH = 800;
 
-    //Our instance variables.
     private JScrollPane terminalScrollPane;
     private JScrollPane editorScrollPane;
     private JScrollPane fileScrollPane;
     private JTextArea lineNumbersPane;
     private File directory;
-
-    //Starter code instance variables.
-    private NoteDataAccessInterface noteDAO;
-    private NoteViewModel noteViewModel = new NoteViewModel();
-    private IdeView ideView;
-    private NoteInteractor noteInteractor;
-
-
-    //-------------------------------------------------------------------------------------------------------------------------
-/* I split The code I integrated my IDE builder into the Starter code,
-this section is part of the starter code that I didn't use, but I left it in
-as to not break something.
-*/
-    /**
-     * Sets the NoteDAO to be used in this application.
-     * @param noteDataAccess the DAO to use
-     * @return this builder
-     */
-    public IDEAppBuilder addNoteDAO(NoteDataAccessInterface noteDataAccess) {
-        noteDAO = noteDataAccess;
-        return this;
-    }
-
-    /**
-     * Creates the objects for the Note Use Case and connects the IdeView to its
-     * controller.
-     * <p>This method must be called after addNoteView!</p>
-     * @return this builder
-     * @throws RuntimeException if this method is called before addNoteView
-     */
-    public IDEAppBuilder addNoteUseCase() {
-        final NoteOutputBoundary noteOutputBoundary = new NotePresenter(noteViewModel);
-        noteInteractor = new NoteInteractor(
-                noteDAO, noteOutputBoundary);
-
-        final IdeController controller = new IdeController(noteInteractor);
-        if (ideView == null) {
-            throw new RuntimeException("addNoteView must be called before addNoteUseCase");
-        }
-        ideView.setNoteController(controller);
-        return this;
-    }
-
-    /**
-     * Creates the IdeView and underlying NoteViewModel.
-     * @return this builder
-     */
-    public IDEAppBuilder addNoteView() {
-        noteViewModel = new NoteViewModel();
-        ideView = new IdeView(noteViewModel);
-        return this;
-    }
-
-
-    //---------------------------------------------------------------------------------------------------------------------
-
 
     /**
      * Builds the application.
@@ -112,9 +55,6 @@ as to not break something.
         frame.add(topBottomSplitPane, BorderLayout.CENTER);
 
         frame.setVisible(true);
-
-        // refresh so that the note will be visible when we start the program
-        //noteInteractor.executeRefresh();
 
         return frame;
 
@@ -161,13 +101,11 @@ as to not break something.
 
     public void chooseDiretory() {
         JFileChooser fileChooser = new JFileChooser();
-        //Changed the directory chooser Title at the top.
         fileChooser.setDialogTitle("Select a Project to Open");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int option = fileChooser.showOpenDialog(null);
 
         if (option == JFileChooser.APPROVE_OPTION) {
-            //refactored to the instance variable.
             directory = fileChooser.getSelectedFile();
         }
     }
