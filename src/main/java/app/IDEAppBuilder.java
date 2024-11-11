@@ -17,7 +17,6 @@ public class IDEAppBuilder {
     public ArrayList<Tab> tabs = null;
 
     private JScrollPane terminalScrollPane;
-    private JTextArea codeEditor;
     private JScrollPane editorScrollPane;
     private JScrollPane fileScrollPane;
     private JTextArea lineNumbersPane;
@@ -36,7 +35,7 @@ public class IDEAppBuilder {
 
         frame.setJMenuBar(makeMenuBar());
 
-        frame.add(makeEditorPanel(), BorderLayout.CENTER);
+        frame.add(makeEmptyEditorPanel(), BorderLayout.CENTER);
         frame.add(makeFilePanel(), BorderLayout.WEST);
         frame.add(makeTerminalPanel(), BorderLayout.SOUTH);
 
@@ -82,25 +81,28 @@ public class IDEAppBuilder {
         return terminalScrollPane;
     }
 
-    private JScrollPane makeEditorPanel() {
-        // make text area an instance variable with this function and create a getter and reference it for autocomp.
-
-        JTextArea codeEditor = new JTextArea();
+    private JScrollPane makeEmptyEditorPanel() {
+        JPanel codeEditor = new JPanel();
+        JLabel label = new JLabel("Open a file to start editing", SwingConstants.CENTER);
+        label.setFont(new Font("Arial", Font.PLAIN, 18));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        codeEditor.add(label);
         editorScrollPane = new JScrollPane(codeEditor);
-        StringBuilder strBuilder = new StringBuilder();
-        for (int i = 1; i <= 500; i++) {
-            strBuilder.append(i).append("\n");
-        }
-        lineNumbersPane = new JTextArea(strBuilder.toString());
-        lineNumbersPane.setEditable(false);
-        lineNumbersPane.setBackground(Color.LIGHT_GRAY);
-        editorScrollPane.setRowHeaderView(lineNumbersPane);
         return editorScrollPane;
     }
-
-    public JTextArea getCodeEditor() {
-        return codeEditor;
-    }
+//    private JScrollPane makeEditorPanel() {
+//        JTextArea codeEditor = new JTextArea();
+//        editorScrollPane = new JScrollPane(codeEditor);
+//        StringBuilder strBuilder = new StringBuilder();
+//        for (int i = 1; i <= 500; i++) {
+//            strBuilder.append(i).append("\n");
+//        }
+//        lineNumbersPane = new JTextArea(strBuilder.toString());
+//        lineNumbersPane.setEditable(false);
+//        lineNumbersPane.setBackground(Color.LIGHT_GRAY);
+//        editorScrollPane.setRowHeaderView(lineNumbersPane);
+//        return editorScrollPane;
+//    }
 
     public void chooseDiretory() {
         JFileChooser fileChooser = new JFileChooser();
