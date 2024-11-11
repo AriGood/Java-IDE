@@ -15,15 +15,20 @@ public class FileOperations {
     public JTextArea loadFile(File file) {
         //TODO
         JTextArea result = new JTextArea();
+        return result;
+    }
+
+    public String fileContent(File file) {
+        StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                result.append(line + "\n");
+                content.append(line).append("\n");
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "File Could Not Load: " + e.getMessage(),
                     "File Load Error", JOptionPane.ERROR_MESSAGE);
         }
-        return result;
+        return content.toString();
     }
 }
