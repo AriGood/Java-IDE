@@ -10,6 +10,8 @@ import java.awt.event.KeyEvent;
 // use key interpreter
 // popup suggestion - 3 or 4
 
+// where to get key interpretation - in ideappbuilder private makeeditorpanel and get text
+
 public class AutoCompleteOperations {
 
     public void enableAutoComplete(JTextComponent textComponent, JPopupMenu popup) {

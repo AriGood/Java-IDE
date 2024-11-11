@@ -86,6 +86,7 @@ public class IDEAppBuilder {
     }
 
     private JScrollPane makeEditorPanel() {
+        // make text area an instance variable with this function and create a getter and reference it for autocomp.
         JTextArea codeEditor = new JTextArea();
         editorScrollPane = new JScrollPane(codeEditor);
         StringBuilder strBuilder = new StringBuilder();
