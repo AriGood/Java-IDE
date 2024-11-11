@@ -2,14 +2,6 @@ package app;
 
 import javax.swing.*;
 
-import interface_adapter.note.IdeController;
-import interface_adapter.note.NotePresenter;
-import interface_adapter.note.NoteViewModel;
-import use_case.note.NoteDataAccessInterface;
-import use_case.note.NoteInteractor;
-import use_case.note.NoteOutputBoundary;
-import view.IdeView;
-
 import java.awt.*;
 import java.io.File;
 
