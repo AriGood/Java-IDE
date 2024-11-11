@@ -40,7 +40,9 @@ public class AutoCompleteOperations {
                         JMenuItem item = new JMenuItem(suggestion);
                         item.addActionListener(event -> {
                             replaceLastWord(textComponent, lastWord, suggestion);
+                        popup.setVisible(false);
                         });
+                        popup.add(item);
                     }
 
                     if (popup.getComponentCount() > 0) {
