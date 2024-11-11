@@ -1,5 +1,7 @@
 package app;
 
+import view.MenuBarObj;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -59,16 +61,9 @@ public class IDEAppBuilder {
     }
 
     private JMenuBar makeMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("File");
-        JMenuItem newFile = new JMenuItem("New File");
-        JMenuItem openFile = new JMenuItem("Open");
-        JMenuItem saveFile = new JMenuItem("Save");
-        fileMenu.add(newFile);
-        fileMenu.add(openFile);
-        fileMenu.add(saveFile);
-        menuBar.add(fileMenu);
-        return menuBar;
+        MenuBarObj menuBarObj = new MenuBarObj();
+        menuBarObj.addFileMenu();
+        return menuBarObj.getMenuBar();
     }
 
     private JScrollPane makeTerminalPanel() {
