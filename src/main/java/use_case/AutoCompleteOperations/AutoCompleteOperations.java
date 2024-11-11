@@ -25,6 +25,7 @@ public class AutoCompleteOperations {
     public void enableAutoComplete(JTextComponent textComponent, JPopupMenu popup) {
         // use json file or string?
         // rewrite code to take info from weighted BST
+        // connect to code editor (doesnt take anything from ideappbuilder yet)
         textComponent.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
