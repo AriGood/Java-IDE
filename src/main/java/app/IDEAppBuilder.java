@@ -13,6 +13,7 @@ public class IDEAppBuilder {
     public static final int WIDTH = 800;
 
     private JScrollPane terminalScrollPane;
+    private JTextArea codeEditor;
     private JScrollPane editorScrollPane;
     private JScrollPane fileScrollPane;
     private JTextArea lineNumbersPane;
@@ -79,6 +80,7 @@ public class IDEAppBuilder {
 
     private JScrollPane makeEditorPanel() {
         // make text area an instance variable with this function and create a getter and reference it for autocomp.
+
         JTextArea codeEditor = new JTextArea();
         editorScrollPane = new JScrollPane(codeEditor);
         StringBuilder strBuilder = new StringBuilder();
@@ -90,6 +92,10 @@ public class IDEAppBuilder {
         lineNumbersPane.setBackground(Color.LIGHT_GRAY);
         editorScrollPane.setRowHeaderView(lineNumbersPane);
         return editorScrollPane;
+    }
+
+    public JTextArea getCodeEditor() {
+        return codeEditor;
     }
 
     public void chooseDiretory() {
