@@ -9,7 +9,7 @@ public class MenuBarObj {
         menuBar = new JMenuBar();
     }
 
-    public void addFileMenu() {
+    private void addFileMenu() {
         JMenu fileMenu = new JMenu("File");
         JMenuItem newFile = new JMenuItem("New File");
         JMenuItem openFile = new JMenuItem("Open");
@@ -18,6 +18,10 @@ public class MenuBarObj {
         fileMenu.add(openFile);
         fileMenu.add(saveFile);
         menuBar.add(fileMenu);
+    }
+
+    public void buildMenu() {
+        addFileMenu();
     }
 
     public JMenuBar getMenuBar() {
