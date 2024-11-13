@@ -1,15 +1,22 @@
 package use_case.FileManagement;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class FileOperations {
 
-    public void saveFile(File parentDirectory) {
-        //TODO
+    public void saveFile(File parentDirectory, String content) {
+        //TODO: in progress
+        // Also there are two options for the second parameter for saveFile: string or JTextArea...
+        // I opted for String bc i think its more versatile... but open to ideas.
+        try (FileWriter writer = new FileWriter(parentDirectory)) {
+            // Write the string content to the specified file
+            writer.write(content);
+            JOptionPane.showMessageDialog(null, "File saved successfully.", "Save File", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "File could not be saved: " + e.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     public JTextArea loadFile(File file) {
