@@ -5,11 +5,18 @@ import java.io.*;
 
 public class FileOperations {
 
-    public void saveFile(File parentDirectory, String content) {
+    /**
+     * This function saves the provided content to the specified file.
+     *
+     * @param file the file to save to
+     * @param content the content to save into the file
+     */
+    public void saveFile(File file, String content) {
         //TODO: in progress
+
         // Also there are two options for the second parameter for saveFile: string or JTextArea...
         // I opted for String bc i think its more versatile... but open to ideas.
-        try (FileWriter writer = new FileWriter(parentDirectory)) {
+        try (FileWriter writer = new FileWriter(file)) {
             // Here we write the string content to the specified file
             writer.write(content);
             JOptionPane.showMessageDialog(null, "File saved successfully.", "Save File", JOptionPane.INFORMATION_MESSAGE);
