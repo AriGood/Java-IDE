@@ -4,14 +4,13 @@ import data_access.AutoCompleteBST;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import data_access.AutoCompleteBST;
 import use_case.FileManagement.TabManagement;
-import view.EditorObj;
-import view.FileTreeObj;
-import view.MenuBarObj;
-import view.TerminalObj;
+import view.*;
 
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -114,6 +113,22 @@ public class IDEAppBuilder {
         return autocompleteBST;
     }
 
+    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
+        AutoCompletePopup suggestionPopup = new AutoCompletePopup();
+        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
+
+        codeEditor.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                SwingUtilities.invokeLater(() -> {
+                    List<String> suggestions = autoCompleteOperations.getSuggestions(codeEditor);
+                    suggestionPopup.showSuggestions(codeEditor, suggestions);
+                });
+            }
+        });
+    }
+
+
     private JScrollPane makeFilePanel() {
         FileTreeObj fileTreeObj = new FileTreeObj();
         fileScrollPane = new JScrollPane(fileTreeObj.getFileTree());
@@ -142,11 +157,11 @@ public class IDEAppBuilder {
     }
 
 
-    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
-        JPopupMenu popup = new JPopupMenu();
-        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
-        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
-    }
+//    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
+//        JPopupMenu popup = new JPopupMenu();
+//        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
+//        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
+//    }
 
     public JTextArea getCodeEditor() {
         return codeEditor;
