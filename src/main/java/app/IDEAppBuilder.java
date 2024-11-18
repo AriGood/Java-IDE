@@ -1,12 +1,14 @@
 package app;
 
-import entity.Tab;
+import view.EditorObj;
+import view.FileTreeObj;
+import view.MenuBarObj;
+import view.TerminalObj;
 
 import javax.swing.*;
 
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * Builder for the Note Application.
@@ -14,12 +16,11 @@ import java.util.ArrayList;
 public class IDEAppBuilder {
     public static final int HEIGHT = 600;
     public static final int WIDTH = 800;
-    public ArrayList<Tab> tabs = null;
 
     private JScrollPane terminalScrollPane;
+    private JTextArea codeEditor;
     private JScrollPane editorScrollPane;
     private JScrollPane fileScrollPane;
-    private JTextArea lineNumbersPane;
     private File directory;
 
     /**
@@ -31,11 +32,10 @@ public class IDEAppBuilder {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setTitle("IDE Application");
         frame.setSize(WIDTH, HEIGHT);
-        chooseDiretory();
 
         frame.setJMenuBar(makeMenuBar());
 
-        frame.add(makeEmptyEditorPanel(), BorderLayout.CENTER);
+        frame.add(makeEditorPanel(), BorderLayout.CENTER);
         frame.add(makeFilePanel(), BorderLayout.WEST);
         frame.add(makeTerminalPanel(), BorderLayout.SOUTH);
 
@@ -57,62 +57,34 @@ public class IDEAppBuilder {
     }
 
     private JScrollPane makeFilePanel() {
-        use_case.FileManagement.FileTreeGenerator fileTreeGenerator = new use_case.FileManagement.FileTreeGenerator(directory);
-        fileScrollPane = new JScrollPane(fileTreeGenerator.createFileTree(directory));
+        FileTreeObj fileTreeObj = new FileTreeObj();
+        fileScrollPane = new JScrollPane(fileTreeObj.getFileTree());
+        directory = fileTreeObj.getDirectory();
         return fileScrollPane;
     }
 
     private JMenuBar makeMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("File");
-        JMenuItem newFile = new JMenuItem("New File");
-        JMenuItem openFile = new JMenuItem("Open");
-        JMenuItem saveFile = new JMenuItem("Save");
-        fileMenu.add(newFile);
-        fileMenu.add(openFile);
-        fileMenu.add(saveFile);
-        menuBar.add(fileMenu);
-        return menuBar;
+        MenuBarObj menuBarObj = new MenuBarObj();
+        menuBarObj.buildMenu();
+        return menuBarObj.getMenuBar();
     }
 
     private JScrollPane makeTerminalPanel() {
-        JTextArea terminal = new JTextArea();
-        terminalScrollPane = new JScrollPane(terminal);
+        TerminalObj terminal = new TerminalObj();
+        terminalScrollPane = new JScrollPane(terminal.getTextArea());
         return terminalScrollPane;
     }
 
-    private JScrollPane makeEmptyEditorPanel() {
-        JPanel codeEditor = new JPanel();
-        JLabel label = new JLabel("Open a file to start editing", SwingConstants.CENTER);
-        label.setFont(new Font("Arial", Font.PLAIN, 18));
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        codeEditor.add(label);
-        editorScrollPane = new JScrollPane(codeEditor);
+    private JScrollPane makeEditorPanel() {
+        // make text area an instance variable with this function and create a getter and reference it for autocomp.
+        EditorObj editorObj = new EditorObj();
+        editorScrollPane = new JScrollPane(editorObj.getTextArea());
+        editorScrollPane.setRowHeaderView(editorObj.getLineNums());
         return editorScrollPane;
     }
-//    private JScrollPane makeEditorPanel() {
-//        JTextArea codeEditor = new JTextArea();
-//        editorScrollPane = new JScrollPane(codeEditor);
-//        StringBuilder strBuilder = new StringBuilder();
-//        for (int i = 1; i <= 500; i++) {
-//            strBuilder.append(i).append("\n");
-//        }
-//        lineNumbersPane = new JTextArea(strBuilder.toString());
-//        lineNumbersPane.setEditable(false);
-//        lineNumbersPane.setBackground(Color.LIGHT_GRAY);
-//        editorScrollPane.setRowHeaderView(lineNumbersPane);
-//        return editorScrollPane;
-//    }
 
-    public void chooseDiretory() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Select a Project to Open");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int option = fileChooser.showOpenDialog(null);
-
-        if (option == JFileChooser.APPROVE_OPTION) {
-            directory = fileChooser.getSelectedFile();
-        }
+    public JTextArea getCodeEditor() {
+        return codeEditor;
     }
 
     public File getDirectory() {
@@ -124,7 +96,6 @@ public class IDEAppBuilder {
     }
 
     public JScrollPane getEditorScrollPane() {
-        editorScrollPane.setRowHeaderView(lineNumbersPane);
         return editorScrollPane;
     }
 
