@@ -2,6 +2,7 @@ package use_case.FileManagement;
 
 import javax.swing.*;
 import java.io.*;
+import java.util.logging.Logger;
 
 public class FileOperations {
 
@@ -14,14 +15,15 @@ public class FileOperations {
     public void saveFile(File file, String content) {
         //TODO: in progress
 
-        // Also there are two options for the second parameter for saveFile: string or JTextArea...
-        // I opted for String bc i think its more versatile... but open to ideas.
+        // Note: intellij suggested to use a logging framework...?  instead of system.out
+
+        // Save the file content to the specified file
+        Logger logger = Logger.getLogger("FileLogger");
         try (FileWriter writer = new FileWriter(file)) {
-            // Here we write the string content to the specified file
             writer.write(content);
-            JOptionPane.showMessageDialog(null, "File saved successfully.", "Save File", JOptionPane.INFORMATION_MESSAGE);
+            logger.info("File saved successfully: " + file.getAbsolutePath());
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "File could not be saved: " + e.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE);
+            logger.severe("File could not be saved: " + e.getMessage());
         }
 
         // Also, I could implement the function using the fileContent method.
