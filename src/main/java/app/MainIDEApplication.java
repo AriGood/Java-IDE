@@ -51,8 +51,9 @@ public class MainIDEApplication {
         builder.build().setVisible(true);
 
 
-        // Enable autocomplete in the IDE builder
-        builder.initializeAutoComplete(autocompleteBST);
+//        // Enable autocomplete in the IDE builder
+        // where to initialize autocomplete?
+//        builder.initializeAutoComplete(autocompleteBST);
 
 
 
