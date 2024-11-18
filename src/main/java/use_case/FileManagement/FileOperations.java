@@ -24,6 +24,12 @@ public class FileOperations {
             JOptionPane.showMessageDialog(null, "File could not be saved: " + e.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE);
         }
 
+        // Also, I could implement the function using the fileContent method.
+        // For example, check if there is nothing to be saved before saving...?
+
+        // WAIT, it can also be used to retrieve data... or look at the history of a file
+        // "backing up original content before saving" - not an as option, just automatically with every save
+
     }
 
     public JTextArea loadFile(File file) {
