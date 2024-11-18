@@ -3,6 +3,11 @@ package app;
 import data_access.AutoCompleteBST;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import data_access.AutoCompleteBST;
+import use_case.FileManagement.TabManagement;
+import view.EditorObj;
+import view.FileTreeObj;
+import view.MenuBarObj;
+import view.TerminalObj;
 
 import javax.swing.*;
 
@@ -22,7 +27,6 @@ public class IDEAppBuilder {
     private JScrollPane terminalScrollPane;
     private JTextArea codeEditor;
     private AutoCompleteOperations autoCompleteOperations;
-    private JScrollPane editorScrollPane;
     private JScrollPane fileScrollPane;
     private File directory;
 
@@ -141,7 +145,7 @@ public class IDEAppBuilder {
     public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
         JPopupMenu popup = new JPopupMenu();
         autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
-        autoCompleteOperations.enableAutoComplete(codeEditor, popup);
+        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
     }
 
     public JTextArea getCodeEditor() {
