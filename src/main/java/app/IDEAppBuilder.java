@@ -70,8 +70,8 @@ public class IDEAppBuilder {
     }
 
     private JScrollPane makeTerminalPanel() {
-        TerminalObj terminal = new TerminalObj();
-        terminalScrollPane = new JScrollPane(terminal.getTextArea());
+        TerminalObj terminalWindow = new TerminalObj();
+        terminalScrollPane = new JScrollPane(terminalWindow);
         return terminalScrollPane;
     }
 
