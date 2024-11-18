@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 public class FileOperations {
 
+    private static final Logger logger = Logger.getLogger(FileOperations.class.getName());
     /**
      * This function saves the provided content to the specified file.
      *
@@ -18,9 +19,9 @@ public class FileOperations {
         // Note: intellij suggested to use a logging framework...?  instead of system.out
 
         // Save the file content to the specified file
-        Logger logger = Logger.getLogger("FileLogger");
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(content);
+
             logger.info("File saved successfully: " + file.getAbsolutePath());
         } catch (IOException e) {
             logger.severe("File could not be saved: " + e.getMessage());
@@ -28,11 +29,8 @@ public class FileOperations {
 
         // Also, I could implement the function using the fileContent method.
         // For example, check if there is nothing to be saved before saving...?
-
-        // WAIT, it can also be used to retrieve data... or look at the history of a file
-        // "backing up original content before saving" - not an as option, just automatically with every save
-
     }
+
 
     public JTextArea loadFile(File file) {
         //TODO
