@@ -1,5 +1,7 @@
 package app;
 
+import entity.Editor;
+import use_case.FileManagement.TabManagement;
 import view.EditorObj;
 import view.FileTreeObj;
 import view.MenuBarObj;
@@ -9,6 +11,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Builder for the Note Application.
@@ -16,10 +19,11 @@ import java.io.File;
 public class IDEAppBuilder {
     public static final int HEIGHT = 600;
     public static final int WIDTH = 800;
+    public static TabManagement tabManagement = new TabManagement();
+    public static JScrollPane editorScrollPane;
 
     private JScrollPane terminalScrollPane;
     private JTextArea codeEditor;
-    private JScrollPane editorScrollPane;
     private JScrollPane fileScrollPane;
     private File directory;
 
@@ -75,13 +79,14 @@ public class IDEAppBuilder {
         return terminalScrollPane;
     }
 
-    private JScrollPane makeEditorPanel() {
+    public static JScrollPane makeEditorPanel() {
         // make text area an instance variable with this function and create a getter and reference it for autocomp.
         EditorObj editorObj = new EditorObj();
         editorScrollPane = new JScrollPane(editorObj.getTextArea());
         editorScrollPane.setRowHeaderView(editorObj.getLineNums());
         return editorScrollPane;
     }
+
 
     public JTextArea getCodeEditor() {
         return codeEditor;

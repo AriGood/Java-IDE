@@ -18,7 +18,7 @@ public class FileOperations {
         return result;
     }
 
-    public String fileContent(File file) {
+    public static String fileContent(File file) {
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;

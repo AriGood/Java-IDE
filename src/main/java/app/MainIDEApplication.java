@@ -41,17 +41,8 @@ public class MainIDEApplication {
      * @param args commandline arguments are ignored
      */
     public static void main(String[] args) {
-
-        // create the data access and inject it into our builder!
-//        final NoteDataAccessInterface noteDataAccess = new DBNoteDataAccessObject();
-
         final IDEAppBuilder builder = new IDEAppBuilder();
         builder.build().setVisible(true);
 
-        /*
-        builder.addNoteDAO(noteDataAccess)
-               .addNoteView()
-               .addNoteUseCase().build().setVisible(true);
-        */
     }
 }
