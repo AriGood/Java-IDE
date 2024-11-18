@@ -2,8 +2,8 @@ package view;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
-import java.awt.*;
 import java.util.List;
+import java.awt.*;
 
 public class AutoCompletePopup {
     private final JPopupMenu popup;

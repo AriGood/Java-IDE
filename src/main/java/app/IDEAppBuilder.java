@@ -8,6 +8,7 @@ import view.*;
 
 import javax.swing.*;
 
+import java.util.List;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -61,6 +62,8 @@ public class IDEAppBuilder {
         return frame;
 
     }
+
+    // TODO: move this to DAO folder
     private AutoCompleteBST BSTBuilder() {
         // Initialize autocomplete BST and add Java keywords
         AutoCompleteBST autocompleteBST = new AutoCompleteBST();
