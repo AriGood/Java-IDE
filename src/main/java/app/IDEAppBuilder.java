@@ -5,6 +5,7 @@ import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import data_access.AutoCompleteBST;
 import use_case.FileManagement.TabManagement;
 import view.*;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -29,7 +30,6 @@ public class IDEAppBuilder {
     private JScrollPane fileScrollPane;
     private File directory;
     private EditorObj editorObj;
-    private JFrame frame;
 
     /**
      * Builds the application.
