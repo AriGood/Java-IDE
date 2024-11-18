@@ -1,15 +1,23 @@
 package entity;
 
 import java.io.File;
-import use_case.FileManagement.FileOperations;
 
-public class Tab {
+public class Editor {
     private String tabName;
     private String tabContent;
-    public Tab(File file) {
+    public Editor(File file) {
         this.tabName = file.getName();
         this.tabContent = use_case.FileManagement.FileOperations.fileContent(file);
     }
+    @Override
+    public String toString() {
+        return this.tabContent;
+    }
+
+    public void setTabContent(String tabContent) {
+        this.tabContent = tabContent;
+    }
+
     public String getTabName() {
         return tabName;
     }

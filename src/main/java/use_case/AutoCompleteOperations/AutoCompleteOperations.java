@@ -1,6 +1,7 @@
 package use_case.AutoCompleteOperations;
 
 import data_access.AutoCompleteBST;
+import use_case.FileManagement.TabManagement;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -14,7 +15,7 @@ import java.util.List;
 // popup suggestion - 3 or 4
 
 // where to get key interpretation - in ideappbuilder private makeeditorpanel and get text
-
+//TODO split off view logic to view folder should not even be importing swing
 public class AutoCompleteOperations {
     private final AutoCompleteBST autoCompleteBST;
 
@@ -22,16 +23,13 @@ public class AutoCompleteOperations {
         this.autoCompleteBST = autoCompleteBST;
     }
 
-    public void enableAutoComplete(JTextComponent textComponent, JPopupMenu popup) {
+    public void enableAutoComplete(TabManagement tabManagement, JTextComponent textComponent, JPopupMenu popup) {
         // use json file or string?
         // rewrite code to take info from weighted BST
         textComponent.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                String text = textComponent.getText();
-                //check lastword getter
-                //String lastword = text.substring(text.lastIndexOf(" ") + 1);
-                //if (e.getKeyChar() == KeyEvent.VK_ENTER) {}
+                String text = tabManagement.currentEditor.toString();
                 String lastWord = getLastWord(text);
                 if (lastWord.length() > 0) {
                     List<String> suggestions = autoCompleteBST.autocomplete(lastWord);

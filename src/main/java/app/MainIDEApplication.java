@@ -1,9 +1,5 @@
 package app;
 
-import entity.Tab;
-
-import java.util.ArrayList;
-
 /**
  * An application where we can view and add to a note stored by a user.
  * <p>
