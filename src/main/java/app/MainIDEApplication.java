@@ -50,18 +50,6 @@ public class MainIDEApplication {
         final IDEAppBuilder builder = new IDEAppBuilder();
         builder.build().setVisible(true);
 
-        // Initialize autocomplete BST and add Java keywords
-        AutoCompleteBST autocompleteBST = new AutoCompleteBST();
-        autocompleteBST.insert("abstract");
-        autocompleteBST.insert("assert");
-        autocompleteBST.insert("boolean");
-        autocompleteBST.insert("break");
-        autocompleteBST.insert("byte");
-        autocompleteBST.insert("case");
-        autocompleteBST.insert("catch");
-        autocompleteBST.insert("char");
-        autocompleteBST.insert("class");
-        autocompleteBST.insert("continue");
 
         // Enable autocomplete in the IDE builder
         builder.initializeAutoComplete(autocompleteBST);
