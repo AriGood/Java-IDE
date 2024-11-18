@@ -1,12 +1,14 @@
 package use_case.AutoCompleteOperations;
 
 import data_access.AutoCompleteBST;
+import use_case.FileManagement.TabManagement;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
+
 
 // recursive tree with weights (use LLM) - weighted prefix trees
 // code system to read tree
