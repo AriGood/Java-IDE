@@ -1,11 +1,8 @@
 package app;
 
-import entity.Editor;
-import use_case.FileManagement.TabManagement;
-import view.EditorObj;
-import view.FileTreeObj;
-import view.MenuBarObj;
-import view.TerminalObj;
+import data_access.AutoCompleteBST;
+import use_case.AutoCompleteOperations.AutoCompleteOperations;
+import data_access.AutoCompleteBST;
 
 import javax.swing.*;
 
@@ -24,6 +21,8 @@ public class IDEAppBuilder {
 
     private JScrollPane terminalScrollPane;
     private JTextArea codeEditor;
+    private AutoCompleteOperations autoCompleteOperations;
+    private JScrollPane editorScrollPane;
     private JScrollPane fileScrollPane;
     private File directory;
 
@@ -59,6 +58,57 @@ public class IDEAppBuilder {
         return frame;
 
     }
+    private AutoCompleteBST BSTBuilder() {
+        // Initialize autocomplete BST and add Java keywords
+        AutoCompleteBST autocompleteBST = new AutoCompleteBST();
+        autocompleteBST.insert("abstract");
+        autocompleteBST.insert("assert");
+        autocompleteBST.insert("boolean");
+        autocompleteBST.insert("break");
+        autocompleteBST.insert("byte");
+        autocompleteBST.insert("case");
+        autocompleteBST.insert("catch");
+        autocompleteBST.insert("char");
+        autocompleteBST.insert("class");
+        autocompleteBST.insert("continue");
+        autocompleteBST.insert("default");
+        autocompleteBST.insert("do");
+        autocompleteBST.insert("double");
+        autocompleteBST.insert("else");
+        autocompleteBST.insert("enum");
+        autocompleteBST.insert("extends");
+        autocompleteBST.insert("final");
+        autocompleteBST.insert("finally");
+        autocompleteBST.insert("float");
+        autocompleteBST.insert("for");
+        autocompleteBST.insert("goto");
+        autocompleteBST.insert("if");
+        autocompleteBST.insert("implements");
+        autocompleteBST.insert("import");
+        autocompleteBST.insert("instanceof");
+        autocompleteBST.insert("int");
+        autocompleteBST.insert("interface");
+        autocompleteBST.insert("long");
+        autocompleteBST.insert("native");
+        autocompleteBST.insert("new");
+        autocompleteBST.insert("package");
+        autocompleteBST.insert("private");
+        autocompleteBST.insert("protected");
+        autocompleteBST.insert("public");
+        autocompleteBST.insert("return");
+        autocompleteBST.insert("short");
+        autocompleteBST.insert("static");
+        autocompleteBST.insert("strictfp");
+        autocompleteBST.insert("super");
+        autocompleteBST.insert("switch");
+        autocompleteBST.insert("synchronized");
+        autocompleteBST.insert("transient");
+        autocompleteBST.insert("volatile");
+        autocompleteBST.insert("while");
+        autocompleteBST.insert("volatile");
+
+        return autocompleteBST;
+    }
 
     private JScrollPane makeFilePanel() {
         FileTreeObj fileTreeObj = new FileTreeObj();
@@ -87,6 +137,12 @@ public class IDEAppBuilder {
         return editorScrollPane;
     }
 
+
+    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
+        JPopupMenu popup = new JPopupMenu();
+        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
+        autoCompleteOperations.enableAutoComplete(codeEditor, popup);
+    }
 
     public JTextArea getCodeEditor() {
         return codeEditor;

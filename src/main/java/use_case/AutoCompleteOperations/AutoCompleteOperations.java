@@ -1,7 +1,6 @@
 package use_case.AutoCompleteOperations;
 
 import data_access.AutoCompleteBST;
-import use_case.FileManagement.TabManagement;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -26,6 +25,7 @@ public class AutoCompleteOperations {
     public void enableAutoComplete(TabManagement tabManagement, JTextComponent textComponent, JPopupMenu popup) {
         // use json file or string?
         // rewrite code to take info from weighted BST
+        // connect to code editor (doesnt take anything from ideappbuilder yet)
         textComponent.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
