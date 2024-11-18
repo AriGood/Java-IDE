@@ -15,7 +15,14 @@ public class AutoCompleteBST {
         if (node == null) {
             return new BSTNode(word);
         }
-
+        // working with frequency
+//        if (word.equals(node.word)) {
+//            node.incrementFrequency(); // Increment frequency if word already exists
+//        } else if (word.compareTo(node.word) < 0) {
+//            node.left = insertRec(node.left, word);
+//        } else {
+//            node.right = insertRec(node.right, word);
+//        }
         // Insert into the correct subtree based on alphabetical order
         if (word.compareTo(node.word) < 0) {
             node.left = insertRec(node.left, word);
@@ -29,6 +36,13 @@ public class AutoCompleteBST {
     public List<String> autocomplete(String prefix) {
         List<String> suggestions = new ArrayList<>();
         autocompleteRec(root, prefix, suggestions);
+
+//        matches.sort((n1, n2) -> Integer.compare(n2.frequency, n1.frequency)); // Sort by frequency descending
+//
+//        List<String> suggestions = new ArrayList<>();
+//        for (BSTNode node : matches) {
+//            suggestions.add(node.word);
+//        }
         return suggestions;
     }
 
@@ -50,4 +64,19 @@ public class AutoCompleteBST {
             autocompleteRec(node.right, prefix, suggestions);
         }
     }
+
+//    private void findMatches(BSTNode node, String prefix, List<BSTNode> matches) {
+//        if (node == null) return;
+//
+//        if (node.word.startsWith(prefix)) {
+//            matches.add(node);
+//        }
+//
+//        if (prefix.compareTo(node.word) <= 0) {
+//            findMatches(node.left, prefix, matches);
+//        }
+//        if (prefix.compareTo(node.word) >= 0) {
+//            findMatches(node.right, prefix, matches);
+//        }
+//    }
 }
