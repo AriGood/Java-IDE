@@ -37,6 +37,7 @@ public class IDEAppBuilder {
         frame.setTitle("IDE Application");
         frame.setSize(WIDTH, HEIGHT);
 
+        tabManagement.newTab("New Tab");
         frame.setJMenuBar(makeMenuBar());
 
         frame.add(makeEditorPanel(), BorderLayout.CENTER);

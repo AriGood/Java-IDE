@@ -18,4 +18,10 @@ public class TabManagement {
         currentEditor = editors.get(editors.size()-1);
         return (currentEditor.toString());
     }
+
+    public String newTab(String fileName) {
+        editors.add(new Editor(fileName,""));
+        currentEditor = editors.get(editors.size()-1);
+        return (currentEditor.toString());
+    }
 }

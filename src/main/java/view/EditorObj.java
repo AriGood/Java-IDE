@@ -9,7 +9,7 @@ public class EditorObj {
     private JTextArea textArea;
     private JTextArea lineNums;
 
-    public void EditorObj() {
+    public EditorObj() {
         textArea = new JTextArea();
         StringBuilder strBuilder = new StringBuilder();
         for (int i = 1; i <= 500; i++) {
@@ -19,6 +19,10 @@ public class EditorObj {
         lineNums.setEditable(false);
         lineNums.setBackground(Color.LIGHT_GRAY);
         textArea.setText(IDEAppBuilder.tabManagement.currentEditor.toString());
+    }
+
+    public void setTextArea (String text) {
+        textArea.setText(text);
     }
 
     public JTextArea getTextArea() {

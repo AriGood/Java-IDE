@@ -39,6 +39,7 @@ public class MenuBarObj {
                 if (option == JFileChooser.APPROVE_OPTION) {
                     IDEAppBuilder.tabManagement.newTab(fileChooser.getSelectedFile());
                     IDEAppBuilder.editorScrollPane = IDEAppBuilder.makeEditorPanel();
+
                 }
             }
         });
