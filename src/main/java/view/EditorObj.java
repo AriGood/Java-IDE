@@ -25,6 +25,10 @@ public class EditorObj {
         textArea.setText(text);
     }
 
+    public void updateTextArea(String newText) {
+        textArea.setText(newText);
+    }
+
     public JTextArea getTextArea() {
         return textArea;
     }

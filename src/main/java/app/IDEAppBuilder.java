@@ -5,6 +5,7 @@ import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import data_access.AutoCompleteBST;
 import use_case.FileManagement.TabManagement;
 import view.*;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -28,6 +29,7 @@ public class IDEAppBuilder {
     private AutoCompleteOperations autoCompleteOperations;
     private JScrollPane fileScrollPane;
     private File directory;
+    private EditorObj editorObj;
 
     /**
      * Builds the application.
@@ -138,7 +140,7 @@ public class IDEAppBuilder {
     }
 
     private JMenuBar makeMenuBar() {
-        MenuBarObj menuBarObj = new MenuBarObj();
+        MenuBarObj menuBarObj = new MenuBarObj(this);
         menuBarObj.buildMenu();
         return menuBarObj.getMenuBar();
     }
@@ -149,9 +151,9 @@ public class IDEAppBuilder {
         return terminalScrollPane;
     }
 
-    public static JScrollPane makeEditorPanel() {
+    public JScrollPane makeEditorPanel() {
         // make text area an instance variable with this function and create a getter and reference it for autocomp.
-        EditorObj editorObj = new EditorObj();
+        editorObj = new EditorObj();
         editorScrollPane = new JScrollPane(editorObj.getTextArea());
         editorScrollPane.setRowHeaderView(editorObj.getLineNums());
         return editorScrollPane;
@@ -178,6 +180,10 @@ public class IDEAppBuilder {
 
     public JScrollPane getEditorScrollPane() {
         return editorScrollPane;
+    }
+
+    public void updateText(String newText){
+        editorObj.updateTextArea(newText);
     }
 
 }

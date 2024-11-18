@@ -2,16 +2,20 @@ package view;
 
 import app.IDEAppBuilder;
 import use_case.FileManagement.TabManagement;
+import use_case.FileManagement.FileOperations;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class MenuBarObj {
     private JMenuBar menuBar;
+    private IDEAppBuilder appBuilder;
 
-    public MenuBarObj() {
+    public MenuBarObj(IDEAppBuilder newAppBuilder) {
         menuBar = new JMenuBar();
+        appBuilder = newAppBuilder;
     }
 
     private void addFileMenu() {
@@ -37,9 +41,10 @@ public class MenuBarObj {
                 int option = fileChooser.showOpenDialog(null);
 
                 if (option == JFileChooser.APPROVE_OPTION) {
-                    IDEAppBuilder.tabManagement.newTab(fileChooser.getSelectedFile());
-                    IDEAppBuilder.editorScrollPane = IDEAppBuilder.makeEditorPanel();
-
+                    File file = fileChooser.getSelectedFile();
+                    IDEAppBuilder.tabManagement.newTab(file);
+                    String fileContent = use_case.FileManagement.FileOperations.fileContent(file);
+                    appBuilder.updateText(fileContent);
                 }
             }
         });
