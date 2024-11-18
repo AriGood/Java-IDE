@@ -1,15 +1,37 @@
 package use_case.FileManagement;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.logging.Logger;
 
 public class FileOperations {
 
-    public void saveFile(File parentDirectory) {
-        //TODO
+    /**
+     * This function saves the provided content to the specified file.
+     *
+     * @param file the file to save to
+     * @param content the content to save into the file
+     */
+    public void saveFile(File file, String content) {
+        //TODO: in progress
+
+        // Note: intellij suggested to use a logging framework...?  instead of system.out
+
+        // Save the file content to the specified file
+        Logger logger = Logger.getLogger("FileLogger");
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(content);
+            logger.info("File saved successfully: " + file.getAbsolutePath());
+        } catch (IOException e) {
+            logger.severe("File could not be saved: " + e.getMessage());
+        }
+
+        // Also, I could implement the function using the fileContent method.
+        // For example, check if there is nothing to be saved before saving...?
+
+        // WAIT, it can also be used to retrieve data... or look at the history of a file
+        // "backing up original content before saving" - not an as option, just automatically with every save
+
     }
 
     public JTextArea loadFile(File file) {
@@ -18,7 +40,7 @@ public class FileOperations {
         return result;
     }
 
-    public String fileContent(File file) {
+    public static String fileContent(File file) {
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
