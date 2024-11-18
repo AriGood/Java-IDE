@@ -17,6 +17,8 @@ import java.util.List;
 
 // where to get key interpretation - in ideappbuilder private makeeditorpanel and get text
 //TODO split off view logic to view folder should not even be importing swing
+//TODO: refactor so popup code is in view
+
 public class AutoCompleteOperations {
     private final AutoCompleteBST autoCompleteBST;
 
