@@ -9,6 +9,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+
 // recursive tree with weights (use LLM) - weighted prefix trees
 // code system to read tree
 // use key interpreter
@@ -26,6 +27,7 @@ public class AutoCompleteOperations {
     public void enableAutoComplete(TabManagement tabManagement, JTextComponent textComponent, JPopupMenu popup) {
         // use json file or string?
         // rewrite code to take info from weighted BST
+        // connect to code editor (doesnt take anything from ideappbuilder yet)
         textComponent.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
