@@ -4,14 +4,15 @@ import data_access.AutoCompleteBST;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import data_access.AutoCompleteBST;
 import use_case.FileManagement.TabManagement;
-import view.EditorObj;
-import view.FileTreeObj;
-import view.MenuBarObj;
-import view.TerminalObj;
+import view.*;
+import java.util.List;
 
 import javax.swing.*;
 
+import java.util.List;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class IDEAppBuilder {
     private AutoCompleteOperations autoCompleteOperations;
     private JScrollPane fileScrollPane;
     private File directory;
+    private EditorObj editorObj;
 
     /**
      * Builds the application.
@@ -40,6 +42,7 @@ public class IDEAppBuilder {
         frame.setTitle("IDE Application");
         frame.setSize(WIDTH, HEIGHT);
 
+        tabManagement.newTab("New Tab");
         frame.setJMenuBar(makeMenuBar());
 
         frame.add(makeEditorPanel(), BorderLayout.CENTER);
@@ -54,7 +57,7 @@ public class IDEAppBuilder {
         JSplitPane topBottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, leftRightSplitPane, terminalScrollPane);
         topBottomSplitPane.setDividerLocation(400);
 
-
+        initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords());
         frame.add(topBottomSplitPane, BorderLayout.CENTER);
 
         frame.setVisible(true);
@@ -62,57 +65,22 @@ public class IDEAppBuilder {
         return frame;
 
     }
-    private AutoCompleteBST BSTBuilder() {
-        // Initialize autocomplete BST and add Java keywords
-        AutoCompleteBST autocompleteBST = new AutoCompleteBST();
-        autocompleteBST.insert("abstract");
-        autocompleteBST.insert("assert");
-        autocompleteBST.insert("boolean");
-        autocompleteBST.insert("break");
-        autocompleteBST.insert("byte");
-        autocompleteBST.insert("case");
-        autocompleteBST.insert("catch");
-        autocompleteBST.insert("char");
-        autocompleteBST.insert("class");
-        autocompleteBST.insert("continue");
-        autocompleteBST.insert("default");
-        autocompleteBST.insert("do");
-        autocompleteBST.insert("double");
-        autocompleteBST.insert("else");
-        autocompleteBST.insert("enum");
-        autocompleteBST.insert("extends");
-        autocompleteBST.insert("final");
-        autocompleteBST.insert("finally");
-        autocompleteBST.insert("float");
-        autocompleteBST.insert("for");
-        autocompleteBST.insert("goto");
-        autocompleteBST.insert("if");
-        autocompleteBST.insert("implements");
-        autocompleteBST.insert("import");
-        autocompleteBST.insert("instanceof");
-        autocompleteBST.insert("int");
-        autocompleteBST.insert("interface");
-        autocompleteBST.insert("long");
-        autocompleteBST.insert("native");
-        autocompleteBST.insert("new");
-        autocompleteBST.insert("package");
-        autocompleteBST.insert("private");
-        autocompleteBST.insert("protected");
-        autocompleteBST.insert("public");
-        autocompleteBST.insert("return");
-        autocompleteBST.insert("short");
-        autocompleteBST.insert("static");
-        autocompleteBST.insert("strictfp");
-        autocompleteBST.insert("super");
-        autocompleteBST.insert("switch");
-        autocompleteBST.insert("synchronized");
-        autocompleteBST.insert("transient");
-        autocompleteBST.insert("volatile");
-        autocompleteBST.insert("while");
-        autocompleteBST.insert("volatile");
 
-        return autocompleteBST;
+    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
+        AutoCompletePopup suggestionPopup = new AutoCompletePopup();
+        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
+
+        codeEditor.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                SwingUtilities.invokeLater(() -> {
+                    List<String> suggestions = autoCompleteOperations.getSuggestions(codeEditor);
+                    suggestionPopup.showSuggestions(codeEditor, suggestions);
+                });
+            }
+        });
     }
+
 
     private JScrollPane makeFilePanel() {
         FileTreeObj fileTreeObj = new FileTreeObj();
@@ -122,7 +90,7 @@ public class IDEAppBuilder {
     }
 
     private JMenuBar makeMenuBar() {
-        MenuBarObj menuBarObj = new MenuBarObj();
+        MenuBarObj menuBarObj = new MenuBarObj(this);
         menuBarObj.buildMenu();
         return menuBarObj.getMenuBar();
     }
@@ -133,20 +101,20 @@ public class IDEAppBuilder {
         return terminalScrollPane;
     }
 
-    public static JScrollPane makeEditorPanel() {
+    public JScrollPane makeEditorPanel() {
         // make text area an instance variable with this function and create a getter and reference it for autocomp.
-        EditorObj editorObj = new EditorObj();
+        editorObj = new EditorObj();
         editorScrollPane = new JScrollPane(editorObj.getTextArea());
         editorScrollPane.setRowHeaderView(editorObj.getLineNums());
         return editorScrollPane;
     }
 
 
-    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
-        JPopupMenu popup = new JPopupMenu();
-        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
-        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
-    }
+//    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
+//        JPopupMenu popup = new JPopupMenu();
+//        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
+//        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
+//    }
 
     public JTextArea getCodeEditor() {
         return codeEditor;
@@ -162,6 +130,10 @@ public class IDEAppBuilder {
 
     public JScrollPane getEditorScrollPane() {
         return editorScrollPane;
+    }
+
+    public void updateText(String newText){
+        editorObj.updateTextArea(newText);
     }
 
 }
