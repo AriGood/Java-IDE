@@ -26,7 +26,6 @@ public class IDEAppBuilder {
     public static JScrollPane editorScrollPane;
 
     private JScrollPane terminalScrollPane;
-    private JTextArea codeEditor;
     private AutoCompleteOperations autoCompleteOperations;
     private JScrollPane fileScrollPane;
     private File directory;
@@ -70,6 +69,7 @@ public class IDEAppBuilder {
         AutoCompletePopup suggestionPopup = new AutoCompletePopup();
         autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
 
+        JTextArea codeEditor = editorObj.getTextArea();
         codeEditor.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -115,10 +115,6 @@ public class IDEAppBuilder {
 //        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
 //        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
 //    }
-
-    public JTextArea getCodeEditor() {
-        return codeEditor;
-    }
 
     public File getDirectory() {
         return directory;
