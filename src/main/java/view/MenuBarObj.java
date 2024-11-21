@@ -1,6 +1,7 @@
 package view;
 
 import app.IDEAppBuilder;
+import use_case.FileManagement.FileTreeGenerator;
 import use_case.FileManagement.TabManagement;
 import use_case.FileManagement.FileOperations;
 

@@ -1,5 +1,7 @@
 package use_case.FileManagement;
 
+import app.IDEAppBuilder;
+
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -14,7 +16,6 @@ import java.util.Arrays;
  * I'll be working on it on this branch. - Mariana
  */
 public class FileTreeGenerator {
-    //TODO: check if this actually works. It automatically generates JTree from chosen direcotry structure...
     private JTree fileTree;
     //made root an instance variable so we can update the tree.
     private DefaultMutableTreeNode treeRootNode;
@@ -41,10 +42,30 @@ public class FileTreeGenerator {
     }
      */
 
-    public JTree createFileTree(File directory) {
+    // Added Tree Listeners
+    public JTree createFileTree(File directory, TabManagement tabManagement, IDEAppBuilder appBuilder) {
         treeRootNode = createNodesFromDirectory(directory);
         fileTree = new JTree(treeRootNode);
+        addTreeListeners(fileTree, tabManagement, appBuilder);
         return fileTree;
+    }
+
+    // Helper to refactor
+    public void addTreeListeners(JTree fileTree, TabManagement tabManagement, IDEAppBuilder appBuilder) {
+        fileTree.addTreeSelectionListener(e -> {
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
+
+            if (selectedNode == null) return;
+
+            String nodeName = selectedNode.toString();
+            File selectedFile = new File(directory, nodeName);
+
+            if (selectedFile.isFile()) {
+                String fileContent = FileOperations.fileContent(selectedFile);
+                tabManagement.newTab(selectedFile);
+                appBuilder.updateText(fileContent);
+            }
+        });
     }
 
     private DefaultMutableTreeNode createNodesFromDirectory(File directory) {
