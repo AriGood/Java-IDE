@@ -1,6 +1,4 @@
-package view;
-
-import app.IDEAppBuilder;
+package entity;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,12 +11,19 @@ public class EditorObj {
         textArea = new JTextArea();
         StringBuilder strBuilder = new StringBuilder();
         for (int i = 1; i <= 500; i++) {
-            strBuilder.append(i).append("\n");
+            String digits = String.valueOf(i);
+            if (digits.length() == 1) {
+                strBuilder.append(" ").append(i).append("     |").append("\n");
+            } else if (digits.length() == 2) {
+                strBuilder.append(" ").append(i).append("   |").append("\n");
+            } else {
+                strBuilder.append(" ").append(i).append(" |").append("\n");
+            }
         }
         lineNums = new JTextArea(strBuilder.toString());
         lineNums.setEditable(false);
-        lineNums.setBackground(Color.LIGHT_GRAY);
-        textArea.setText(IDEAppBuilder.tabManagement.currentEditor.toString());
+        lineNums.setBackground(Color.WHITE);
+        lineNums.setColumns(4);
     }
 
     public void setTextArea (String text) {

@@ -1,7 +1,6 @@
 package view;
 
 import app.IDEAppBuilder;
-import use_case.FileManagement.TabManagement;
 import use_case.FileManagement.FileOperations;
 
 import javax.swing.*;
@@ -42,9 +41,7 @@ public class MenuBarObj {
 
                 if (option == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
-                    IDEAppBuilder.tabManagement.newTab(file);
-                    String fileContent = use_case.FileManagement.FileOperations.fileContent(file);
-                    appBuilder.updateText(fileContent);
+                    appBuilder.openFile(file);
                 }
             }
         });
