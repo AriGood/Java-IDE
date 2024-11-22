@@ -21,7 +21,9 @@ public class MenuBarObj {
     private void addFileMenu() {
         JMenu fileMenu = new JMenu("File");
         JMenuItem newFile = new JMenuItem("New File");
-        JMenuItem openFile = new JMenuItem("Open");
+
+        // Changed from openFile to openDirectory
+        JMenuItem openDirectory = new JMenuItem("Open Directory");
         JMenuItem saveFile = new JMenuItem("Save");
 
         // Add ActionListeners to the menu items
@@ -32,20 +34,15 @@ public class MenuBarObj {
             }
         });
 
-        openFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Select a File to Open");
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                int option = fileChooser.showOpenDialog(null);
+        openDirectory.addActionListener(e -> {
+            JFileChooser directoryChooser = new JFileChooser();
+            directoryChooser.setDialogTitle("Select a Directory");
+            directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            int option = directoryChooser.showOpenDialog(null);
 
-                if (option == JFileChooser.APPROVE_OPTION) {
-                    File file = fileChooser.getSelectedFile();
-                    IDEAppBuilder.tabManagement.newTab(file);
-                    String fileContent = use_case.FileManagement.FileOperations.fileContent(file);
-                    appBuilder.updateText(fileContent);
-                }
+            if (option == JFileChooser.APPROVE_OPTION) {
+                File selectedDirectory = directoryChooser.getSelectedFile();
+                appBuilder.updateFileTree(selectedDirectory);
             }
         });
 
@@ -57,7 +54,7 @@ public class MenuBarObj {
         });
 
         fileMenu.add(newFile);
-        fileMenu.add(openFile);
+        fileMenu.add(openDirectory);
         fileMenu.add(saveFile);
         menuBar.add(fileMenu);
     }

@@ -1,10 +1,15 @@
 package use_case.FileManagement;
 
+import app.IDEAppBuilder;
+
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 
 /**
@@ -14,36 +19,40 @@ import java.util.Arrays;
  * I'll be working on it on this branch. - Mariana
  */
 public class FileTreeGenerator {
-    //TODO: check if this actually works. It automatically generates JTree from chosen direcotry structure...
     private JTree fileTree;
-    //made root an instance variable so we can update the tree.
     private DefaultMutableTreeNode treeRootNode;
-    //made the directory an instance variable to recycle it in create, delete, and save.
-    private final File directory;
+    private File directory;
 
     public FileTreeGenerator(File projectDirectory) {
-        directory = projectDirectory;
+        this.directory = projectDirectory;
     }
 
-    /* Reformatted the way this class works by outsourcing any swing operations
-    to the app builder. That way "FileTreeGenerator" only performs tree opperations.
-    public void chooseDiretory() {
-        JFileChooser fileChooser = new JFileChooser();
-        //Changed the directory chooser Title at the top.
-        fileChooser.setDialogTitle("Select a Project to Open");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int option = fileChooser.showOpenDialog(null);
-
-        if (option == JFileChooser.APPROVE_OPTION) {
-            //refactored to the instance variable.
-            directory = fileChooser.getSelectedFile();
-        }
-    }
-     */
-
+    //TODO: check if changes work
     public JTree createFileTree(File directory) {
         treeRootNode = createNodesFromDirectory(directory);
         fileTree = new JTree(treeRootNode);
+
+        // Add listener to open file on node click
+        fileTree.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
+                if (selectedNode == null || selectedNode.isLeaf()) {
+                    File selectedFile = new File(directory, selectedNode.getUserObject().toString());
+                    if (selectedFile.isFile()) {
+                        try {
+                            String content = Files.readString(selectedFile.toPath());
+                            // Assuming IDEAppBuilder has a method to update the text editor
+                            IDEAppBuilder.tabManagement.newTab(selectedFile);
+                            IDEAppBuilder.updateText(content);
+                        } catch (IOException ex) {
+                            JOptionPane.showMessageDialog(null, "Could not open file: " + ex.getMessage());
+                        }
+                    }
+                }
+            }
+        });
+
         return fileTree;
     }
 
@@ -61,6 +70,13 @@ public class FileTreeGenerator {
             });
         }
         return rootNode;
+    }
+
+    // New
+    public void updateTree(File newDirectory) {
+        directory = newDirectory;
+        treeRootNode = createNodesFromDirectory(directory);
+        ((DefaultTreeModel) fileTree.getModel()).setRoot(treeRootNode);
     }
 
     public File getDirectory() {
@@ -116,3 +132,4 @@ public class FileTreeGenerator {
     }
 
 }
+

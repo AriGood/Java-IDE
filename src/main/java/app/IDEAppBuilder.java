@@ -3,6 +3,7 @@ package app;
 import data_access.AutoCompleteBST;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import data_access.AutoCompleteBST;
+import use_case.FileManagement.FileTreeGenerator;
 import use_case.FileManagement.TabManagement;
 import view.*;
 import java.util.List;
@@ -30,7 +31,8 @@ public class IDEAppBuilder {
     private AutoCompleteOperations autoCompleteOperations;
     private JScrollPane fileScrollPane;
     private File directory;
-    private EditorObj editorObj;
+    private static EditorObj editorObj;
+    private FileTreeGenerator fileTreeGenerator;
 
     /**
      * Builds the application.
@@ -95,6 +97,13 @@ public class IDEAppBuilder {
         return menuBarObj.getMenuBar();
     }
 
+    // New
+    public void updateFileTree(File newDirectory) {
+        directory = newDirectory;
+        fileTreeGenerator.updateTree(directory);
+        fileScrollPane.setViewportView(fileTreeGenerator.createFileTree(directory));
+    }
+
     private JScrollPane makeTerminalPanel() {
         TerminalObj terminal = new TerminalObj();
         terminalScrollPane = new JScrollPane(terminal.getTextArea());
@@ -132,7 +141,7 @@ public class IDEAppBuilder {
         return editorScrollPane;
     }
 
-    public void updateText(String newText){
+    public static void updateText(String newText){
         editorObj.updateTextArea(newText);
     }
 
