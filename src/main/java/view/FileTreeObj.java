@@ -1,6 +1,6 @@
 package view;
 
-import use_case.FileManagement.FileTreeGenerator;
+import app.IDEAppBuilder;
 
 import javax.swing.*;
 import java.io.File;
@@ -10,9 +10,9 @@ public class FileTreeObj {
     private File directory;
     private JTree fileTree;
 
-    public FileTreeObj() {
+    public FileTreeObj(IDEAppBuilder IDEAppBuilder) {
         chooseDiretory();
-        fileTreeGenerator = new use_case.FileManagement.FileTreeGenerator(directory);
+        fileTreeGenerator = new use_case.FileManagement.FileTreeGenerator(IDEAppBuilder);
         fileTree = fileTreeGenerator.createFileTree(directory);
     }
 

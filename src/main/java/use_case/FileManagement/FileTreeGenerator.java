@@ -22,9 +22,11 @@ public class FileTreeGenerator {
     private JTree fileTree;
     private DefaultMutableTreeNode treeRootNode;
     private File directory;
+    private IDEAppBuilder appBuilder;
 
-    public FileTreeGenerator(File projectDirectory) {
-        this.directory = projectDirectory;
+    public FileTreeGenerator(IDEAppBuilder IDEAppBuilder) {
+        appBuilder = IDEAppBuilder;
+        directory = appBuilder.getDirectory();
     }
 
     //TODO: check if changes work
@@ -43,7 +45,7 @@ public class FileTreeGenerator {
                         try {
                             String content = Files.readString(selectedFile.toPath());
                             // Assuming IDEAppBuilder has a method to update the text editor
-                            IDEAppBuilder.tabManagement.newTab(selectedFile);
+                            appBuilder.createNewTab(selectedFile);
                             IDEAppBuilder.updateText(content);
                         } catch (IOException ex) {
                             JOptionPane.showMessageDialog(null, "Could not open file: " + ex.getMessage());

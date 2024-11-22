@@ -1,8 +1,6 @@
 package view;
 
 import app.IDEAppBuilder;
-import use_case.FileManagement.TabManagement;
-import use_case.FileManagement.FileOperations;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,11 +9,11 @@ import java.io.File;
 
 public class MenuBarObj {
     private JMenuBar menuBar;
-    private IDEAppBuilder appBuilder;
+    private IDEAppBuilder IDEAppBuilder;
 
-    public MenuBarObj(IDEAppBuilder newAppBuilder) {
+    public MenuBarObj(IDEAppBuilder newIDEAppBuilder) {
         menuBar = new JMenuBar();
-        appBuilder = newAppBuilder;
+        IDEAppBuilder = newIDEAppBuilder;
     }
 
     private void addFileMenu() {
@@ -42,7 +40,7 @@ public class MenuBarObj {
 
             if (option == JFileChooser.APPROVE_OPTION) {
                 File selectedDirectory = directoryChooser.getSelectedFile();
-                appBuilder.updateFileTree(selectedDirectory);
+                IDEAppBuilder.updateFileTree(selectedDirectory);
             }
         });
 

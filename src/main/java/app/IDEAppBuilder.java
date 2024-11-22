@@ -2,7 +2,6 @@ package app;
 
 import data_access.AutoCompleteBST;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
-import data_access.AutoCompleteBST;
 import use_case.FileManagement.FileTreeGenerator;
 import use_case.FileManagement.TabManagement;
 import view.*;
@@ -10,12 +9,10 @@ import java.util.List;
 
 import javax.swing.*;
 
-import java.util.List;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * Builder for the Note Application.
@@ -27,7 +24,6 @@ public class IDEAppBuilder {
     public static JScrollPane editorScrollPane;
 
     private JScrollPane terminalScrollPane;
-    private JTextArea codeEditor;
     private AutoCompleteOperations autoCompleteOperations;
     private JScrollPane fileScrollPane;
     private File directory;
@@ -72,6 +68,8 @@ public class IDEAppBuilder {
         AutoCompletePopup suggestionPopup = new AutoCompletePopup();
         autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
 
+        JTextArea codeEditor = editorObj.getTextArea();
+
         codeEditor.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -85,7 +83,7 @@ public class IDEAppBuilder {
 
 
     private JScrollPane makeFilePanel() {
-        FileTreeObj fileTreeObj = new FileTreeObj();
+        FileTreeObj fileTreeObj = new FileTreeObj(this);
         fileScrollPane = new JScrollPane(fileTreeObj.getFileTree());
         directory = fileTreeObj.getDirectory();
         return fileScrollPane;
@@ -118,6 +116,10 @@ public class IDEAppBuilder {
         return editorScrollPane;
     }
 
+    public void createNewTab(File selectedFile) {
+        tabManagement.newTab(selectedFile);
+    }
+
 
 //    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
 //        JPopupMenu popup = new JPopupMenu();
@@ -125,9 +127,6 @@ public class IDEAppBuilder {
 //        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
 //    }
 
-    public JTextArea getCodeEditor() {
-        return codeEditor;
-    }
 
     public File getDirectory() {
         return directory;
