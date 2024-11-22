@@ -2,19 +2,16 @@ package app;
 
 import data_access.AutoCompleteBST;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
-import data_access.AutoCompleteBST;
 import use_case.FileManagement.TabManagement;
 import view.*;
 import java.util.List;
 
 import javax.swing.*;
 
-import java.util.List;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * Builder for the Note Application.
@@ -24,6 +21,7 @@ public class IDEAppBuilder {
     public static final int WIDTH = 800;
     public static TabManagement tabManagement = new TabManagement();
     public static JScrollPane editorScrollPane;
+    public static JTabbedPane editorTabbedPane;
 
     private JScrollPane terminalScrollPane;
     private AutoCompleteOperations autoCompleteOperations;
@@ -49,7 +47,7 @@ public class IDEAppBuilder {
         frame.add(makeTerminalPanel(), BorderLayout.SOUTH);
 
 
-        JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, editorScrollPane);
+        JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, editorTabbedPane);
         leftRightSplitPane.setDividerLocation(300);
 
 
@@ -101,12 +99,14 @@ public class IDEAppBuilder {
         return terminalScrollPane;
     }
 
-    public JScrollPane makeEditorPanel() {
+    public JTabbedPane makeEditorPanel() {
         // make text area an instance variable with this function and create a getter and reference it for autocomp.
         editorObj = new EditorObj();
+        editorTabbedPane = new JTabbedPane();
         editorScrollPane = new JScrollPane(editorObj.getTextArea());
         editorScrollPane.setRowHeaderView(editorObj.getLineNums());
-        return editorScrollPane;
+        editorTabbedPane.add("New Tab", editorScrollPane);
+        return editorTabbedPane;
     }
 
 
