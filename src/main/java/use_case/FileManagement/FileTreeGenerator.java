@@ -29,29 +29,44 @@ public class FileTreeGenerator {
         directory = appBuilder.getDirectory();
     }
 
-    //TODO: check if changes work
+    //TODO: check if changes work. Also I am using Javaswing just to see the error more clearly
     public JTree createFileTree(File directory) {
         treeRootNode = createNodesFromDirectory(directory);
         fileTree = new JTree(treeRootNode);
 
-        // Add listener to open file on node click
+        // Modified valueChanged method in createFileTree
         fileTree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
+
+                // Check if a node is selected
                 if (selectedNode == null) {
-                    return; // No node selected, exit early.
+                    JOptionPane.showMessageDialog(null, "No file selected.");
+                    return;
                 }
+
+                // TODO: check if it is correct path. Construct the file path
                 File selectedFile = new File(directory, selectedNode.getUserObject().toString());
+
+                // Check if the selected node corresponds to a file
                 if (selectedFile.isFile()) {
-                    // Open the file
                     try {
+                        // Read file content
                         String content = Files.readString(selectedFile.toPath());
+                        System.out.println("File content loaded successfully.");
+
+                        // Open the file in a new tab and update the editor
                         appBuilder.createNewTab(selectedFile);
                         IDEAppBuilder.updateText(content);
+
                     } catch (IOException ex) {
                         JOptionPane.showMessageDialog(null, "Could not open file: " + ex.getMessage());
+                        ex.printStackTrace();
                     }
+                } else {
+                    //TODO: error here ... this happens
+                    JOptionPane.showMessageDialog(null, "Selected node is not a valid file.");
                 }
             }
         });
