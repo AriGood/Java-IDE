@@ -57,8 +57,7 @@ public class FileTreeGenerator {
                         System.out.println("File content loaded successfully.");
 
                         // Open the file in a new tab and update the editor
-                        appBuilder.createNewTab(selectedFile);
-                        IDEAppBuilder.updateText(content);
+                        appBuilder.openFile(selectedFile);
 
                     } catch (IOException ex) {
                         JOptionPane.showMessageDialog(null, "Could not open file: " + ex.getMessage());
