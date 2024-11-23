@@ -39,17 +39,18 @@ public class FileTreeGenerator {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
-                if (selectedNode == null || selectedNode.isLeaf()) {
-                    File selectedFile = new File(directory, selectedNode.getUserObject().toString());
-                    if (selectedFile.isFile()) {
-                        try {
-                            String content = Files.readString(selectedFile.toPath());
-                            // Assuming IDEAppBuilder has a method to update the text editor
-                            appBuilder.createNewTab(selectedFile);
-                            IDEAppBuilder.updateText(content);
-                        } catch (IOException ex) {
-                            JOptionPane.showMessageDialog(null, "Could not open file: " + ex.getMessage());
-                        }
+                if (selectedNode == null) {
+                    return; // No node selected, exit early.
+                }
+                File selectedFile = new File(directory, selectedNode.getUserObject().toString());
+                if (selectedFile.isFile()) {
+                    // Open the file
+                    try {
+                        String content = Files.readString(selectedFile.toPath());
+                        appBuilder.createNewTab(selectedFile);
+                        IDEAppBuilder.updateText(content);
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(null, "Could not open file: " + ex.getMessage());
                     }
                 }
             }
