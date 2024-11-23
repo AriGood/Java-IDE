@@ -50,7 +50,7 @@ public class FileTreeGenerator {
                 File selectedFile = new File(directory, selectedNode.getUserObject().toString());
 
                 // Check if the selected node corresponds to a file
-                if (selectedFile.isFile()) {
+                if (selectedFile.exists()) {
                     try {
                         // Read file content
                         String content = Files.readString(selectedFile.toPath());
