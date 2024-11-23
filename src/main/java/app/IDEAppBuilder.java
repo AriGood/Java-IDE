@@ -1,9 +1,9 @@
 package app;
 
 import data_access.AutoCompleteBST;
+import entity.EditorObj;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import use_case.FileManagement.FileTreeGenerator;
-import use_case.FileManagement.TabManagement;
 import view.*;
 import java.util.List;
 
@@ -20,14 +20,16 @@ import java.io.File;
 public class IDEAppBuilder {
     public static final int HEIGHT = 600;
     public static final int WIDTH = 800;
-    public static TabManagement tabManagement = new TabManagement();
     public static JScrollPane editorScrollPane;
+    public static IDEJTabbedPane editorTabbedPane;
 
     private JScrollPane terminalScrollPane;
     private AutoCompleteOperations autoCompleteOperations;
     private JScrollPane fileScrollPane;
     private File directory;
-    private static EditorObj editorObj;
+    private EditorObj editorObj;
+    private FileTreeObj fileTreeObj;
+    private JScrollPane currentScrollPane;
     private FileTreeGenerator fileTreeGenerator;
 
     /**
@@ -40,7 +42,6 @@ public class IDEAppBuilder {
         frame.setTitle("IDE Application");
         frame.setSize(WIDTH, HEIGHT);
 
-        tabManagement.newTab("New Tab");
         frame.setJMenuBar(makeMenuBar());
 
         frame.add(makeEditorPanel(), BorderLayout.CENTER);
@@ -48,14 +49,13 @@ public class IDEAppBuilder {
         frame.add(makeTerminalPanel(), BorderLayout.SOUTH);
 
 
-        JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, editorScrollPane);
+        JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, editorTabbedPane);
         leftRightSplitPane.setDividerLocation(300);
 
 
         JSplitPane topBottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, leftRightSplitPane, terminalScrollPane);
         topBottomSplitPane.setDividerLocation(400);
 
-        initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords());
         frame.add(topBottomSplitPane, BorderLayout.CENTER);
 
         frame.setVisible(true);
@@ -64,11 +64,9 @@ public class IDEAppBuilder {
 
     }
 
-    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
+    public void initializeAutoComplete(AutoCompleteBST autocompleteBST, JTextArea codeEditor) {
         AutoCompletePopup suggestionPopup = new AutoCompletePopup();
         autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
-
-        JTextArea codeEditor = editorObj.getTextArea();
 
         codeEditor.addKeyListener(new KeyAdapter() {
             @Override
@@ -103,21 +101,23 @@ public class IDEAppBuilder {
     }
 
     private JScrollPane makeTerminalPanel() {
-        TerminalObj terminal = new TerminalObj();
-        terminalScrollPane = new JScrollPane(terminal.getTextArea());
+        TerminalObj terminalWindow = new TerminalObj();
+        terminalScrollPane = new JScrollPane(terminalWindow);
         return terminalScrollPane;
     }
 
-    public JScrollPane makeEditorPanel() {
+    public JTabbedPane makeEditorPanel() {
         // make text area an instance variable with this function and create a getter and reference it for autocomp.
-        editorObj = new EditorObj();
-        editorScrollPane = new JScrollPane(editorObj.getTextArea());
-        editorScrollPane.setRowHeaderView(editorObj.getLineNums());
-        return editorScrollPane;
+//        editorObj = new EditorObj();
+        editorTabbedPane = new IDEJTabbedPane(this);
+//        editorScrollPane = new JScrollPane(editorObj.getTextArea());
+//        editorScrollPane.setRowHeaderView(editorObj.getLineNums());
+//        editorTabbedPane.add("New Tab", editorScrollPane);
+        return editorTabbedPane;
     }
 
-    public void createNewTab(File selectedFile) {
-        tabManagement.newTab(selectedFile);
+    public void openFile(File file) {
+        editorTabbedPane.addTab(file);
     }
 
 
@@ -126,7 +126,6 @@ public class IDEAppBuilder {
 //        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
 //        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
 //    }
-
 
     public File getDirectory() {
         return directory;
@@ -138,10 +137,6 @@ public class IDEAppBuilder {
 
     public JScrollPane getEditorScrollPane() {
         return editorScrollPane;
-    }
-
-    public static void updateText(String newText){
-        editorObj.updateTextArea(newText);
     }
 
 }
