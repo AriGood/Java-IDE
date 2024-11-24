@@ -15,9 +15,6 @@ import java.util.Arrays;
 
 /**
  * Class to convert list of files into a tree.
- * I added what I had written in my mock draft - Dario
- * I can't figure out the untracked files thing yet so I copied what Dario has done so far.
- * I'll be working on it on this branch. - Mariana
  */
 public class FileTreeGenerator {
     private JTree fileTree;
@@ -30,7 +27,7 @@ public class FileTreeGenerator {
         directory = appBuilder.getDirectory();
     }
 
-    //TODO: finish. Also I am using Javaswing just to see the error more clearly
+    //TODO: which java swing elements to remove?
     public JTree createFileTree(File directory) {
         treeRootNode = createNodesFromDirectory(directory);
         fileTree = new JTree(treeRootNode);
@@ -43,10 +40,11 @@ public class FileTreeGenerator {
 
                 // Check if a node is selected
                 if (selectedNode == null) {
-                    JOptionPane.showMessageDialog(null, "No file selected.");
+                    System.out.println("No file selected.");
                     return;
                 }
-                // Reconstruct the file path from the selected node
+
+                // Reconstruct file path from the selected node
                 StringBuilder filePathBuilder = new StringBuilder();
                 TreeNode[] nodePath = selectedNode.getPath();
                 for (TreeNode node : nodePath) {
@@ -61,17 +59,17 @@ public class FileTreeGenerator {
                     try {
                         // Read file content
                         String content = Files.readString(selectedFile.toPath());
-                        System.out.println("File content loaded successfully.");
+                        System.out.println("File content loaded successfully: " + content);
 
-                        // Open the file in a new tab and update the editor
+                        // Open the file
                         appBuilder.openFile(selectedFile);
 
                     } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(null, "Could not open file: " + ex.getMessage());
+                        System.err.println("Could not open file: " + ex.getMessage());
                         ex.printStackTrace();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Selected node is not a valid file.");
+                    System.out.println("Selected node is not a valid file.");
                 }
             }
         });
