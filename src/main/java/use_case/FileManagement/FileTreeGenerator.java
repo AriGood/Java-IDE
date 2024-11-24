@@ -7,6 +7,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,7 +30,7 @@ public class FileTreeGenerator {
         directory = appBuilder.getDirectory();
     }
 
-    //TODO: check if changes work. Also I am using Javaswing just to see the error more clearly
+    //TODO: finish. Also I am using Javaswing just to see the error more clearly
     public JTree createFileTree(File directory) {
         treeRootNode = createNodesFromDirectory(directory);
         fileTree = new JTree(treeRootNode);
@@ -45,9 +46,15 @@ public class FileTreeGenerator {
                     JOptionPane.showMessageDialog(null, "No file selected.");
                     return;
                 }
+                // Reconstruct the file path from the selected node
+                StringBuilder filePathBuilder = new StringBuilder();
+                TreeNode[] nodePath = selectedNode.getPath();
+                for (TreeNode node : nodePath) {
+                    filePathBuilder.append(node.toString()).append(File.separator);
+                }
+                String filePath = filePathBuilder.toString().replaceAll(File.separator + "$", ""); // Remove trailing separator
 
-                // TODO: check if it is correct path. Construct the file path
-                File selectedFile = new File(directory, selectedNode.getUserObject().toString());
+                File selectedFile = new File(directory.getParent(), filePath);
 
                 // Check if the selected node corresponds to a file
                 if (selectedFile.exists()) {
@@ -64,7 +71,6 @@ public class FileTreeGenerator {
                         ex.printStackTrace();
                     }
                 } else {
-                    //TODO: error here ... this happens
                     JOptionPane.showMessageDialog(null, "Selected node is not a valid file.");
                 }
             }
@@ -72,6 +78,7 @@ public class FileTreeGenerator {
 
         return fileTree;
     }
+
 
     private DefaultMutableTreeNode createNodesFromDirectory(File directory) {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(directory.getName());
