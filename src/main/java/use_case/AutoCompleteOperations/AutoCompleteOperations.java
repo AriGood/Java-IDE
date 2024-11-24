@@ -1,7 +1,6 @@
 package use_case.AutoCompleteOperations;
 
 import data_access.AutoCompleteBST;
-import use_case.FileManagement.TabManagement;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;

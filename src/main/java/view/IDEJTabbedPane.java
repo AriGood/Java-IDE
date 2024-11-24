@@ -15,7 +15,6 @@ import java.util.List;
 public class IDEJTabbedPane extends JTabbedPane {
 
     private List<EditorObj> editorObjs = new ArrayList<>();
-    private JButton closeButton;
 
     public IDEJTabbedPane(IDEAppBuilder appBuilder) {
         this.addChangeListener(e -> {
@@ -25,14 +24,17 @@ public class IDEJTabbedPane extends JTabbedPane {
                 appBuilder.initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords(), currentTextArea);
             }
         });
+    }
 
-        closeButton = new JButton("x");
+    private JButton newCloseButton() {
+        JButton closeButton = new JButton("x");
         closeButton.setPreferredSize(new Dimension(15, 15));
         closeButton.setMargin(new Insets(0, 0, 5, 0));
         closeButton.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
         closeButton.addActionListener(e -> {
             closeTab();
         });
+        return closeButton;
     }
 
     private void closeTab() {
@@ -60,7 +62,7 @@ public class IDEJTabbedPane extends JTabbedPane {
         tabHeader.setOpaque(false);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         tabHeader.add(titleLabel, BorderLayout.WEST);
-        tabHeader.add(closeButton, BorderLayout.EAST);
+        tabHeader.add(newCloseButton(), BorderLayout.EAST);
         return tabHeader;
     }
 
