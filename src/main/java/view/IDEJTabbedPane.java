@@ -57,7 +57,7 @@ public class IDEJTabbedPane extends JTabbedPane {
         newScrollPane.setRowHeaderView(editorObj.getLineNums());
         this.add(file.getName(), newScrollPane);
         this.setTabComponentAt(this.getTabCount() - 1, createTabHeader(file.getName()));
-
+        this.setSelectedIndex(this.getTabCount() - 1);
     }
 
     private JPanel createTabHeader(String title) {

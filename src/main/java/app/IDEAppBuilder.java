@@ -31,21 +31,31 @@ public class IDEAppBuilder {
     private FileTreeObj fileTreeObj;
     private JScrollPane currentScrollPane;
     private FileTreeGenerator fileTreeGenerator;
+    private JFrame frame;
 
     /**
      * Builds the application.
      * @return the JFrame for the application
      */
     public JFrame build() {
-        final JFrame frame = new JFrame();
+        final JFrame newFrame = new JFrame();
+        frame = newFrame;
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setTitle("IDE Application");
         frame.setSize(WIDTH, HEIGHT);
 
         frame.setJMenuBar(makeMenuBar());
+        frame.add(makeFilePanel(), BorderLayout.CENTER);
 
+        frame.setVisible(true);
+
+        return frame;
+
+    }
+
+    public void buildIDE() {
         frame.add(makeEditorPanel(), BorderLayout.CENTER);
-        frame.add(makeFilePanel(), BorderLayout.WEST);
+
         frame.add(makeTerminalPanel(), BorderLayout.SOUTH);
 
 
@@ -57,11 +67,7 @@ public class IDEAppBuilder {
         topBottomSplitPane.setDividerLocation(400);
 
         frame.add(topBottomSplitPane, BorderLayout.CENTER);
-
-        frame.setVisible(true);
-
-        return frame;
-
+        frame.revalidate();
     }
 
     public void initializeAutoComplete(AutoCompleteBST autocompleteBST, JTextArea codeEditor) {
@@ -81,10 +87,16 @@ public class IDEAppBuilder {
 
 
     private JScrollPane makeFilePanel() {
-        FileTreeObj fileTreeObj = new FileTreeObj(this);
-        fileScrollPane = new JScrollPane(fileTreeObj.getFileTree());
-        directory = fileTreeObj.getDirectory();
+        fileScrollPane = new JScrollPane();
+        JLabel messageLabel = new JLabel("Select A Project Directory To Get Started", JLabel.CENTER);
+        fileScrollPane.setViewportView(messageLabel);
         return fileScrollPane;
+    }
+
+    public void buildTree() {
+        fileTreeObj = new FileTreeObj(this);
+        directory = fileTreeObj.getDirectory();
+        fileScrollPane.setViewportView(fileTreeObj.getFileTree());
     }
 
     private JMenuBar makeMenuBar() {
@@ -129,6 +141,10 @@ public class IDEAppBuilder {
 
     public File getDirectory() {
         return directory;
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 
     public JScrollPane getTerminalScrollPane() {
