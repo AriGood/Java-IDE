@@ -2,6 +2,7 @@ package view;
 
 import app.IDEAppBuilder;
 import data_access.AutoCompleteBST;
+import entity.Editor;
 import entity.EditorObj;
 import use_case.FileManagement.FileOperations;
 
@@ -40,6 +41,8 @@ public class IDEJTabbedPane extends JTabbedPane {
     private void closeTab() {
         int currentTabIndex = getSelectedIndex();
         if (currentTabIndex != -1) {
+            EditorObj currentEditorObj = editorObjs.get(currentTabIndex);
+            use_case.FileManagement.FileOperations.saveFile(currentEditorObj.getFile(), currentEditorObj.getTextArea().getText());
             this.remove(currentTabIndex);
             this.editorObjs.remove(currentTabIndex);
         }
@@ -47,6 +50,7 @@ public class IDEJTabbedPane extends JTabbedPane {
 
     public void addTab(File file) {
         EditorObj editorObj = new EditorObj();
+        editorObj.setFile(file);
         editorObj.setTextArea(FileOperations.fileContent(file));
         this.editorObjs.add(editorObj);
         JScrollPane newScrollPane = new JScrollPane(editorObj.getTextArea());
