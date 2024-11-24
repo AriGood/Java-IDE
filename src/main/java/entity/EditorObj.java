@@ -2,10 +2,12 @@ package entity;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class EditorObj {
     private JTextArea textArea;
     private JTextArea lineNums;
+    private File file;
 
     public EditorObj() {
         textArea = new JTextArea();
@@ -30,6 +32,10 @@ public class EditorObj {
         textArea.setText(text);
     }
 
+    public void setFile (File file) {
+        this.file = file;
+    }
+
     public void updateTextArea(String newText) {
         textArea.setText(newText);
     }
@@ -40,5 +46,9 @@ public class EditorObj {
 
     public JTextArea getLineNums() {
         return lineNums;
+    }
+
+    public File getFile() {
+        return file;
     }
 }

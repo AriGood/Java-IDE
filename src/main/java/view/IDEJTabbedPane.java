@@ -2,6 +2,7 @@ package view;
 
 import app.IDEAppBuilder;
 import data_access.AutoCompleteBST;
+import entity.Editor;
 import entity.EditorObj;
 import use_case.FileManagement.FileOperations;
 
@@ -15,7 +16,6 @@ import java.util.List;
 public class IDEJTabbedPane extends JTabbedPane {
 
     private List<EditorObj> editorObjs = new ArrayList<>();
-    private JButton closeButton;
 
     public IDEJTabbedPane(IDEAppBuilder appBuilder) {
         this.addChangeListener(e -> {
@@ -25,19 +25,24 @@ public class IDEJTabbedPane extends JTabbedPane {
                 appBuilder.initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords(), currentTextArea);
             }
         });
+    }
 
-        closeButton = new JButton("x");
+    private JButton newCloseButton() {
+        JButton closeButton = new JButton("x");
         closeButton.setPreferredSize(new Dimension(15, 15));
         closeButton.setMargin(new Insets(0, 0, 5, 0));
         closeButton.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
         closeButton.addActionListener(e -> {
             closeTab();
         });
+        return closeButton;
     }
 
     private void closeTab() {
         int currentTabIndex = getSelectedIndex();
         if (currentTabIndex != -1) {
+            EditorObj currentEditorObj = editorObjs.get(currentTabIndex);
+            use_case.FileManagement.FileOperations.saveFile(currentEditorObj.getFile(), currentEditorObj.getTextArea().getText());
             this.remove(currentTabIndex);
             this.editorObjs.remove(currentTabIndex);
         }
@@ -45,6 +50,7 @@ public class IDEJTabbedPane extends JTabbedPane {
 
     public void addTab(File file) {
         EditorObj editorObj = new EditorObj();
+        editorObj.setFile(file);
         editorObj.setTextArea(FileOperations.fileContent(file));
         this.editorObjs.add(editorObj);
         JScrollPane newScrollPane = new JScrollPane(editorObj.getTextArea());
@@ -60,7 +66,7 @@ public class IDEJTabbedPane extends JTabbedPane {
         tabHeader.setOpaque(false);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         tabHeader.add(titleLabel, BorderLayout.WEST);
-        tabHeader.add(closeButton, BorderLayout.EAST);
+        tabHeader.add(newCloseButton(), BorderLayout.EAST);
         return tabHeader;
     }
 
