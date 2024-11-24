@@ -38,40 +38,34 @@ public class FileTreeGenerator {
         fileTree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
-                // Get the selected node from the tree
                 DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
 
-                // Ensure a node is selected
+                // Check if a node is selected
                 if (selectedNode == null) {
-                    return; // No node selected, exit
-                }
-
-                // Get the file name associated with the selected node
-                Object userObject = selectedNode.getUserObject();
-                if (userObject == null) {
-                    JOptionPane.showMessageDialog(null, "Selected node is invalid.");
+                    JOptionPane.showMessageDialog(null, "No file selected.");
                     return;
                 }
 
-                // Create the file path using the directory and node name
-                String nodeName = userObject.toString();
-                File selectedFile = new File(directory, nodeName);
+                // TODO: check if it is correct path. Construct the file path
+                File selectedFile = new File(directory, selectedNode.getUserObject().toString());
 
                 // Check if the selected node corresponds to a file
-                if (selectedFile.isFile()) {
+                if (selectedFile.exists()) {
                     try {
                         // Read file content
                         String content = Files.readString(selectedFile.toPath());
+                        System.out.println("File content loaded successfully.");
 
-                        // Open the file in the editor
-                        appBuilder.createNewTab(selectedFile); // Open a new tab for the file
-                        IDEAppBuilder.updateText(content);     // Update the text editor with file content
+                        // Open the file in a new tab and update the editor
+                        appBuilder.openFile(selectedFile);
+
                     } catch (IOException ex) {
                         JOptionPane.showMessageDialog(null, "Could not open file: " + ex.getMessage());
+                        ex.printStackTrace();
                     }
                 } else {
-                    //TODO: ERROR HERE bc it always goes to this
-                    JOptionPane.showMessageDialog(null, "Selected node is not a file.");
+                    //TODO: error here ... this happens
+                    JOptionPane.showMessageDialog(null, "Selected node is not a valid file.");
                 }
             }
         });
