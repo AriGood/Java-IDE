@@ -13,7 +13,17 @@ public class TerminalOperations {
 
     public void executeCommand(String command, CommandCallback callback) {
         if (command.equalsIgnoreCase("clear")) {
-            callback.onOutput(""); // Clear command
+            callback.onOutput(""); // Clear the terminal UI
+
+            try {
+                ProcessBuilder builder = new ProcessBuilder();
+                builder.command("bash", "-c", "clear");
+                Process process = builder.start();
+                process.waitFor();
+            } catch (IOException | InterruptedException e) {
+                callback.onError("Error executing 'clear' command: " + e.getMessage() + "\n");
+            }
+
             return;
         }
 

@@ -61,8 +61,12 @@ public class TerminalObj extends JPanel {
                 terminalOperations.executeCommand(command, new TerminalOperations.CommandCallback() {
                     @Override
                     public void onOutput(String output) {
-                        outputArea.append(output);
-                        outputArea.setCaretPosition(outputArea.getDocument().getLength());
+                        if (command.equalsIgnoreCase("clear")) {
+                            outputArea.setText("");
+                        } else {
+                            outputArea.append(output);
+                            outputArea.setCaretPosition(outputArea.getDocument().getLength());
+                        }
                     }
 
                     @Override
