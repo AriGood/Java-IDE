@@ -3,6 +3,7 @@ package app;
 import data_access.AutoCompleteBST;
 import entity.EditorObj;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
+import use_case.FileManagement.FileTreeGenerator;
 import view.*;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class IDEAppBuilder {
     private EditorObj editorObj;
     private FileTreeObj fileTreeObj;
     private JScrollPane currentScrollPane;
+    private FileTreeGenerator fileTreeGenerator;
 
     /**
      * Builds the application.
@@ -40,7 +42,6 @@ public class IDEAppBuilder {
         frame.setTitle("IDE Application");
         frame.setSize(WIDTH, HEIGHT);
 
-        //tabManagement.newTab("New Tab");
         frame.setJMenuBar(makeMenuBar());
 
         frame.add(makeEditorPanel(), BorderLayout.CENTER);
@@ -55,7 +56,6 @@ public class IDEAppBuilder {
         JSplitPane topBottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, leftRightSplitPane, terminalScrollPane);
         topBottomSplitPane.setDividerLocation(400);
 
-//        initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords());
         frame.add(topBottomSplitPane, BorderLayout.CENTER);
 
         frame.setVisible(true);
@@ -81,7 +81,7 @@ public class IDEAppBuilder {
 
 
     private JScrollPane makeFilePanel() {
-        fileTreeObj = new FileTreeObj();
+        FileTreeObj fileTreeObj = new FileTreeObj(this);
         fileScrollPane = new JScrollPane(fileTreeObj.getFileTree());
         directory = fileTreeObj.getDirectory();
         return fileScrollPane;
@@ -91,6 +91,13 @@ public class IDEAppBuilder {
         MenuBarObj menuBarObj = new MenuBarObj(this);
         menuBarObj.buildMenu();
         return menuBarObj.getMenuBar();
+    }
+
+    // New
+    public void updateFileTree(File newDirectory) {
+        directory = newDirectory;
+        fileTreeGenerator.updateTree(directory);
+        fileScrollPane.setViewportView(fileTreeGenerator.createFileTree(directory));
     }
 
     private JScrollPane makeTerminalPanel() {
