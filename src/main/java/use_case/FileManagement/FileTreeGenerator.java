@@ -27,7 +27,6 @@ public class FileTreeGenerator {
         directory = appBuilder.getDirectory();
     }
 
-    //TODO: which java swing elements to remove?
     public JTree createFileTree(File directory) {
         treeRootNode = createNodesFromDirectory(directory);
         fileTree = new JTree(treeRootNode);
