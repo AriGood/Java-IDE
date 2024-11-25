@@ -13,7 +13,7 @@ public class FileOperations {
      * @param file the file to save to
      * @param content the content to save into the file
      */
-    public void saveFile(File file, String content) {
+    public static void saveFile(File file, String content) {
         //TODO: in progress
 
         // Note: intellij suggested to use a logging framework...?  instead of system.out

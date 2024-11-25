@@ -34,15 +34,17 @@ public class MenuBarObj {
         });
 
         openDirectory.addActionListener(e -> {
-            JFileChooser directoryChooser = new JFileChooser();
-            directoryChooser.setDialogTitle("Select a Directory");
-            directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int option = directoryChooser.showOpenDialog(null);
-
-            if (option == JFileChooser.APPROVE_OPTION) {
-                File selectedDirectory = directoryChooser.getSelectedFile();
-                IDEAppBuilder.updateFileTree(selectedDirectory);
-            }
+            IDEAppBuilder.buildTree();
+            IDEAppBuilder.buildIDE();
+//            JFileChooser directoryChooser = new JFileChooser();
+//            directoryChooser.setDialogTitle("Choose Project Directory");
+//            directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//            int option = directoryChooser.showOpenDialog(null);
+//
+//            if (option == JFileChooser.APPROVE_OPTION) {
+//                File selectedDirectory = directoryChooser.getSelectedFile();
+//                IDEAppBuilder.updateFileTree(selectedDirectory);
+//            }
         });
 
         saveFile.addActionListener(new ActionListener() {

@@ -24,6 +24,8 @@ public class TerminalObj extends JPanel {
         JScrollPane scrollPane = new JScrollPane(outputArea);
 
         inputField = new JTextField();
+        inputField.setBackground(new Color(169, 169, 169));
+        inputField.setForeground(Color.BLACK);
         commandHistory = new ArrayList<>();
         historyIndex = -1;
 
@@ -59,8 +61,12 @@ public class TerminalObj extends JPanel {
                 terminalOperations.executeCommand(command, new TerminalOperations.CommandCallback() {
                     @Override
                     public void onOutput(String output) {
-                        outputArea.append(output);
-                        outputArea.setCaretPosition(outputArea.getDocument().getLength());
+                        if (command.equalsIgnoreCase("clear")) {
+                            outputArea.setText("");
+                        } else {
+                            outputArea.append(output);
+                            outputArea.setCaretPosition(outputArea.getDocument().getLength());
+                        }
                     }
 
                     @Override

@@ -18,6 +18,12 @@ public class FileTreeObj {
 
     public void chooseDiretory() {
         JFileChooser fileChooser = new JFileChooser();
+
+        //TODO Remove this when done.
+//        //The next line is only to make testing easier by setting the default directory to where I keep my Files - Dario
+//        //Feel free to use your path for testing
+        fileChooser.setCurrentDirectory(new File("D:\\Users\\dario\\IdeaProjects\\puentesd"));
+
         fileChooser.setDialogTitle("Select a Project to Open");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int option = fileChooser.showOpenDialog(null);
