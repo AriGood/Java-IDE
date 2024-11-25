@@ -36,15 +36,6 @@ public class MenuBarObj {
         openDirectory.addActionListener(e -> {
             IDEAppBuilder.buildTree();
             IDEAppBuilder.buildIDE();
-//            JFileChooser directoryChooser = new JFileChooser();
-//            directoryChooser.setDialogTitle("Choose Project Directory");
-//            directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//            int option = directoryChooser.showOpenDialog(null);
-//
-//            if (option == JFileChooser.APPROVE_OPTION) {
-//                File selectedDirectory = directoryChooser.getSelectedFile();
-//                IDEAppBuilder.updateFileTree(selectedDirectory);
-//            }
         });
 
         saveFile.addActionListener(new ActionListener() {
@@ -60,6 +51,19 @@ public class MenuBarObj {
         menuBar.add(fileMenu);
     }
 
+    private void addEditMenu() {
+        JMenu editMenu = new JMenu("Edit");
+        JMenuItem find = new JMenuItem("Find");
+        JMenuItem findAll = new JMenuItem("Find All");
+
+    }
+
+    private void addGitMenu(){
+        JMenu gitMenu = new JMenu("Git");
+        JMenuItem commit = new JMenuItem("Commit");
+        JMenuItem push = new JMenuItem("Push");
+        JMenuItem pull = new JMenuItem("Pull");
+    }
     public void buildMenu() {
         addFileMenu();
     }
