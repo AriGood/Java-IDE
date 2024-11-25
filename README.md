@@ -60,6 +60,6 @@ Mariana Novoa - mariana-novoa:
 Tracy wants to manage files and run Java programs directly through an integrated terminal, so that she can create, delete, and run files without leaving the IDE.
 
 Yara Alkurdi - yaraalkurdi:
-Jessica, while developing her Java program, wants to use a Terminal within her IDE, so that she can run commands, scan output, and manage multiple command sessions through tabs, while viewing the output directly via System.out, to efficiently debug and test her code.
+Jessica, while developing her Java program, wants to use a terminal within her IDE to run commands, navigate between directories, and view output directly in a terminal UI. This helps her efficiently interact with her project's environment without leaving the IDE.
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
