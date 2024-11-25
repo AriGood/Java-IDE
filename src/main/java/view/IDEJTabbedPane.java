@@ -52,12 +52,25 @@ public class IDEJTabbedPane extends JTabbedPane {
         EditorObj editorObj = new EditorObj();
         editorObj.setFile(file);
         editorObj.setTextArea(FileOperations.fileContent(file));
+        if (isDuplicate(editorObj)) {
+            return;
+        }
         this.editorObjs.add(editorObj);
         JScrollPane newScrollPane = new JScrollPane(editorObj.getTextArea());
         newScrollPane.setRowHeaderView(editorObj.getLineNums());
         this.add(file.getName(), newScrollPane);
         this.setTabComponentAt(this.getTabCount() - 1, createTabHeader(file.getName()));
         this.setSelectedIndex(this.getTabCount() - 1);
+    }
+
+    private boolean isDuplicate(EditorObj editorObj) {
+        for (int i = 0; i < this.editorObjs.size(); i++) {
+            if (this.editorObjs.get(i).getFile().equals(editorObj.getFile())) {
+                this.setSelectedIndex(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     private JPanel createTabHeader(String title) {
