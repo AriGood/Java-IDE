@@ -17,8 +17,8 @@ import java.util.Arrays;
  * Class to convert list of files into a tree.
  */
 public class FileTreeGenerator {
-    private JTree fileTree;
-    private DefaultMutableTreeNode treeRootNode;
+    private static JTree fileTree;
+    private static DefaultMutableTreeNode treeRootNode;
     private File directory;
     private IDEAppBuilder appBuilder;
 
@@ -105,7 +105,7 @@ public class FileTreeGenerator {
     }
 
 
-    public void createFile(File parent) {
+    public static void createFile(File parent) {
         String fileName = JOptionPane.showInputDialog(null, "File name:", "File", JOptionPane.QUESTION_MESSAGE);
 
         if (fileName == null || fileName.trim().isEmpty()) {
@@ -134,7 +134,7 @@ public class FileTreeGenerator {
             JOptionPane.showMessageDialog(null, "Security access denied", "File", JOptionPane.ERROR_MESSAGE);
         }
     }
-    private DefaultMutableTreeNode findNodeByName(String nodeName, DefaultMutableTreeNode root) {
+    private static DefaultMutableTreeNode findNodeByName(String nodeName, DefaultMutableTreeNode root) {
         if (root.toString().equals(nodeName)) {
             return root;
         }
