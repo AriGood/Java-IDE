@@ -28,6 +28,7 @@ public class IDEJTabbedPane extends JTabbedPane {
                 }
             }
 
+            @Override
             public void mousePressed(MouseEvent e) {
                 if (e.isPopupTrigger()) {
                     rightClickEvent(e);
@@ -37,12 +38,12 @@ public class IDEJTabbedPane extends JTabbedPane {
             public void rightClickEvent(MouseEvent e) {
                 if (e.isPopupTrigger()) {
 
-                    JPopupMenu popupMenu = this.newTabPopUPMenu(e);
+                    JPopupMenu popupMenu = this.newTabPopUPMenu();
                     popupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
 
-            private JPopupMenu newTabPopUPMenu(MouseEvent e) {
+            private JPopupMenu newTabPopUPMenu() {
                 JPopupMenu popupMenu = new JPopupMenu();
 
                 JMenuItem closeAllTabs = new JMenuItem("Close All Tabs");
@@ -51,11 +52,13 @@ public class IDEJTabbedPane extends JTabbedPane {
                 JMenuItem closeTabsToTheLeft = new JMenuItem("Close Tabs To The Left");
                 JMenuItem splitTab = new JMenuItem("Split Tab");
 
-//              closeAllTabs.addActionListener(ev -> closeAllTabs());
-//              closeOtherTabs.addActionListener(ev -> closeOtherTabs(getSelectedIndex()));
-//              closeTabsToTheRight.addActionListener(ev -> closeTabsToTheRight(getSelectedIndex()));
-//              closeTabsToTheLeft.addActionListener(ev -> closeTabsToTheLeft(getSelectedIndex()));
-//              splitTab.addActionListener(ev -> splitTab(getSelectedIndex()));
+                int selectedIndex = getSelectedIndex();
+
+                closeAllTabs.addActionListener(ev -> closeAllTabs());
+                closeOtherTabs.addActionListener(ev -> closeOtherTabs(selectedIndex));
+                closeTabsToTheRight.addActionListener(ev -> closeTabsToTheRight(selectedIndex));
+                closeTabsToTheLeft.addActionListener(ev -> closeTabsToTheLeft(selectedIndex));
+                splitTab.addActionListener(ev -> splitTab(selectedIndex));
 
                 popupMenu.add(closeAllTabs);
                 popupMenu.add(closeOtherTabs);
@@ -67,6 +70,7 @@ public class IDEJTabbedPane extends JTabbedPane {
                 return popupMenu;
             }
         });
+
         this.addChangeListener(e -> {
             int currentTabIndex = getSelectedIndex();
             if (currentTabIndex != -1) {
@@ -78,6 +82,7 @@ public class IDEJTabbedPane extends JTabbedPane {
 
     private void closeAllTabs() {
         this.removeAll();
+        editorObjs.clear();
     }
 
     private JButton newCloseButton() {
