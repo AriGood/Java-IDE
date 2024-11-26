@@ -38,12 +38,6 @@ public class MenuBarObj {
             IDEAppBuilder.buildIDE();
         });
 
-        saveFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //TODO
-            }
-        });
 
         fileMenu.add(newFile);
         fileMenu.add(openDirectory);
@@ -58,14 +52,14 @@ public class MenuBarObj {
 
     }
 
-    private void addGitMenu(){
-        JMenu gitMenu = new JMenu("Git");
-        JMenuItem commit = new JMenuItem("Commit");
-        JMenuItem push = new JMenuItem("Push");
-        JMenuItem pull = new JMenuItem("Pull");
+    private void addGitMenu() {
+        gitMenuObj gitmenuObj = new gitMenuObj();
+        menuBar.add(gitmenuObj.getGitMenu());
     }
     public void buildMenu() {
         addFileMenu();
+        addEditMenu();
+        addGitMenu();
     }
 
     public JMenuBar getMenuBar() {
