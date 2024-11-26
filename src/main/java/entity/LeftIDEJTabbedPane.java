@@ -2,19 +2,12 @@ package entity;
 
 import app.IDEAppBuilder;
 import data_access.AutoCompleteBST;
-import use_case.FileManagement.FileOperations;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-public class RightIDEJTabbedPane extends ParentIDEJTabbedPane {
+public class LeftIDEJTabbedPane extends ParentIDEJTabbedPane {
 
-    public RightIDEJTabbedPane(IDEAppBuilder ideAppBuilder) {
+    public LeftIDEJTabbedPane(IDEAppBuilder ideAppBuilder) {
         super(ideAppBuilder);
 
         this.addChangeListener(e -> {
@@ -34,35 +27,34 @@ public class RightIDEJTabbedPane extends ParentIDEJTabbedPane {
         JMenuItem closeOtherTabs = new JMenuItem("Close Other Tabs");
         JMenuItem closeTabsToTheLeft = new JMenuItem("Close Tabs To The Left");
         JMenuItem closeTabsToTheRight = new JMenuItem("Close Tabs To The Right");
-        JMenuItem mergeTab = new JMenuItem("Merge Tab");
+        JMenuItem splitTab = new JMenuItem("Split Tab");
 
         closeAllTabs.addActionListener(e -> closeAllTabs());
         closeOtherTabs.addActionListener(e -> closeOtherTabs(selectedIndex));
         closeTabsToTheLeft.addActionListener(e -> closeTabsToLeft(selectedIndex));
         closeTabsToTheRight.addActionListener(e -> closeTabsToRight(selectedIndex));
-        mergeTab.addActionListener(e -> mergeTab(selectedIndex));
+        splitTab.addActionListener(e -> splitTab(selectedIndex));
 
         popupMenu.add(closeAllTabs);
         popupMenu.add(closeOtherTabs);
         popupMenu.add(closeTabsToTheLeft);
         popupMenu.add(closeTabsToTheRight);
-        popupMenu.add(mergeTab);
+        popupMenu.add(splitTab);
         popupMenu.setVisible(true);
 
         return popupMenu;
     }
 
-    private void mergeTab(int selectedIndex) {
-        setSelectedIndex(selectedIndex);
+    private void splitTab(int selectedIndex) {
         EditorObj editorObj = editorObjs.get(selectedIndex);
+        RightIDEJTabbedPane newTabbedPane = new RightIDEJTabbedPane(ideAppBuilder);
+        newTabbedPane.addTab(editorObj.getFile());
         closeTab(selectedIndex);
-        ideAppBuilder.getLeftEditorTabbedPane().addTab(editorObj.getFile());
-        if (editorObjs.isEmpty()) {
-            ideAppBuilder.getLeftRightSplitPane().setRightComponent(ideAppBuilder.getLeftEditorTabbedPane());
-            ideAppBuilder.setRightEditorTabbedPane(null);
+        if (ideAppBuilder.getRightEditorTabbedPane() != null) {
+            ideAppBuilder.getRightEditorTabbedPane().addTab(editorObj.getFile());
+        } else {
+            JSplitPane newSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this, newTabbedPane);
+            ideAppBuilder.splitEditor(newSplitPane);
         }
-        ideAppBuilder.getFrame().revalidate();
-        ideAppBuilder.getFrame().repaint();
-
     }
 }
