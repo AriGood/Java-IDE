@@ -1,29 +1,25 @@
-package view;
+package entity;
 
 import app.IDEAppBuilder;
 import data_access.AutoCompleteBST;
-import entity.Editor;
-import entity.EditorObj;
-import entity.RightIDEJTabbedPane;
 import use_case.FileManagement.FileOperations;
+import view.IDEJTabbedPane;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IDEJTabbedPane extends JTabbedPane {
+public class RightIDEJTabbedPane extends JTabbedPane {
 
     private List<EditorObj> editorObjs = new ArrayList<>();
     private IDEAppBuilder ideAppBuilder;
 
-    public IDEJTabbedPane(IDEAppBuilder appBuilder) {
-        ideAppBuilder = appBuilder;
+    public RightIDEJTabbedPane(IDEAppBuilder ideAppBuilder) {
+        this.ideAppBuilder = ideAppBuilder;
         this.addMouseListener(new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
                 if (e.isPopupTrigger()) {
@@ -46,14 +42,14 @@ public class IDEJTabbedPane extends JTabbedPane {
                 }
             }
 
-            protected JPopupMenu newTabPopUPMenu() {
+            private JPopupMenu newTabPopUPMenu() {
                 JPopupMenu popupMenu = new JPopupMenu();
 
                 JMenuItem closeAllTabs = new JMenuItem("Close All Tabs");
                 JMenuItem closeOtherTabs = new JMenuItem("Close Other Tabs");
                 JMenuItem closeTabsToTheRight = new JMenuItem("Close Tabs To The Right");
                 JMenuItem closeTabsToTheLeft = new JMenuItem("Close Tabs To The Left");
-                JMenuItem splitTab = new JMenuItem("Split Tab");
+                JMenuItem mergeTab = new JMenuItem("Merge Tab");
 
                 int selectedIndex = getSelectedIndex();
 
@@ -61,39 +57,31 @@ public class IDEJTabbedPane extends JTabbedPane {
                 closeOtherTabs.addActionListener(ev -> closeOtherTabs(selectedIndex));
                 closeTabsToTheRight.addActionListener(ev -> closeTabsToTheRight(selectedIndex));
                 closeTabsToTheLeft.addActionListener(ev -> closeTabsToTheLeft(selectedIndex));
-                splitTab.addActionListener(ev -> splitTab(selectedIndex));
+                mergeTab.addActionListener(ev -> mergeTab(selectedIndex));
 
                 popupMenu.add(closeAllTabs);
                 popupMenu.add(closeOtherTabs);
                 popupMenu.add(closeTabsToTheRight);
                 popupMenu.add(closeTabsToTheLeft);
-                popupMenu.add(splitTab);
+                popupMenu.add(mergeTab);
                 popupMenu.setVisible(true);
 
                 return popupMenu;
             }
         });
-
-        this.addChangeListener(e -> {
-            int currentTabIndex = getSelectedIndex();
-            if (currentTabIndex != -1) {
-                JTextArea currentTextArea = editorObjs.get(currentTabIndex).getTextArea();
-                appBuilder.initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords(), currentTextArea);
-            }
-        });
     }
 
-    private void splitTab(int selectedIndex) {
+    private void mergeTab(int selectedIndex) {
+        setSelectedIndex(selectedIndex);
         EditorObj editorObj = editorObjs.get(selectedIndex);
-        RightIDEJTabbedPane newTabbedPane = new RightIDEJTabbedPane(ideAppBuilder);
-        newTabbedPane.addTab(editorObj.getFile());
         closeTab();
-        if (ideAppBuilder.getRightEditorTabbedPane() != null) {
-            ideAppBuilder.getRightEditorTabbedPane().addTab(editorObj.getFile());
-        } else {
-            JSplitPane newSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this, newTabbedPane);
-            ideAppBuilder.splitEditor(newSplitPane);
+        ideAppBuilder.getLeftEditorTabbedPane().addTab(editorObj.getFile());
+        if (editorObjs.size() == 0) {
+            ideAppBuilder.getLeftRightSplitPane().setRightComponent(ideAppBuilder.getLeftEditorTabbedPane());
+            ideAppBuilder.setRightEditorTabbedPane(null);
         }
+        ideAppBuilder.getFrame().revalidate();
+        ideAppBuilder.getFrame().repaint();
     }
 
     private void closeTabsToTheLeft(int selectedIndex) {
@@ -185,5 +173,4 @@ public class IDEJTabbedPane extends JTabbedPane {
         tabHeader.add(newCloseButton(), BorderLayout.EAST);
         return tabHeader;
     }
-
 }

@@ -2,6 +2,7 @@ package app;
 
 import data_access.AutoCompleteBST;
 import entity.EditorObj;
+import entity.RightIDEJTabbedPane;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import use_case.FileManagement.FileTreeGenerator;
 import view.*;
@@ -34,7 +35,8 @@ public class IDEAppBuilder {
     private JFrame frame;
     private JSplitPane leftRightSplitPane;
 
-    private IDEJTabbedPane rightEditorTabbedPane;
+    private RightIDEJTabbedPane rightEditorTabbedPane;
+    private IDEJTabbedPane leftEditorTabbedPane;
 
     /**
      * Builds the application.
@@ -160,17 +162,32 @@ public class IDEAppBuilder {
 
     public void splitEditor(JSplitPane newSplit) {
         leftRightSplitPane.setRightComponent(newSplit);
-        Component newTabbedComponent = newSplit.getRightComponent();
-        if (newTabbedComponent instanceof IDEJTabbedPane) {
-            rightEditorTabbedPane = (IDEJTabbedPane) newTabbedComponent;
+        Component rightTabbedComponent = newSplit.getRightComponent();
+        Component leftTabbedComponent = newSplit.getLeftComponent();
+        if (rightTabbedComponent instanceof RightIDEJTabbedPane) {
+            rightEditorTabbedPane = (RightIDEJTabbedPane) rightTabbedComponent;
+        }
+        if (leftTabbedComponent instanceof IDEJTabbedPane) {
+            leftEditorTabbedPane = (IDEJTabbedPane) leftTabbedComponent;
         }
         frame.revalidate();
         frame.repaint();
     }
 
-    public IDEJTabbedPane getRightEditorTabbedPane() {
+    public RightIDEJTabbedPane getRightEditorTabbedPane() {
         return rightEditorTabbedPane;
     }
 
+    public IDEJTabbedPane getLeftEditorTabbedPane() {
+        return leftEditorTabbedPane;
+    }
 
+
+    public JSplitPane getLeftRightSplitPane() {
+        return leftRightSplitPane;
+    }
+
+    public void setRightEditorTabbedPane(RightIDEJTabbedPane newRightPane) {
+        rightEditorTabbedPane = newRightPane;
+    }
 }
