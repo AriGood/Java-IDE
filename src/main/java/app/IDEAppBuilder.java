@@ -32,6 +32,9 @@ public class IDEAppBuilder {
     private JScrollPane currentScrollPane;
     private FileTreeGenerator fileTreeGenerator;
     private JFrame frame;
+    private JSplitPane leftRightSplitPane;
+
+    private IDEJTabbedPane rightEditorTabbedPane;
 
     /**
      * Builds the application.
@@ -59,7 +62,7 @@ public class IDEAppBuilder {
         frame.add(makeTerminalPanel(), BorderLayout.SOUTH);
 
 
-        JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, editorTabbedPane);
+        leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, editorTabbedPane);
         leftRightSplitPane.setDividerLocation(300);
 
 
@@ -154,5 +157,20 @@ public class IDEAppBuilder {
     public JScrollPane getEditorScrollPane() {
         return editorScrollPane;
     }
+
+    public void splitEditor(JSplitPane newSplit) {
+        leftRightSplitPane.setRightComponent(newSplit);
+        Component newTabbedComponent = newSplit.getRightComponent();
+        if (newTabbedComponent instanceof IDEJTabbedPane) {
+            rightEditorTabbedPane = (IDEJTabbedPane) newTabbedComponent;
+        }
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public IDEJTabbedPane getRightEditorTabbedPane() {
+        return rightEditorTabbedPane;
+    }
+
 
 }

@@ -19,8 +19,10 @@ import java.util.List;
 public class IDEJTabbedPane extends JTabbedPane {
 
     private List<EditorObj> editorObjs = new ArrayList<>();
+    private IDEAppBuilder ideAppBuilder;
 
     public IDEJTabbedPane(IDEAppBuilder appBuilder) {
+        ideAppBuilder = appBuilder;
         this.addMouseListener(new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
                 if (e.isPopupTrigger()) {
@@ -58,7 +60,7 @@ public class IDEJTabbedPane extends JTabbedPane {
                 closeOtherTabs.addActionListener(ev -> closeOtherTabs(selectedIndex));
                 closeTabsToTheRight.addActionListener(ev -> closeTabsToTheRight(selectedIndex));
                 closeTabsToTheLeft.addActionListener(ev -> closeTabsToTheLeft(selectedIndex));
-//                splitTab.addActionListener(ev -> splitTab(selectedIndex));
+                splitTab.addActionListener(ev -> splitTab(selectedIndex));
 
                 popupMenu.add(closeAllTabs);
                 popupMenu.add(closeOtherTabs);
@@ -78,6 +80,19 @@ public class IDEJTabbedPane extends JTabbedPane {
                 appBuilder.initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords(), currentTextArea);
             }
         });
+    }
+
+    private void splitTab(int selectedIndex) {
+        EditorObj editorObj = editorObjs.get(selectedIndex);
+        IDEJTabbedPane newTabbedPane = new IDEJTabbedPane(ideAppBuilder);
+        newTabbedPane.addTab(editorObj.getFile());
+        closeTab();
+        if (ideAppBuilder.getRightEditorTabbedPane() != null) {
+            ideAppBuilder.getRightEditorTabbedPane().addTab(editorObj.getFile());
+        } else {
+            JSplitPane newSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this, newTabbedPane);
+            ideAppBuilder.splitEditor(newSplitPane);
+        }
     }
 
     private void closeTabsToTheLeft(int selectedIndex) {
