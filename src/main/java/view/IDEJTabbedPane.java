@@ -55,9 +55,9 @@ public class IDEJTabbedPane extends JTabbedPane {
                 int selectedIndex = getSelectedIndex();
 
                 closeAllTabs.addActionListener(ev -> closeAllTabs());
-//                closeOtherTabs.addActionListener(ev -> closeOtherTabs(selectedIndex));
-//                closeTabsToTheRight.addActionListener(ev -> closeTabsToTheRight(selectedIndex));
-//                closeTabsToTheLeft.addActionListener(ev -> closeTabsToTheLeft(selectedIndex));
+                closeOtherTabs.addActionListener(ev -> closeOtherTabs(selectedIndex));
+                closeTabsToTheRight.addActionListener(ev -> closeTabsToTheRight(selectedIndex));
+                closeTabsToTheLeft.addActionListener(ev -> closeTabsToTheLeft(selectedIndex));
 //                splitTab.addActionListener(ev -> splitTab(selectedIndex));
 
                 popupMenu.add(closeAllTabs);
@@ -78,6 +78,33 @@ public class IDEJTabbedPane extends JTabbedPane {
                 appBuilder.initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords(), currentTextArea);
             }
         });
+    }
+
+    private void closeTabsToTheLeft(int selectedIndex) {
+        List<EditorObj> toKeep = new ArrayList<>();
+        for (int i = selectedIndex; i < editorObjs.size(); i++) {
+            EditorObj editorObj = editorObjs.get(i);
+            toKeep.add(editorObj);
+        }
+        closeAllTabs();
+        for (int i = 0; i < toKeep.size(); i++) {
+            addTab(toKeep.get(i).getFile());
+        }
+        setSelectedIndex(0);
+    }
+
+    private void closeTabsToTheRight(int selectedIndex) {
+        setSelectedIndex(selectedIndex);
+        for (int i = editorObjs.size() - 1; i > selectedIndex; i--) {
+            setSelectedIndex(i);
+            closeTab();
+        }
+    }
+
+    private void closeOtherTabs(int selectedIndex) {
+        EditorObj editorObj = editorObjs.get(selectedIndex);
+        closeAllTabs();
+        addTab(editorObj.getFile());
     }
 
     private void closeAllTabs() {
