@@ -53,7 +53,7 @@ public class FileTreeGenerator {
 
                 File selectedFile = new File(directory.getParent(), filePath);
 
-                // Check if the selected node corresponds to a file
+                // exists works but isFile does not... weirdly enough
                 if (selectedFile.exists()) {
                     try {
                         // Read file content
