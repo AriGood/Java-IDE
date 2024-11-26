@@ -67,7 +67,8 @@ public class TerminalOperations {
         );
     }
 
-    private void executeGeneralCommand(String command, CommandCallback callback) throws IOException, InterruptedException {
+    private void executeGeneralCommand(String command, CommandCallback callback)
+            throws IOException, InterruptedException {
         callback.onOutput("> " + command + "\n");
         executeProcess(new String[]{"bash", "-c", command}, callback);
     }

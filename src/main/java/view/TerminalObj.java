@@ -39,7 +39,6 @@ public class TerminalObj extends JPanel {
     }
 
     private void setupInputFieldListeners() {
-        // Manage command history navigation
         inputField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
