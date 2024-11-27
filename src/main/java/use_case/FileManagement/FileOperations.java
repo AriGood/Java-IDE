@@ -4,9 +4,38 @@ import javax.swing.*;
 import java.io.*;
 import java.util.logging.Logger;
 
-public class FileOperations {
+public class FileOperations extends Operations {
 
     private static final Logger logger = Logger.getLogger(FileOperations.class.getName());
+
+    public FileOperations(File target) {
+        super(target);
+    }
+
+    @Override
+    public void copy(File destination) {
+        try {
+            java.nio.file.Files.copy(target.toPath(), new File(destination, target.getName()).toPath());
+            System.out.println("File copied to " + destination.getAbsolutePath());
+        } catch (IOException e) {
+            System.err.println("Error copying file: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void paste(File destination) {
+        System.out.println("Pasting file to " + destination.getAbsolutePath());
+    }
+
+    @Override
+    public void delete() {
+        if (target.delete()) {
+            System.out.println("File deleted: " + target.getName());
+        } else {
+            System.err.println("Failed to delete file: " + target.getName());
+        }
+    }
+
     /**
      * This function saves the provided content to the specified file.
      *
@@ -14,11 +43,6 @@ public class FileOperations {
      * @param content the content to save into the file
      */
     public static void saveFile(File file, String content) {
-        //TODO: in progress
-
-        // Note: intellij suggested to use a logging framework...?  instead of system.out
-
-        // Save the file content to the specified file
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(content);
 
@@ -26,11 +50,7 @@ public class FileOperations {
         } catch (IOException e) {
             logger.severe("File could not be saved: " + e.getMessage());
         }
-
-        // Also, I could implement the function using the fileContent method.
-        // For example, check if there is nothing to be saved before saving...?
     }
-
 
     public JTextArea loadFile(File file) {
         //TODO
@@ -38,6 +58,7 @@ public class FileOperations {
         return result;
     }
 
+    //TODO: remove UI-elements
     public static String fileContent(File file) {
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
