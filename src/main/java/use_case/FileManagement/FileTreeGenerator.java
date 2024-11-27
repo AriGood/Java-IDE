@@ -97,7 +97,6 @@ public class FileTreeGenerator {
         return directory;
     }
 
-    // Creo que lo elimino... wait a ver si funciona
     public static void createFile(File parent) {
         String fileName = JOptionPane.showInputDialog(null, "File name:", "File", JOptionPane.QUESTION_MESSAGE);
 

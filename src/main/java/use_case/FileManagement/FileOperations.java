@@ -2,6 +2,8 @@ package use_case.FileManagement;
 
 import javax.swing.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.logging.Logger;
 
 // Make sure all methods here do not include any UI-related code - responsibility for interacting with the user
@@ -54,17 +56,55 @@ public class FileOperations {
         return newFile;
     }
 
-    public static void pasteFile(File sourceFile, File destinationDir) throws Exception {
-        if (!destinationDir.isDirectory()) {
-            throw new IllegalArgumentException("Destination must be a directory.");
+    /**
+     * Copies a file or directory to the specified destination.
+     *
+     * @param sourceFile The file or directory to copy.
+     * @param destination The destination directory.
+     * @throws IOException If the copy operation fails.
+     */
+    public static void copyFile(File sourceFile, File destination) throws IOException {
+        if (!sourceFile.exists()) {
+            throw new IllegalArgumentException("Source file does not exist: " + sourceFile.getAbsolutePath());
         }
-
-        File destinationFile = new File(destinationDir, sourceFile.getName());
-        copyFile(sourceFile, destinationFile);
+        if (sourceFile.isFile()) {
+            // Copy single file
+            Files.copy(sourceFile.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } else if (sourceFile.isDirectory()) {
+            // Recursively copy directory
+            if (!destination.exists() && !destination.mkdir()) {
+                throw new IOException("Failed to create destination directory: " + destination.getAbsolutePath());
+            }
+            for (File file : sourceFile.listFiles()) {
+                File destFile = new File(destination, file.getName());
+                copyFile(file, destFile);
+            }
+        }
     }
 
-    public static void copyFile(File sourceFile, File destinationFile) throws IOException {
-        java.nio.file.Files.copy(sourceFile.toPath(), destinationFile.toPath());
+    /**
+     * Pastes a file or directory into the specified destination directory.
+     *
+     * @param sourceFile The file or directory to paste.
+     * @param destination The destination directory or parent directory.
+     * @throws IOException If the paste operation fails.
+     */
+    public static void pasteFile(File sourceFile, File destination) throws IOException {
+        if (!destination.exists()) {
+            throw new IllegalArgumentException("Destination does not exist.");
+        }
+
+        if (!destination.isDirectory()) {
+            // Use parent directory if destination is a file
+            destination = destination.getParentFile();
+        }
+
+        if (destination == null || !destination.isDirectory()) {
+            throw new IllegalArgumentException("Destination must be a valid directory.");
+        }
+
+        File destinationFile = new File(destination, sourceFile.getName());
+        copyFile(sourceFile, destinationFile);
     }
 
     /**
@@ -81,6 +121,7 @@ public class FileOperations {
         //TODO
     }
 
+    // TODO: remove UI related code - JOptionPane
     public static String fileContent(File file) {
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {

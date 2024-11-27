@@ -1,6 +1,7 @@
 package view;
 
 import use_case.FileManagement.FileOperations;
+import use_case.FileManagement.FileTreeGenerator;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -62,44 +63,33 @@ public class FilePopup {
                 JPopupMenu popupMenu = new JPopupMenu();
 
                 // New File Option
+                //TODO: fix
                 JMenuItem newFileItem = new JMenuItem("New File");
-                newFileItem.addActionListener(e -> {
-                    String fileName = JOptionPane.showInputDialog("Enter file name:");
-                    if (fileName != null && !fileName.isEmpty()) {
-                        try {
-                            FileOperations.createFile(
-                                    selectedFile.isDirectory() ? selectedFile : selectedFile.getParentFile(),
-                                    fileName
-                            );
-                            JOptionPane.showMessageDialog(null, "File created successfully!");
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(null, "Error creating file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                });
 
-                // Copy Option
-                JMenuItem copyItem = new JMenuItem("Copy");
-                copyItem.addActionListener(e -> fileToCopy = selectedFile);
 
                 // Paste Option
+                //TODO: fix
                 JMenuItem pasteItem = new JMenuItem("Paste");
                 pasteItem.addActionListener(e -> {
                     if (fileToCopy != null) {
+                        // Determine the correct destination
                         File destination = selectedFile.isDirectory() ? selectedFile : selectedFile.getParentFile();
                         try {
-                            // Use FileOperations.pasteFile
                             FileOperations.pasteFile(fileToCopy, destination);
-                            JOptionPane.showMessageDialog(null, "File pasted successfully!");
+                            JOptionPane.showMessageDialog(null, "File or directory pasted successfully!");
                         } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(null, "Error pasting file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Error pasting: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "No file copied!", "Error", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "No file or directory copied!", "Error", JOptionPane.WARNING_MESSAGE);
                     }
                 });
 
+                JMenuItem copyItem = new JMenuItem("Copy");
+                copyItem.addActionListener(e -> fileToCopy = selectedFile); // Works for files and directories
+
                 // Delete option
+                //TODO: actually implement this
                 JMenuItem deleteItem = new JMenuItem("Delete");
 
                 popupMenu.add(newFileItem);
@@ -108,6 +98,9 @@ public class FilePopup {
                 popupMenu.add(deleteItem);
 
                 return popupMenu;
+
+                // Note: when you copy and paste a file or directory or create a new file
+                // git should be updated as well ... need to involve that
             }
         });
     }
