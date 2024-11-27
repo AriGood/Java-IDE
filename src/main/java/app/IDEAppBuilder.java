@@ -32,6 +32,7 @@ public class IDEAppBuilder {
     private JScrollPane currentScrollPane;
     private FileTreeGenerator fileTreeGenerator;
     private JFrame frame;
+    private FilePopup filePopup;
 
     /**
      * Builds the application.
@@ -96,7 +97,12 @@ public class IDEAppBuilder {
     public void buildTree() {
         fileTreeObj = new FileTreeObj(this);
         directory = fileTreeObj.getDirectory();
-        fileScrollPane.setViewportView(fileTreeObj.getFileTree());
+        JTree fileTree = fileTreeObj.getFileTree();
+
+        // Initialize the popup menu functionality
+        new FilePopup(fileTree); // This will add the right-click functionality to the file tree
+
+        fileScrollPane.setViewportView(fileTree);
     }
 
     private JMenuBar makeMenuBar() {
