@@ -8,6 +8,8 @@ import view.*;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -32,7 +34,6 @@ public class IDEAppBuilder {
     private JScrollPane currentScrollPane;
     private FileTreeGenerator fileTreeGenerator;
     private JFrame frame;
-    private FilePopup filePopup;
 
     /**
      * Builds the application.
@@ -109,13 +110,6 @@ public class IDEAppBuilder {
         MenuBarObj menuBarObj = new MenuBarObj(this);
         menuBarObj.buildMenu();
         return menuBarObj.getMenuBar();
-    }
-
-    // New
-    public void updateFileTree(File newDirectory) {
-        directory = newDirectory;
-        fileTreeGenerator.updateTree(directory);
-        fileScrollPane.setViewportView(fileTreeGenerator.createFileTree(directory));
     }
 
     private JScrollPane makeTerminalPanel() {

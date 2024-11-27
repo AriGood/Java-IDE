@@ -1,24 +1,21 @@
 package view;
 
-import use_case.FileManagement.FileTreeGenerator;
+import use_case.FileManagement.FileOperations;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.nio.file.Files;
 
 public class FilePopup {
     private final JTree fileTree;
-    private File copiedFile; // To keep track of the file to be copied
+    private File fileToCopy;
 
     public FilePopup(JTree fileTree) {
         this.fileTree = fileTree;
 
-        // Add mouse listener to detect right-click
         fileTree.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -35,32 +32,30 @@ public class FilePopup {
             }
 
             private void showPopup(MouseEvent e) {
-                // Get the tree path at the click location
                 TreePath path = fileTree.getPathForLocation(e.getX(), e.getY());
                 if (path != null) {
-                    fileTree.setSelectionPath(path); // Select the clicked node
+                    fileTree.setSelectionPath(path);
                     DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
                     File selectedFile = getFileFromNode(selectedNode);
 
                     if (selectedFile != null) {
                         JPopupMenu popupMenu = createPopupMenu(selectedFile);
-                        popupMenu.show(fileTree, e.getX(), e.getY()); // Display the popup menu
+                        popupMenu.show(fileTree, e.getX(), e.getY());
                     }
                 }
             }
 
             private File getFileFromNode(DefaultMutableTreeNode node) {
-                Object userObject = node.getUserObject();
-                if (userObject instanceof String) {
-                    // Rebuild the file path based on the node's hierarchy
-                    StringBuilder filePathBuilder = new StringBuilder(userObject.toString());
-                    TreeNode[] pathNodes = node.getPath();
-                    for (int i = 1; i < pathNodes.length; i++) {
-                        filePathBuilder.insert(0, File.separator).insert(0, pathNodes[i].toString());
-                    }
-                    return new File(filePathBuilder.toString());
+                String filePath = buildFilePath(node);
+                return new File(filePath);
+            }
+
+            private String buildFilePath(DefaultMutableTreeNode node) {
+                StringBuilder path = new StringBuilder(node.toString());
+                while ((node = (DefaultMutableTreeNode) node.getParent()) != null) {
+                    path.insert(0, node + File.separator);
                 }
-                return null;
+                return path.toString();
             }
 
             private JPopupMenu createPopupMenu(File selectedFile) {
@@ -69,34 +64,48 @@ public class FilePopup {
                 // New File Option
                 JMenuItem newFileItem = new JMenuItem("New File");
                 newFileItem.addActionListener(e -> {
-                    FileTreeGenerator.createFile(selectedFile.isDirectory() ? selectedFile : selectedFile.getParentFile());
+                    String fileName = JOptionPane.showInputDialog("Enter file name:");
+                    if (fileName != null && !fileName.isEmpty()) {
+                        try {
+                            FileOperations.createFile(
+                                    selectedFile.isDirectory() ? selectedFile : selectedFile.getParentFile(),
+                                    fileName
+                            );
+                            JOptionPane.showMessageDialog(null, "File created successfully!");
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "Error creating file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                 });
 
                 // Copy Option
                 JMenuItem copyItem = new JMenuItem("Copy");
-                copyItem.addActionListener(e -> copiedFile = selectedFile);
+                copyItem.addActionListener(e -> fileToCopy = selectedFile);
 
                 // Paste Option
                 JMenuItem pasteItem = new JMenuItem("Paste");
                 pasteItem.addActionListener(e -> {
-                    if (copiedFile != null) {
+                    if (fileToCopy != null) {
                         File destination = selectedFile.isDirectory() ? selectedFile : selectedFile.getParentFile();
-                        File newFile = new File(destination, copiedFile.getName());
                         try {
-                            Files.copy(copiedFile.toPath(), newFile.toPath());
+                            // Use FileOperations.pasteFile
+                            FileOperations.pasteFile(fileToCopy, destination);
                             JOptionPane.showMessageDialog(null, "File pasted successfully!");
                         } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(null, "Failed to paste file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Error pasting file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         JOptionPane.showMessageDialog(null, "No file copied!", "Error", JOptionPane.WARNING_MESSAGE);
                     }
                 });
 
-                // Add options to the menu
+                // Delete option
+                JMenuItem deleteItem = new JMenuItem("Delete");
+
                 popupMenu.add(newFileItem);
                 popupMenu.add(copyItem);
                 popupMenu.add(pasteItem);
+                popupMenu.add(deleteItem);
 
                 return popupMenu;
             }

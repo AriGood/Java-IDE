@@ -93,18 +93,11 @@ public class FileTreeGenerator {
         return rootNode;
     }
 
-    // New
-    public void updateTree(File newDirectory) {
-        directory = newDirectory;
-        treeRootNode = createNodesFromDirectory(directory);
-        ((DefaultTreeModel) fileTree.getModel()).setRoot(treeRootNode);
-    }
-
     public File getDirectory() {
         return directory;
     }
 
-
+    // Creo que lo elimino... wait a ver si funciona
     public static void createFile(File parent) {
         String fileName = JOptionPane.showInputDialog(null, "File name:", "File", JOptionPane.QUESTION_MESSAGE);
 
@@ -134,6 +127,27 @@ public class FileTreeGenerator {
             JOptionPane.showMessageDialog(null, "Security access denied", "File", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    /**
+     * Updates the file tree by adding a new file node under the given parent node.
+     *
+     * @param parent  The parent directory for the new file.
+     * @param newFile The newly created file.
+     */
+    public void updateTreeForNewFile(File parent, File newFile) {
+        DefaultMutableTreeNode parentNode = findNodeByName(parent.getName(), treeRootNode);
+        if (parentNode != null) {
+            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newFile.getName());
+            parentNode.add(newNode);
+            ((DefaultTreeModel) fileTree.getModel()).reload(parentNode);
+        } else {
+            System.err.println("Parent node not found in the tree.");
+        }
+    }
+
+    /**
+     * Finds a node in the tree by its name.
+     */
     private static DefaultMutableTreeNode findNodeByName(String nodeName, DefaultMutableTreeNode root) {
         if (root.toString().equals(nodeName)) {
             return root;
@@ -147,10 +161,5 @@ public class FileTreeGenerator {
         }
         return null;
     }
-
-    public void deleteFile(File parentDirectory) {
-        //TODO
-    }
-
 }
 
