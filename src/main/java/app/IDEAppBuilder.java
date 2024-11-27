@@ -2,6 +2,7 @@ package app;
 
 import data_access.AutoCompleteBST;
 import entity.EditorObj;
+import entity.LeftIDEJTabbedPane;
 import entity.RightIDEJTabbedPane;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import use_case.FileManagement.FileTreeGenerator;
@@ -22,7 +23,6 @@ public class IDEAppBuilder {
     public static final int HEIGHT = 600;
     public static final int WIDTH = 800;
     public static JScrollPane editorScrollPane;
-    public static IDEJTabbedPane editorTabbedPane;
 
     private JScrollPane terminalScrollPane;
     private AutoCompleteOperations autoCompleteOperations;
@@ -30,13 +30,12 @@ public class IDEAppBuilder {
     private File directory;
     private EditorObj editorObj;
     private FileTreeObj fileTreeObj;
-    private JScrollPane currentScrollPane;
     private FileTreeGenerator fileTreeGenerator;
     private JFrame frame;
     private JSplitPane leftRightSplitPane;
 
     private RightIDEJTabbedPane rightEditorTabbedPane;
-    private IDEJTabbedPane leftEditorTabbedPane;
+    private LeftIDEJTabbedPane leftEditorTabbedPane;
 
     /**
      * Builds the application.
@@ -64,7 +63,7 @@ public class IDEAppBuilder {
         frame.add(makeTerminalPanel(), BorderLayout.SOUTH);
 
 
-        leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, editorTabbedPane);
+        leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, leftEditorTabbedPane);
         leftRightSplitPane.setDividerLocation(300);
 
 
@@ -126,15 +125,15 @@ public class IDEAppBuilder {
     public JTabbedPane makeEditorPanel() {
         // make text area an instance variable with this function and create a getter and reference it for autocomp.
 //        editorObj = new EditorObj();
-        editorTabbedPane = new IDEJTabbedPane(this);
+        leftEditorTabbedPane = new LeftIDEJTabbedPane(this);
 //        editorScrollPane = new JScrollPane(editorObj.getTextArea());
 //        editorScrollPane.setRowHeaderView(editorObj.getLineNums());
 //        editorTabbedPane.add("New Tab", editorScrollPane);
-        return editorTabbedPane;
+        return leftEditorTabbedPane;
     }
 
     public void openFile(File file) {
-        editorTabbedPane.addTab(file);
+        leftEditorTabbedPane.addTab(file);
     }
 
 
@@ -167,8 +166,8 @@ public class IDEAppBuilder {
         if (rightTabbedComponent instanceof RightIDEJTabbedPane) {
             rightEditorTabbedPane = (RightIDEJTabbedPane) rightTabbedComponent;
         }
-        if (leftTabbedComponent instanceof IDEJTabbedPane) {
-            leftEditorTabbedPane = (IDEJTabbedPane) leftTabbedComponent;
+        if (leftTabbedComponent instanceof LeftIDEJTabbedPane) {
+            leftEditorTabbedPane = (LeftIDEJTabbedPane) leftTabbedComponent;
         }
         frame.revalidate();
         frame.repaint();
@@ -178,7 +177,7 @@ public class IDEAppBuilder {
         return rightEditorTabbedPane;
     }
 
-    public IDEJTabbedPane getLeftEditorTabbedPane() {
+    public LeftIDEJTabbedPane getLeftEditorTabbedPane() {
         return leftEditorTabbedPane;
     }
 
