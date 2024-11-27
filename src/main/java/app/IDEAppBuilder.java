@@ -2,6 +2,7 @@ package app;
 
 import data_access.AutoCompleteBST;
 import entity.EditorObj;
+import entity.RightIDEJTabbedPane;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import use_case.FileManagement.FileTreeGenerator;
 import view.*;
@@ -32,6 +33,10 @@ public class IDEAppBuilder {
     private JScrollPane currentScrollPane;
     private FileTreeGenerator fileTreeGenerator;
     private JFrame frame;
+    private JSplitPane leftRightSplitPane;
+
+    private RightIDEJTabbedPane rightEditorTabbedPane;
+    private IDEJTabbedPane leftEditorTabbedPane;
 
     /**
      * Builds the application.
@@ -59,7 +64,7 @@ public class IDEAppBuilder {
         frame.add(makeTerminalPanel(), BorderLayout.SOUTH);
 
 
-        JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, editorTabbedPane);
+        leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, editorTabbedPane);
         leftRightSplitPane.setDividerLocation(300);
 
 
@@ -155,4 +160,34 @@ public class IDEAppBuilder {
         return editorScrollPane;
     }
 
+    public void splitEditor(JSplitPane newSplit) {
+        leftRightSplitPane.setRightComponent(newSplit);
+        Component rightTabbedComponent = newSplit.getRightComponent();
+        Component leftTabbedComponent = newSplit.getLeftComponent();
+        if (rightTabbedComponent instanceof RightIDEJTabbedPane) {
+            rightEditorTabbedPane = (RightIDEJTabbedPane) rightTabbedComponent;
+        }
+        if (leftTabbedComponent instanceof IDEJTabbedPane) {
+            leftEditorTabbedPane = (IDEJTabbedPane) leftTabbedComponent;
+        }
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public RightIDEJTabbedPane getRightEditorTabbedPane() {
+        return rightEditorTabbedPane;
+    }
+
+    public IDEJTabbedPane getLeftEditorTabbedPane() {
+        return leftEditorTabbedPane;
+    }
+
+
+    public JSplitPane getLeftRightSplitPane() {
+        return leftRightSplitPane;
+    }
+
+    public void setRightEditorTabbedPane(RightIDEJTabbedPane newRightPane) {
+        rightEditorTabbedPane = newRightPane;
+    }
 }
