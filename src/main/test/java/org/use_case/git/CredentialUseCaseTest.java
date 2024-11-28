@@ -1,56 +1,78 @@
 package org.use_case.git;
 
+import entity.CredentialEncryption;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import use_case.git.CredentialUseCase;
+import use_case.git.*;
 
+import javax.crypto.SecretKey;
 import java.io.File;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CredentialUseCaseTest {
 
     private static final String TEST_USERNAME = "testUser";
     private static final String TEST_PASSWORD = "testPassword";
-
-    // Files to clean up after tests
     private static final String CREDENTIALS_FILE = "credentials.dat";
-    private static final String SALT_FILE = "salt.dat";
 
     private CredentialUseCase credentialUseCase;
+    private SecretKey secretKey;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
+        // Initialize the CredentialUseCase instance
         credentialUseCase = new CredentialUseCase();
-        deleteTestFiles(); // Ensure no leftover test data
+
+        // Generate a test SecretKey
+        secretKey = SecureKeyManager.loadKey();
+
+        // Ensure no leftover files exist before tests
+        deleteTestFiles();
     }
 
     @After
     public void tearDown() {
-        deleteTestFiles(); // Clean up test files after each test
+        // Clean up test files after each test
+        deleteTestFiles();
     }
 
     @Test
     public void testSaveAndLoadCredentials() throws Exception {
-        // Act
-        credentialUseCase.saveCredentials(TEST_USERNAME, TEST_PASSWORD);
+        // Save the credentials
+        credentialUseCase.saveCredentials(TEST_USERNAME, TEST_PASSWORD, secretKey);
 
-        // Assert save
+        // Check that the credentials file is created
         File credentialsFile = new File(CREDENTIALS_FILE);
-        File saltFile = new File(SALT_FILE);
-        assert credentialsFile.exists();
-        assert saltFile.exists();
+        assertTrue("Credentials file should exist after saving.", credentialsFile.exists());
 
-        // Act: Load credentials
-        String[] loadedCredentials = credentialUseCase.loadCredentials(TEST_PASSWORD);
+        // Load the credentials
+        String[] loadedCredentials = credentialUseCase.loadCredentials(secretKey);
 
-        // Assert: Verify the data
-        assertArrayEquals(new String[]{TEST_USERNAME, TEST_PASSWORD}, loadedCredentials);
+        // Verify the loaded credentials match the original
+        assertArrayEquals("Loaded credentials should match the saved ones.",
+                new String[]{TEST_USERNAME, TEST_PASSWORD}, loadedCredentials);
+    }
+
+    @Test(expected = Exception.class)
+    public void testLoadCredentialsWithWrongKey() throws Exception {
+        // Save the credentials
+        credentialUseCase.saveCredentials(TEST_USERNAME, TEST_PASSWORD, secretKey);
+        SecureKeyManager.saveKey();
+        // Generate a different SecretKey
+        SecretKey wrongKey = SecureKeyManager.loadKey();
+
+        // Attempt to load credentials with the wrong key, expecting an exception
+        credentialUseCase.loadCredentials(wrongKey);
     }
 
     private void deleteTestFiles() {
-        new File(CREDENTIALS_FILE).delete();
-        new File(SALT_FILE).delete();
+        // Delete the credentials file after tests
+        File credentialsFile = new File(CREDENTIALS_FILE);
+        if (credentialsFile.exists()) {
+            credentialsFile.delete();
+        }
     }
 }

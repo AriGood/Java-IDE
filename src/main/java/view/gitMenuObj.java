@@ -1,6 +1,7 @@
 package view;
 
 import use_case.git.CredentialUseCase;
+import use_case.git.SecureKeyManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -21,9 +22,11 @@ public class gitMenuObj {
 
                 JPasswordField pf = new JPasswordField();
                 try {
-                    credentialUseCase.saveCredentials(JOptionPane.showInputDialog("Enter username:"), String.valueOf(JOptionPane.showConfirmDialog(null, pf, "Enter Password",
-                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE))
-    );
+                    SecureKeyManager.saveKey();
+                    credentialUseCase.saveCredentials(JOptionPane.showInputDialog("Enter username:"),
+                            String.valueOf(JOptionPane.showConfirmDialog(null, pf, "Enter Password",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE)), SecureKeyManager.loadKey());
+
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null,"Invalid login");
                     actionPerformed(null);

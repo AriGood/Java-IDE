@@ -4,63 +4,61 @@ import entity.CredentialEncryption;
 
 import javax.crypto.SecretKey;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class CredentialUseCase {
     private static final String CREDENTIALS_FILE = "credentials.dat";
-    private static final String SALT_FILE = "salt.dat";
 
-    public void saveCredentials(String username, String password) throws Exception {
-        // Generate or load salt in a more explicit way
-        byte[] salt = getSalt();
-        SecretKey key = CredentialEncryption.deriveKey(password.toCharArray(), salt);
-
+    /**
+     * Save encrypted credentials to a file.
+     *
+     * @param username The username to save.
+     * @param password The password to save.
+     * @param secretKey The SecretKey used for encryption.
+     * @throws Exception If an error occurs during encryption or saving.
+     */
+    public void saveCredentials(String username, String password, SecretKey secretKey) throws Exception {
         String credentials = username + ":" + password;
-        byte[] encryptedData = CredentialEncryption.encrypt(credentials, key);
-        saveToFile(CREDENTIALS_FILE, encryptedData);
+        byte[] encryptedData = CredentialEncryption.encrypt(credentials, secretKey);
+        saveToFile(encryptedData);
     }
 
-    public String[] loadCredentials(String password) throws Exception {
-        // Get salt and derive the key
-        byte[] salt = getSalt();
-        SecretKey key = CredentialEncryption.deriveKey(password.toCharArray(), salt);
-
-        byte[] encryptedData = readFromFile(CREDENTIALS_FILE);
-        String decryptedData = CredentialEncryption.decrypt(encryptedData, key);
+    /**
+     * Load and decrypt credentials from a file.
+     *
+     * @param secretKey The SecretKey used for decryption.
+     * @return An array containing the username and password.
+     * @throws Exception If an error occurs during decryption or loading.
+     */
+    public String[] loadCredentials(SecretKey secretKey) throws Exception {
+        byte[] encryptedData = readFromFile();
+        String decryptedData = CredentialEncryption.decrypt(encryptedData, secretKey);
         return decryptedData.split(":");
     }
 
-    private byte[] getSalt() throws IOException {
-        // Separate the logic of checking or generating salt
-        File saltFile = new File(SALT_FILE);
-        if (!saltFile.exists()) {
-            return generateAndSaveSalt();
-        }
-        return readSaltFromFile();
-    }
-
-    private byte[] generateAndSaveSalt() throws IOException {
-        byte[] salt = CredentialEncryption.generateSalt();
-        saveToFile(SALT_FILE, salt);
-        return salt;
-    }
-
-    private byte[] readSaltFromFile() throws IOException {
-        if (!Files.exists(Paths.get(SALT_FILE))) {
-            throw new FileNotFoundException("Salt file not found. Ensure credentials have been saved first.");
-        }
-        return Files.readAllBytes(Paths.get(SALT_FILE));
-    }
-
-    private void saveToFile(String fileName, byte[] data) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(fileName)) {
+    /**
+     * Save data to a file.
+     *
+     * @param data The data to save.
+     * @throws IOException If an error occurs during saving.
+     */
+    private void saveToFile(byte[] data) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(CredentialUseCase.CREDENTIALS_FILE)) {
             fos.write(data);
         }
     }
 
-    private byte[] readFromFile(String fileName) throws IOException {
-        File file = new File(fileName);
+    /**
+     * Read data from a file.
+     *
+     * @return The data read from the file.
+     * @throws IOException If an error occurs during reading.
+     */
+    private byte[] readFromFile() throws IOException {
+        File file = new File(CredentialUseCase.CREDENTIALS_FILE);
+        if (!file.exists()) {
+            throw new FileNotFoundException("File " + CredentialUseCase.CREDENTIALS_FILE + " not found.");
+        }
+
         byte[] data = new byte[(int) file.length()];
         try (FileInputStream fis = new FileInputStream(file)) {
             fis.read(data);

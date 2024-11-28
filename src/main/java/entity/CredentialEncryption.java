@@ -52,4 +52,5 @@ public class CredentialEncryption {
     public static byte[] decodeBase64(String data) {
         return Base64.getDecoder().decode(data);
     }
+
 }
