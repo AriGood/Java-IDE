@@ -29,6 +29,7 @@ public class FileTreeObj {
         DefaultMutableTreeNode rootNode = fileTreeGenerator.createNodesFromDirectory(directory);
         fileTree = new JTree(rootNode);
 
+        // Add listener for tree selection
         fileTree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -50,7 +51,6 @@ public class FileTreeObj {
                 File selectedFile = new File(directory.getParent(), filePath);
 
                 if (selectedFile.exists() && selectedFile.isFile()) {
-                    // Pass the selected file to the IDEAppBuilder to open it in a new tab
                     appBuilder.openFile(selectedFile);
                 } else {
                     System.out.println("Selected node is not a valid file.");
@@ -58,7 +58,59 @@ public class FileTreeObj {
             }
         });
 
+        // Add right-click menu
+        addRightClickMenu(directory);
+
         return fileTree;
+    }
+
+    private void addRightClickMenu(File directory) {
+        PopupMenuHandler popupMenuHandler = new PopupMenuHandler();
+
+        fileTree.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    showPopupMenu(e);
+                }
+            }
+
+            @Override
+            public void mouseReleased(java.awt.event.MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    showPopupMenu(e);
+                }
+            }
+
+            private void showPopupMenu(java.awt.event.MouseEvent e) {
+                int row = fileTree.getClosestRowForLocation(e.getX(), e.getY());
+                fileTree.setSelectionRow(row);
+
+                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTree.getLastSelectedPathComponent();
+                if (selectedNode == null) {
+                    return;
+                }
+
+                // Reconstruct file path
+                StringBuilder filePathBuilder = new StringBuilder();
+                TreeNode[] nodePath = selectedNode.getPath();
+                for (TreeNode node : nodePath) {
+                    filePathBuilder.append(node.toString()).append(File.separator);
+                }
+                String filePath = filePathBuilder.toString().replaceAll(File.separator + "$", "");
+                File selectedFile = new File(directory.getParent(), filePath);
+
+                if (selectedFile.exists()) {
+                    if (selectedFile.isFile()) {
+                        JPopupMenu fileMenu = popupMenuHandler.createFilePopupMenu(selectedFile);
+                        fileMenu.show(e.getComponent(), e.getX(), e.getY());
+                    } else if (selectedFile.isDirectory()) {
+                        JPopupMenu dirMenu = popupMenuHandler.createDirectoryPopupMenu(selectedFile);
+                        dirMenu.show(e.getComponent(), e.getX(), e.getY());
+                    }
+                }
+            }
+        });
     }
 
     public void updateTree(File newDirectory) {
