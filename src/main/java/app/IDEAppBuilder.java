@@ -52,9 +52,7 @@ public class IDEAppBuilder {
         frame.add(makeFilePanel(), BorderLayout.CENTER);
 
         frame.setVisible(true);
-
         return frame;
-
     }
 
     public void buildIDE() {
@@ -97,9 +95,8 @@ public class IDEAppBuilder {
         return fileScrollPane;
     }
 
-    public void buildTree() {
-        fileTreeObj = new FileTreeObj(this);
-        directory = fileTreeObj.getDirectory();
+    public void buildTree(File directory) {
+        fileTreeObj = new FileTreeObj(directory, this);
         fileScrollPane.setViewportView(fileTreeObj.getFileTree());
     }
 
@@ -109,12 +106,6 @@ public class IDEAppBuilder {
         return menuBarObj.getMenuBar();
     }
 
-    // New
-    public void updateFileTree(File newDirectory) {
-        directory = newDirectory;
-        fileTreeGenerator.updateTree(directory);
-        fileScrollPane.setViewportView(fileTreeGenerator.createFileTree(directory));
-    }
 
     private JScrollPane makeTerminalPanel() {
         TerminalObj terminalWindow = new TerminalObj();
@@ -132,8 +123,16 @@ public class IDEAppBuilder {
         return leftEditorTabbedPane;
     }
 
-    public void openFile(File file) {
+    /*public void openFile(File file) {
         leftEditorTabbedPane.addTab(file);
+    }*/
+
+    public void openFile(File file) {
+        if (file != null && file.exists() && file.isFile()) {
+            getLeftEditorTabbedPane().addTab(file);
+        } else {
+            System.err.println("Invalid file: " + (file != null ? file.getAbsolutePath() : "null"));
+        }
     }
 
 
