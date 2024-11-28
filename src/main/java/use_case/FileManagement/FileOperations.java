@@ -18,7 +18,7 @@ public class FileOperations extends Operations {
             java.nio.file.Files.copy(target.toPath(), new File(destination, target.getName()).toPath());
             System.out.println("File copied to " + destination.getAbsolutePath());
         } catch (IOException e) {
-            System.err.println("Error copying file: " + e.getMessage());
+            view.DisplayErrors.displayFileCopyError(e);
         }
     }
 
@@ -32,7 +32,7 @@ public class FileOperations extends Operations {
         if (target.delete()) {
             System.out.println("File deleted: " + target.getName());
         } else {
-            System.err.println("Failed to delete file: " + target.getName());
+            view.DisplayErrors.displayFileDeleteError(target.getName());
         }
     }
 
@@ -48,17 +48,10 @@ public class FileOperations extends Operations {
 
             logger.info("File saved successfully: " + file.getAbsolutePath());
         } catch (IOException e) {
-            logger.severe("File could not be saved: " + e.getMessage());
+            view.DisplayErrors.displayFileSaveError(e);
         }
     }
 
-    public JTextArea loadFile(File file) {
-        //TODO
-        JTextArea result = new JTextArea();
-        return result;
-    }
-
-    //TODO: remove UI-elements
     public static String fileContent(File file) {
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -67,8 +60,7 @@ public class FileOperations extends Operations {
                 content.append(line).append("\n");
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "File Could Not Load: " + e.getMessage(),
-                    "File Load Error", JOptionPane.ERROR_MESSAGE);
+            view.DisplayErrors.displayFileLoadError(e);
         }
         return content.toString();
     }
