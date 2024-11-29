@@ -14,25 +14,41 @@ public class FileOperations extends Operations {
     @Override
     public void copy(File destination) {
         try {
-            java.nio.file.Files.copy(target.toPath(), new File(destination, target.getName()).toPath());
-            System.out.println("File copied to " + destination.getAbsolutePath());
+            File newFile = new File(destination, target.getName());
+
+            // Prevent overwriting existing files
+            if (newFile.exists()) {
+                System.err.println("File already exists: " + newFile.getAbsolutePath());
+                return;
+            }
+
+            // Copy file content
+            java.nio.file.Files.copy(target.toPath(), newFile.toPath());
+            System.out.println("File copied to " + newFile.getAbsolutePath());
+
+            // Refresh file system metadata
+            destination.listFiles();
+
         } catch (IOException e) {
-            view.DisplayErrors.displayFileCopyError(e);
+            System.err.println("Failed to copy file: " + target.getAbsolutePath());
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void delete() {
+        // Delete the file
+        if (target.delete()) {
+            System.out.println("Deleted file: " + target.getAbsolutePath());
+        } else {
+            System.err.println("Failed to delete file: " + target.getAbsolutePath());
         }
     }
 
     @Override
     public void paste(File destination) {
         System.out.println("Pasting file to " + destination.getAbsolutePath());
-    }
-
-    @Override
-    public void delete() {
-        if (target.delete()) {
-            System.out.println("File deleted: " + target.getName());
-        } else {
-            view.DisplayErrors.displayFileDeleteError(target.getName());
-        }
+        copy(destination);
     }
 
     /**

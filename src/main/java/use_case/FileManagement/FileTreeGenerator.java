@@ -31,4 +31,14 @@ public class FileTreeGenerator {
         }
         return rootNode;
     }
+
+    /**
+     * Updates the tree structure starting from the given directory.
+     *
+     * @param directory The root directory for the updated tree.
+     * @return A DefaultMutableTreeNode representing the updated root of the tree.
+     */
+    public DefaultMutableTreeNode updateTree(File directory) {
+        return createNodesFromDirectory(directory);
+    }
 }
