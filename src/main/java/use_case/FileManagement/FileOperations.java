@@ -1,5 +1,10 @@
 package use_case.FileManagement;
 
+import app.IDEAppBuilder;
+import entity.EditorObj;
+import entity.ParentIDEJTabbedPane;
+import use_case.EditorOperations.EditorOperations;
+
 import java.io.*;
 import java.util.logging.Logger;
 
@@ -39,6 +44,7 @@ public class FileOperations extends Operations {
     public void delete() {
         // Delete the file
         if (target.delete()) {
+            EditorOperations.closeAbstractTab(appBuilder, target);
             System.out.println("Deleted file: " + target.getAbsolutePath());
         } else {
             System.err.println("Failed to delete file: " + target.getAbsolutePath());

@@ -2,6 +2,7 @@ package entity;
 
 import app.IDEAppBuilder;
 import entity.EditorObj;
+import use_case.EditorOperations.EditorOperations;
 import use_case.FileManagement.FileOperations;
 
 import javax.swing.*;
@@ -11,11 +12,12 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class ParentIDEJTabbedPane extends JTabbedPane {
 
     protected List<EditorObj> editorObjs = new ArrayList<>();
-    protected IDEAppBuilder ideAppBuilder;
+    protected static IDEAppBuilder ideAppBuilder;
 
     public ParentIDEJTabbedPane(IDEAppBuilder appBuilder) {
         this.ideAppBuilder = appBuilder;
@@ -51,7 +53,7 @@ public abstract class ParentIDEJTabbedPane extends JTabbedPane {
         editorObj.setFile(file);
         editorObj.setTextArea(FileOperations.fileContent(file));
 
-        if (isDuplicate(editorObj)) {
+        if (isDuplicate(file)) {
             return;
         }
 
@@ -64,9 +66,9 @@ public abstract class ParentIDEJTabbedPane extends JTabbedPane {
         this.setSelectedIndex(this.getTabCount() - 1);
     }
 
-    private boolean isDuplicate(EditorObj editorObj) {
+    public boolean isDuplicate(File file) {
         for (int i = 0; i < this.editorObjs.size(); i++) {
-            if (this.editorObjs.get(i).getFile().equals(editorObj.getFile())) {
+            if (this.editorObjs.get(i).getFile().equals(file)) {
                 this.setSelectedIndex(i);
                 return true;
             }
@@ -93,13 +95,11 @@ public abstract class ParentIDEJTabbedPane extends JTabbedPane {
         return closeButton;
     }
 
-    protected void closeTab(int index) {
-        if (index != -1) {
-            EditorObj editorObj = editorObjs.get(index);
-            FileOperations.saveFile(editorObj.getFile(), editorObj.getTextArea().getText());
-            this.remove(index);
-            this.editorObjs.remove(index);
-        }
+    public void closeTab(int index) {
+        EditorObj editorObj = editorObjs.get(index);
+        FileOperations.saveFile(editorObj.getFile(), editorObj.getTextArea().getText());
+        this.remove(index);
+        this.editorObjs.remove(index);
     }
 
     public void closeAllTabs() {
@@ -127,5 +127,9 @@ public abstract class ParentIDEJTabbedPane extends JTabbedPane {
         while (this.getTabCount() > index + 1) {
             closeTab(index + 1);
         }
+    }
+
+    public List<EditorObj> getEditorObjs() {
+        return editorObjs;
     }
 }
