@@ -6,6 +6,7 @@ import use_case.FileManagement.FileOperations;
 import javax.swing.*;
 import java.io.File;
 
+// Popup menu
 public class PopupMenuHandler {
     private File copiedFileOrDirectory; // Stores the file or directory to copy
     private boolean isCopyingDirectory; // Tracks whether the copied item is a directory
