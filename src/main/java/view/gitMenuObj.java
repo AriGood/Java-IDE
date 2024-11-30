@@ -1,5 +1,7 @@
 package view;
 
+import app.IDEAppBuilder;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import use_case.git.CredentialUseCase;
 import use_case.git.SecureKeyManager;
 
@@ -14,7 +16,33 @@ public class gitMenuObj {
         JMenuItem commit = new JMenuItem("Commit");
         JMenuItem push = new JMenuItem("Push");
         JMenuItem pull = new JMenuItem("Pull");
+        JMenuItem about = new JMenuItem("New Repository");
         JMenuItem login = new JMenuItem("login");
+
+        commit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    IDEAppBuilder.gitManager.commitChanges(
+                            JOptionPane.showInputDialog(null,
+                                        "enter commit message"));
+                } catch (GitAPIException ex) {
+                    warningNoGit();
+                }
+            }
+        });
+
+        push.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    IDEAppBuilder.gitManager.pushChanges(CredentialUseCase.loadCredentials(SecureKeyManager.));
+                } catch (GitAPIException ex) {
+                    warningNoGit();
+                }
+            }
+        });
+
+
+
 
         login.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -38,6 +66,9 @@ public class gitMenuObj {
         gitMenu.add(push);
         gitMenu.add(pull);
         gitMenu.add(login);
+    }
+    private void warningNoGit(){
+        JOptionPane.showMessageDialog(null,"Warning no git repository open");
     }
     public JMenu getGitMenu() {
         return gitMenu;

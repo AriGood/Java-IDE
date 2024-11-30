@@ -4,6 +4,7 @@ import data_access.AutoCompleteBST;
 import entity.EditorObj;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import use_case.FileManagement.FileTreeGenerator;
+import use_case.git.GitManager;
 import view.*;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class IDEAppBuilder {
     public static final int WIDTH = 800;
     public static JScrollPane editorScrollPane;
     public static IDEJTabbedPane editorTabbedPane;
+    public static GitManager gitManager;
 
     private JScrollPane terminalScrollPane;
     private AutoCompleteOperations autoCompleteOperations;

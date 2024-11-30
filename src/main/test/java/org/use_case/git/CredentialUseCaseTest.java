@@ -1,6 +1,5 @@
 package org.use_case.git;
 
-import entity.CredentialEncryption;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
