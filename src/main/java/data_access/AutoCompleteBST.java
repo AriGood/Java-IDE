@@ -10,7 +10,6 @@ public class AutoCompleteBST {
     public void insert(String word) {
         root = insertRec(root, word);
     }
-
     private BSTNode insertRec(BSTNode node, String word) {
         if (node == null) {
             return new BSTNode(word);
@@ -31,6 +30,7 @@ public class AutoCompleteBST {
         }
         return node;
     }
+    //added a comment to make sure I can merge and pull.
 
     // Find suggestions for a given prefix
     public List<String> autocomplete(String prefix) {
@@ -38,7 +38,6 @@ public class AutoCompleteBST {
         autocompleteRec(root, prefix, suggestions);
 
 //        matches.sort((n1, n2) -> Integer.compare(n2.frequency, n1.frequency)); // Sort by frequency descending
-//
 //        List<String> suggestions = new ArrayList<>();
 //        for (BSTNode node : matches) {
 //            suggestions.add(node.word);
