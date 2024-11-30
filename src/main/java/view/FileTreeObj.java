@@ -2,6 +2,7 @@ package view;
 
 import app.IDEAppBuilder;
 import use_case.FileManagement.FileTreeGenerator;
+import use_case.PopupMenuOperations.PopupMenuOperations;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -12,7 +13,7 @@ import java.io.File;
 public class FileTreeObj {
     private final FileTreeGenerator fileTreeGenerator; // Generates tree structure
     private final IDEAppBuilder appBuilder; // For file-opening functionality
-    private final PopupMenuHandler popupMenuHandler; // Manages right-click menus
+    private final FileTreeObj fileTreeObj = this; // Manages right-click menus
     private File directory; // Root directory of the tree
     private JTree fileTree; // UI component representing the tree
 
@@ -26,7 +27,6 @@ public class FileTreeObj {
         this.directory = directory;
         this.fileTreeGenerator = new FileTreeGenerator();
         this.appBuilder = appBuilder;
-        this.popupMenuHandler = new PopupMenuHandler(this);
         this.fileTree = createFileTree(directory);
     }
 
@@ -103,9 +103,9 @@ public class FileTreeObj {
 
                 if (selectedFile.exists()) {
                     if (selectedFile.isFile()) {
-                        popupMenuHandler.createFilePopupMenu(selectedFile).show(e.getComponent(), e.getX(), e.getY());
+                        PopupMenuOperations.createFilePopupMenu(selectedFile, fileTreeObj).show(e.getComponent(), e.getX(), e.getY());
                     } else if (selectedFile.isDirectory()) {
-                        popupMenuHandler.createDirectoryPopupMenu(selectedFile).show(e.getComponent(), e.getX(), e.getY());
+                        PopupMenuOperations.createDirectoryPopupMenu(selectedFile, fileTreeObj).show(e.getComponent(), e.getX(), e.getY());
                     }
                 }
             }

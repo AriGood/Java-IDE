@@ -5,6 +5,7 @@ import entity.EditorObj;
 import entity.LeftIDEJTabbedPane;
 import entity.RightIDEJTabbedPane;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
+import use_case.EditorOperations.EditorOperations;
 import use_case.FileManagement.FileTreeGenerator;
 import view.*;
 import java.util.List;
@@ -129,7 +130,7 @@ public class IDEAppBuilder {
 
     public void openFile(File file) {
         if (file != null && file.exists() && file.isFile()) {
-            getLeftEditorTabbedPane().addTab(file);
+            EditorOperations.addTab(file, leftEditorTabbedPane);
         } else {
             System.err.println("Invalid file: " + (file != null ? file.getAbsolutePath() : "null"));
         }
