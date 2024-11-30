@@ -2,8 +2,11 @@ package app;
 
 import data_access.AutoCompleteBST;
 import entity.EditorObj;
+import entity.LeftIDEJTabbedPane;
+import entity.RightIDEJTabbedPane;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import use_case.FileManagement.FileTreeGenerator;
+import use_case.git.GitManager;
 import view.*;
 import java.util.List;
 
@@ -21,7 +24,7 @@ public class IDEAppBuilder {
     public static final int HEIGHT = 600;
     public static final int WIDTH = 800;
     public static JScrollPane editorScrollPane;
-    public static IDEJTabbedPane editorTabbedPane;
+    public static GitManager gitManager = new GitManager();
 
     private JScrollPane terminalScrollPane;
     private AutoCompleteOperations autoCompleteOperations;
@@ -29,9 +32,12 @@ public class IDEAppBuilder {
     private File directory;
     private EditorObj editorObj;
     private FileTreeObj fileTreeObj;
-    private JScrollPane currentScrollPane;
     private FileTreeGenerator fileTreeGenerator;
     private JFrame frame;
+    private JSplitPane leftRightSplitPane;
+
+    private RightIDEJTabbedPane rightEditorTabbedPane;
+    private LeftIDEJTabbedPane leftEditorTabbedPane;
 
     /**
      * Builds the application.
@@ -48,9 +54,7 @@ public class IDEAppBuilder {
         frame.add(makeFilePanel(), BorderLayout.CENTER);
 
         frame.setVisible(true);
-
         return frame;
-
     }
 
     public void buildIDE() {
@@ -59,7 +63,7 @@ public class IDEAppBuilder {
         frame.add(makeTerminalPanel(), BorderLayout.SOUTH);
 
 
-        JSplitPane leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, editorTabbedPane);
+        leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, leftEditorTabbedPane);
         leftRightSplitPane.setDividerLocation(300);
 
 
@@ -93,9 +97,8 @@ public class IDEAppBuilder {
         return fileScrollPane;
     }
 
-    public void buildTree() {
-        fileTreeObj = new FileTreeObj(this);
-        directory = fileTreeObj.getDirectory();
+    public void buildTree(File directory) {
+        fileTreeObj = new FileTreeObj(directory, this);
         fileScrollPane.setViewportView(fileTreeObj.getFileTree());
     }
 
@@ -105,12 +108,6 @@ public class IDEAppBuilder {
         return menuBarObj.getMenuBar();
     }
 
-    // New
-    public void updateFileTree(File newDirectory) {
-        directory = newDirectory;
-        fileTreeGenerator.updateTree(directory);
-        fileScrollPane.setViewportView(fileTreeGenerator.createFileTree(directory));
-    }
 
     private JScrollPane makeTerminalPanel() {
         TerminalObj terminalWindow = new TerminalObj();
@@ -121,15 +118,23 @@ public class IDEAppBuilder {
     public JTabbedPane makeEditorPanel() {
         // make text area an instance variable with this function and create a getter and reference it for autocomp.
 //        editorObj = new EditorObj();
-        editorTabbedPane = new IDEJTabbedPane(this);
+        leftEditorTabbedPane = new LeftIDEJTabbedPane(this);
 //        editorScrollPane = new JScrollPane(editorObj.getTextArea());
 //        editorScrollPane.setRowHeaderView(editorObj.getLineNums());
 //        editorTabbedPane.add("New Tab", editorScrollPane);
-        return editorTabbedPane;
+        return leftEditorTabbedPane;
     }
 
+    /*public void openFile(File file) {
+        leftEditorTabbedPane.addTab(file);
+    }*/
+
     public void openFile(File file) {
-        editorTabbedPane.addTab(file);
+        if (file != null && file.exists() && file.isFile()) {
+            getLeftEditorTabbedPane().addTab(file);
+        } else {
+            System.err.println("Invalid file: " + (file != null ? file.getAbsolutePath() : "null"));
+        }
     }
 
 
@@ -155,4 +160,34 @@ public class IDEAppBuilder {
         return editorScrollPane;
     }
 
+    public void splitEditor(JSplitPane newSplit) {
+        leftRightSplitPane.setRightComponent(newSplit);
+        Component rightTabbedComponent = newSplit.getRightComponent();
+        Component leftTabbedComponent = newSplit.getLeftComponent();
+        if (rightTabbedComponent instanceof RightIDEJTabbedPane) {
+            rightEditorTabbedPane = (RightIDEJTabbedPane) rightTabbedComponent;
+        }
+        if (leftTabbedComponent instanceof LeftIDEJTabbedPane) {
+            leftEditorTabbedPane = (LeftIDEJTabbedPane) leftTabbedComponent;
+        }
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public RightIDEJTabbedPane getRightEditorTabbedPane() {
+        return rightEditorTabbedPane;
+    }
+
+    public LeftIDEJTabbedPane getLeftEditorTabbedPane() {
+        return leftEditorTabbedPane;
+    }
+
+
+    public JSplitPane getLeftRightSplitPane() {
+        return leftRightSplitPane;
+    }
+
+    public void setRightEditorTabbedPane(RightIDEJTabbedPane newRightPane) {
+        rightEditorTabbedPane = newRightPane;
+    }
 }
