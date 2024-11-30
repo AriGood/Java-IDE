@@ -1,11 +1,8 @@
 package use_case.FileManagement;
 
-import app.IDEAppBuilder;
-import entity.EditorObj;
-import entity.ParentIDEJTabbedPane;
-import use_case.EditorOperations.EditorOperations;
 
 import java.io.*;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 public class FileOperations extends Operations {
@@ -42,6 +39,27 @@ public class FileOperations extends Operations {
 
     @Override
     public void delete() {
+        if (target.delete()) {
+            System.out.println("Deleted file: " + target.getAbsolutePath());
+        } else {
+            System.err.println("Failed to delete file: " + target.getAbsolutePath());
+        }
+    }
+
+    // CHANGED: Overloaded delete method with a Consumer for post-deletion actions
+    public void delete(Consumer<File> postDeleteAction) {
+        if (target.delete()) {
+            System.out.println("Deleted file: " + target.getAbsolutePath());
+            if (postDeleteAction != null) {
+                postDeleteAction.accept(target); // Notify via delegate
+            }
+        } else {
+            System.err.println("Failed to delete file: " + target.getAbsolutePath());
+        }
+    }
+
+    /*@Override
+    public void delete() {
         // Delete the file
         if (target.delete()) {
             EditorOperations.closeAbstractTab(appBuilder, target);
@@ -49,13 +67,14 @@ public class FileOperations extends Operations {
         } else {
             System.err.println("Failed to delete file: " + target.getAbsolutePath());
         }
-    }
+    }*/
 
     @Override
     public void paste(File destination) {
         System.out.println("Pasting file to " + destination.getAbsolutePath());
         copy(destination);
     }
+
 
     /**
      * This function saves the provided content to the specified file.

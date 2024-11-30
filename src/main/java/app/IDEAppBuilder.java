@@ -3,9 +3,11 @@ package app;
 import data_access.AutoCompleteBST;
 import entity.EditorObj;
 import entity.LeftIDEJTabbedPane;
+import entity.ParentIDEJTabbedPane;
 import entity.RightIDEJTabbedPane;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
 import use_case.EditorOperations.EditorOperations;
+import use_case.FileManagement.FileOperations;
 import use_case.FileManagement.FileTreeGenerator;
 import view.*;
 import java.util.List;
@@ -171,6 +173,42 @@ public class IDEAppBuilder {
         }
         frame.revalidate();
         frame.repaint();
+    }
+
+    // CHANGED: Added handleFileDeletion to manage file deletion and associated tabs
+    public void handleFileDeletion(File file) {
+        FileOperations fileOperations = new FileOperations(file);
+
+        // Use the overloaded delete method
+        fileOperations.delete(deletedFile -> {
+            closeTabForFile(deletedFile); // Ensure the tab is closed
+            System.out.println("Tab for file " + deletedFile.getName() + " closed.");
+        });
+    }
+
+    // CHANGED: Refactored tab closure logic into a reusable helper method
+    private void closeTabForFile(File file) {
+        if (leftEditorTabbedPane != null) {
+            int index = findTabIndex(leftEditorTabbedPane, file);
+            if (index != -1) {
+                leftEditorTabbedPane.remove(index); // Remove the tab
+            }
+        }
+        if (rightEditorTabbedPane != null) {
+            int index = findTabIndex(rightEditorTabbedPane, file);
+            if (index != -1) {
+                rightEditorTabbedPane.remove(index); // Remove the tab
+            }
+        }
+    }
+
+    private int findTabIndex(ParentIDEJTabbedPane tabbedPane, File file) {
+        for (int i = 0; i < tabbedPane.getEditorObjs().size(); i++) {
+            if (tabbedPane.getEditorObjs().get(i).getFile().equals(file)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public RightIDEJTabbedPane getRightEditorTabbedPane() {
