@@ -23,7 +23,7 @@ public class IDEAppBuilder {
     public static final int WIDTH = 800;
     public static JScrollPane editorScrollPane;
     public static IDEJTabbedPane editorTabbedPane;
-    public static GitManager gitManager;
+    public static GitManager gitManager = new GitManager();
 
     private JScrollPane terminalScrollPane;
     private AutoCompleteOperations autoCompleteOperations;

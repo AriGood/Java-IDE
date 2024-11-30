@@ -144,11 +144,7 @@ public class GitManager {
         return currentDirectory;
     }
 
-    /**
-     * Add specific files to the staging area.
-     * @param filePaths List of file paths to add to staging.
-     * @throws GitAPIException if adding files fails.
-     */
+
     /**
      * Add specific files to the staging area.
      * @param filePaths List of file paths to add to staging.
