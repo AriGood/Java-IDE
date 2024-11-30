@@ -3,6 +3,7 @@ package use_case.git;
 import entity.CredentialEncryption;
 
 import javax.crypto.SecretKey;
+import javax.security.auth.login.LoginException;
 import java.io.*;
 
 public class CredentialUseCase {
@@ -27,12 +28,17 @@ public class CredentialUseCase {
      *
      * @param secretKey The SecretKey used for decryption.
      * @return An array containing the username and password.
-     * @throws Exception If an error occurs during decryption or loading.
+     * @throws LoginException If an error occurs during decryption or loading.
      */
-    public String[] loadCredentials(SecretKey secretKey) throws Exception {
-        byte[] encryptedData = readFromFile();
-        String decryptedData = CredentialEncryption.decrypt(encryptedData, secretKey);
-        return decryptedData.split(":");
+    public static String[] loadCredentials(SecretKey secretKey) throws LoginException {
+        try{
+            byte[] encryptedData = readFromFile();
+            String decryptedData = CredentialEncryption.decrypt(encryptedData, secretKey);
+            return decryptedData.split(":");
+        } catch (Exception e) {
+            throw new LoginException();
+        }
+
     }
 
     /**
@@ -53,7 +59,7 @@ public class CredentialUseCase {
      * @return The data read from the file.
      * @throws IOException If an error occurs during reading.
      */
-    private byte[] readFromFile() throws IOException {
+    private static byte[] readFromFile() throws IOException {
         File file = new File(CredentialUseCase.CREDENTIALS_FILE);
         if (!file.exists()) {
             throw new FileNotFoundException("File " + CredentialUseCase.CREDENTIALS_FILE + " not found.");

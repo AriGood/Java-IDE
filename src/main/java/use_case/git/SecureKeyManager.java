@@ -2,6 +2,7 @@ package use_case.git;
 
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
+import java.security.KeyException;
 import java.security.KeyStore;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -47,16 +48,21 @@ public class SecureKeyManager {
      * @return The AES key stored in the Keystore.
      * @throws Exception if an error occurs during key retrieval.
      */
-    public static SecretKey loadKey() throws Exception {
-        // Load the KeyStore from the file
-        KeyStore keyStore = KeyStore.getInstance("JCEKS");
-        try (FileInputStream fis = new FileInputStream(KEYSTORE_FILE)) {
-            keyStore.load(fis, KEYSTORE_PASSWORD);
-        }
+    public static SecretKey loadKey() throws KeyException {
+        try {
+            // Load the KeyStore from the file
+            KeyStore keyStore = KeyStore.getInstance("JCEKS");
+            try (FileInputStream fis = new FileInputStream(KEYSTORE_FILE)) {
+                keyStore.load(fis, KEYSTORE_PASSWORD);
+            }
 
-        // Retrieve the key using its alias and password protection
-        KeyStore.ProtectionParameter protectionParam = new KeyStore.PasswordProtection(KEYSTORE_PASSWORD);
-        KeyStore.SecretKeyEntry keyEntry = (KeyStore.SecretKeyEntry) keyStore.getEntry(KEY_ALIAS, protectionParam);
-        return keyEntry.getSecretKey();
+            // Retrieve the key using its alias and password protection
+            KeyStore.ProtectionParameter protectionParam = new KeyStore.PasswordProtection(KEYSTORE_PASSWORD);
+            KeyStore.SecretKeyEntry keyEntry = (KeyStore.SecretKeyEntry) keyStore.getEntry(KEY_ALIAS, protectionParam);
+            return keyEntry.getSecretKey();
+
+        } catch (Exception e) {
+            throw new KeyException("Error loading key", e);
+        }
     }
 }
