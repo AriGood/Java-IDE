@@ -42,10 +42,10 @@ public class FileOperations extends Operations {
         if (target.delete()) {
             System.out.println("Deleted file: " + target.getAbsolutePath());
 
-            // Refresh the directory's metadata to ensure accurate file system state
+            // Trigger metadata refresh
             File parentDirectory = target.getParentFile();
             if (parentDirectory != null) {
-                parentDirectory.listFiles(); // Triggers a metadata refresh
+                parentDirectory.listFiles();
             }
         } else {
             System.err.println("Failed to delete file: " + target.getAbsolutePath());
@@ -57,6 +57,12 @@ public class FileOperations extends Operations {
             System.out.println("Deleted file: " + target.getAbsolutePath());
             if (postDeleteAction != null) {
                 postDeleteAction.accept(target); // Notify about deletion
+            }
+
+            // Trigger metadata refresh
+            File parentDirectory = target.getParentFile();
+            if (parentDirectory != null) {
+                parentDirectory.listFiles();
             }
         } else {
             System.err.println("Failed to delete file: " + target.getAbsolutePath());

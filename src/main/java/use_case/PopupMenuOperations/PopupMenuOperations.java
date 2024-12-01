@@ -76,40 +76,26 @@ public class PopupMenuOperations {
             }
         });
 
-        // Delete option
+        // Delete File Option
         JMenuItem deleteFileItem = new JMenuItem("Delete");
         deleteFileItem.addActionListener(e -> {
             try {
-                // Perform file deletion and close associated tabs
+                // Perform file deletion
                 new FileOperations(file).delete(deletedFile -> {
-                    fileTreeObj.getAppBuilder().handleFileDeletion(deletedFile); // Closes tabs
-                    System.out.println("Deleted file and closed associated tabs: " + deletedFile.getAbsolutePath());
+                    // Update the file tree dynamically
+                    DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTreeObj.getFileTree().getLastSelectedPathComponent();
+                    if (selectedNode != null) {
+                        DefaultTreeModel model = (DefaultTreeModel) fileTreeObj.getFileTree().getModel();
+                        model.removeNodeFromParent(selectedNode);
+                    }
+                    System.out.println("Deleted file and updated tree: " + deletedFile.getAbsolutePath());
                 });
 
-                // Verify the file's actual existence
-                if (!file.exists()) {
-                    System.out.println("File successfully deleted from system: " + file.getAbsolutePath());
-                } else {
-                    System.err.println("File still exists on the system after delete attempt: "
-                            + file.getAbsolutePath());
-                }
-
-                // Refresh the directory metadata
+                // Refresh the directory to ensure the system reflects the change
                 File parentDirectory = file.getParentFile();
                 if (parentDirectory != null) {
-                    parentDirectory.listFiles(); // Ensures the file system is up-to-date
+                    parentDirectory.listFiles(); // Metadata refresh
                 }
-
-                // Dynamically remove the node from the JTree
-                DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)
-                        fileTreeObj.getFileTree().getLastSelectedPathComponent();
-                if (selectedNode != null) {
-                    DefaultTreeModel model = (DefaultTreeModel) fileTreeObj.getFileTree().getModel();
-                    model.removeNodeFromParent(selectedNode); // Remove the node from the tree model
-                } else {
-                    System.err.println("Failed to identify the node to remove.");
-                }
-
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Failed to delete: " + ex.getMessage(),
                         "Delete Error", JOptionPane.ERROR_MESSAGE);
@@ -127,7 +113,7 @@ public class PopupMenuOperations {
         JPopupMenu popupMenu = new JPopupMenu();
 
         // Create New File Option
-        JMenuItem newFileItem = new JMenuItem("New File");
+        JMenuItem newFileItem = new JMenuItem("New Text File");
         newFileItem.addActionListener(e -> {
             String fileName = JOptionPane.showInputDialog("Enter file name:");
             if (fileName != null && !fileName.trim().isEmpty()) {
