@@ -3,6 +3,9 @@ package use_case.AutoCompleteOperations;
 import javax.swing.text.JTextComponent;
 import java.util.List;
 
+/**
+ * New abstract class that initializes autcomplete methods.
+ */
 public abstract class AutoCompleteOperationsBase {
     /**
      * Retrieves suggestions based on input text.

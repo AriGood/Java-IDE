@@ -10,13 +10,15 @@ public class AutoCompleteBst {
     public void insert(String word) {
         root = insertRec(root, word);
     }
+
     private bst_Node insertRec(bst_Node node, String word) {
         if (node == null) {
             return new bst_Node(word);
         }
         if (word.compareTo(node.word) < 0) {
             node.left = insertRec(node.left, word);
-        } else if (word.compareTo(node.word) > 0) {
+        }
+        else if (word.compareTo(node.word) > 0) {
             node.right = insertRec(node.right, word);
         }
         return node;
@@ -48,7 +50,7 @@ public class AutoCompleteBst {
      * @return autocompletebst.
      */
     public static AutoCompleteBst buildWithJavaKeywords() {
-        AutoCompleteBst autocompleteBST = new AutoCompleteBst();
+        AutoCompleteBst autocompleteBst = new AutoCompleteBst();
 
         // Populate the tree with Java keywords
         String[] javaKeywords = {
@@ -57,14 +59,14 @@ public class AutoCompleteBst {
                 "enum", "extends", "equals", "Exception", "final", "finally", "float", "for", "get", "goto",
                 "if", "implements", "import", "instanceof", "int", "interface",
                 "length", "List", "long", "main", "native", "new", "package", "private", "protected",
-                "public", "remove", "return", "short", "static", "strictfp", "String", "super",
-                "switch", "synchronized", "transient", "volatile", "while", "@Override"
+                "public", "remove", "return", "short", "static", "strictfp", "String", "super", "switch",
+                "synchronized", "transient", "volatile", "while", "@Override",
         };
 
         for (String keyword : javaKeywords) {
-            autocompleteBST.insert(keyword);
+            autocompleteBst.insert(keyword);
         }
 
-        return autocompleteBST;
+        return autocompleteBst;
     }
 }

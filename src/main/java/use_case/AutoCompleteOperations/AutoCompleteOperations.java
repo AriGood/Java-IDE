@@ -5,11 +5,14 @@ import data.access.AutoCompleteBst;
 import javax.swing.text.JTextComponent;
 import java.util.List;
 
+/**
+ * New method and class that finalizes autocomplete before sending to pop up.
+ */
 public class AutoCompleteOperations extends AutoCompleteOperationsBase {
-    private final AutoCompleteBst autoCompleteBST;
+    private final AutoCompleteBst autoCompleteBst;
 
-    public AutoCompleteOperations(AutoCompleteBst autoCompleteBST) {
-        this.autoCompleteBST = autoCompleteBST;
+    public AutoCompleteOperations(AutoCompleteBst autoCompleteBst) {
+        this.autoCompleteBst = autoCompleteBst;
     }
 
     @Override
@@ -17,9 +20,10 @@ public class AutoCompleteOperations extends AutoCompleteOperationsBase {
         String text = textComponent.getText();
         String lastWord = getLastWord(text);
         if (!lastWord.isEmpty()) {
-            return autoCompleteBST.autocomplete(lastWord);
+            return autoCompleteBst.autocomplete(lastWord);
         }
-        return List.of(); // No suggestions if last word is empty
+        // No suggestions if last word is empty
+        return List.of();
     }
 
     /**
