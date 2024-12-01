@@ -1,20 +1,32 @@
 package view;
 
 import app.IDEAppBuilder;
+import org.jetbrains.annotations.NotNull;
 import use_case.FileManagement.FileOperations;
 
 import javax.swing.*;
 import java.io.File;
+import java.util.*;
 
 public class MenuBarObj {
     private final JMenuBar menuBar;
     private final IDEAppBuilder IDEAppBuilder;
 
+    /**
+     * Constructor to initialize the MenuBarObj with a given IDEAppBuilder.
+     *
+     * @param newIDEAppBuilder The IDEAppBuilder instance to integrate with.
+     */
     public MenuBarObj(IDEAppBuilder newIDEAppBuilder) {
         this.menuBar = new JMenuBar();
         this.IDEAppBuilder = newIDEAppBuilder;
     }
 
+    /**
+     * Builds and adds the "File" menu to the menu bar.
+     * Includes options for creating, opening, and saving files,
+     * with Git integration for new files.
+     */
     private void addFileMenu() {
         JMenu fileMenu = new JMenu("File");
 
@@ -33,8 +45,31 @@ public class MenuBarObj {
             if (option == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
                 FileOperations fileOperations = new FileOperations(selectedFile);
-                fileOperations.saveFile(selectedFile, ""); // Create an empty file with no content
+
+                // Create an empty file
+                FileOperations.saveFile(selectedFile, "");
                 JOptionPane.showMessageDialog(null, "File created successfully!");
+
+                // Check if Git integration is available
+                if (app.IDEAppBuilder.gitManager != null) {
+                    int gitOption = JOptionPane.showConfirmDialog(
+                            null,
+                            "Do you want to add this file to Git?",
+                            "Git Integration",
+                            JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (gitOption == JOptionPane.YES_OPTION) {
+                        try {
+                            List<String> file = new ArrayList<String>();
+                            file.add(selectedFile.getAbsolutePath());
+                            app.IDEAppBuilder.gitManager.addFiles(file);
+                            JOptionPane.showMessageDialog(null, "File added to Git repository.");
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "Error adding file to Git: " + ex.getMessage());
+                        }
+                    }
+                }
             }
         });
 
@@ -62,7 +97,7 @@ public class MenuBarObj {
                 FileOperations fileOperations = new FileOperations(selectedFile);
                 String content = JOptionPane.showInputDialog("Enter file content:");
                 if (content != null) {
-                    fileOperations.saveFile(selectedFile, content);
+                    FileOperations.saveFile(selectedFile, content);
                     JOptionPane.showMessageDialog(null, "File saved successfully!");
                 }
             }
@@ -73,17 +108,25 @@ public class MenuBarObj {
         fileMenu.add(openDirectory);
         fileMenu.add(saveFile);
 
-        // Add the File menu to the menu bar
-        gitMenuObj git = new gitMenuObj();
-        JMenu gitMenu = git.getGitMenu();
+        // Add the File menu and Git menu to the menu bar
+        GitMenuBuilder git = new GitMenuBuilder();
+        JMenu gitMenu = git.build();
         menuBar.add(fileMenu);
         menuBar.add(gitMenu);
     }
 
+    /**
+     * Builds the menu bar by adding all necessary menus.
+     */
     public void buildMenu() {
         addFileMenu();
     }
 
+    /**
+     * Returns the built menu bar.
+     *
+     * @return The JMenuBar object containing all menus.
+     */
     public JMenuBar getMenuBar() {
         return menuBar;
     }
