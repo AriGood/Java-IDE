@@ -2,6 +2,7 @@ package use_case.EditorOperations;
 
 import app.IDEAppBuilder;
 import entity.LeftIDEJTabbedPane;
+import entity.RightIDEJTabbedPane;
 import org.junit.Test;
 
 import java.io.File;
@@ -13,35 +14,34 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class EditorOperationsTest {
 
-    @Test
-    public void closeAbstractTabLeft() throws IOException {
+    private IDEAppBuilder makeTestBuilder() {
         IDEAppBuilder app = new IDEAppBuilder();
         app.build();
         app.buildIDE();
-        LeftIDEJTabbedPane tabbedPane = new LeftIDEJTabbedPane(app);
 
-        // Create temporary files for testing
+        return app;
+    }
+
+    @Test
+    public void testCloseAbstractTabLeft() throws IOException {
+        IDEAppBuilder app = makeTestBuilder();
+        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
+        RightIDEJTabbedPane rightTabbedPane = new RightIDEJTabbedPane(app);
+
         File[] tempFiles = new File[5];
         for (int i = 0; i < 5; i++) {
             Path tempFilePath = Files.createTempFile("newFile" + i, ".txt");
             tempFiles[i] = tempFilePath.toFile();
-            // Optional: Write some content to the file to avoid empty file reading issues
             Files.write(tempFilePath, ("Content of file " + i).getBytes());
+            EditorOperations.addTab(tempFilePath.toFile(), leftTabbedPane);
         }
 
-        // Add tabs using the created files
-        for (File tempFile : tempFiles) {
-            EditorOperations.addTab(tempFile, tabbedPane);
-        }
-
-        // Remove a file and close the corresponding tab
-        File removeFile = tempFiles[2]; // Use one of the temp files for removal
+        File removeFile = tempFiles[2];
         EditorOperations.closeAbstractTab(app, removeFile);
 
-        // Assert that the file is no longer in the tabbed pane (i.e., not a duplicate)
-        assertTrue(EditorOperations.isDuplicate(removeFile, tabbedPane));
+        assertTrue(EditorOperations.isDuplicate(removeFile, leftTabbedPane));
+        assertFalse(EditorOperations.isDuplicate(removeFile, rightTabbedPane));
 
-        // Clean up the temporary files
         for (File tempFile : tempFiles) {
             if (tempFile.exists()) {
                 tempFile.delete();
@@ -50,50 +50,116 @@ public class EditorOperationsTest {
     }
 
     @Test
-    public void isDuplicate() {
+    public void testCloseAbstractTabRight() throws IOException {
+        IDEAppBuilder app = makeTestBuilder();
+        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
+        RightIDEJTabbedPane rightTabbedPane = new RightIDEJTabbedPane(app);
+
+        File[] tempFiles = new File[5];
+        for (int i = 0; i < 5; i++) {
+            Path tempFilePath = Files.createTempFile("newFile" + i, ".txt");
+            tempFiles[i] = tempFilePath.toFile();
+            Files.write(tempFilePath, ("Content of file " + i).getBytes());
+            EditorOperations.addTab(tempFilePath.toFile(), rightTabbedPane);
+        }
+
+        File removeFile = tempFiles[2];
+        EditorOperations.closeAbstractTab(app, removeFile);
+
+        assertTrue(EditorOperations.isDuplicate(removeFile, rightTabbedPane));
+        assertFalse(EditorOperations.isDuplicate(removeFile, leftTabbedPane));
+
+        for (File tempFile : tempFiles) {
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
+        }
     }
 
     @Test
-    public void addTab() {
+    public void testsDuplicate() throws IOException {
+        IDEAppBuilder app = makeTestBuilder();
+        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
+
+        File[] tempFiles = new File[5];
+        for (int i = 0; i < 5; i++) {
+            Path tempFilePath = Files.createTempFile("newFile" + i, ".txt");
+            tempFiles[i] = tempFilePath.toFile();
+            Files.write(tempFilePath, ("Content of file " + i).getBytes());
+            EditorOperations.addTab(tempFilePath.toFile(), leftTabbedPane);
+        }
+
+        assertTrue(EditorOperations.isDuplicate(tempFiles[0], leftTabbedPane));
+
+        for (File tempFile : tempFiles) {
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
+        }
+
     }
 
     @Test
-    public void createTabHeader() {
+    public void testAddTab() throws IOException {
+        IDEAppBuilder app = makeTestBuilder();
+        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
+
+        File[] tempFiles = new File[5];
+        for (int i = 0; i < 5; i++) {
+            Path tempFilePath = Files.createTempFile("newFile" + i, ".txt");
+            tempFiles[i] = tempFilePath.toFile();
+            Files.write(tempFilePath, ("Content of file " + i).getBytes());
+            EditorOperations.addTab(tempFilePath.toFile(), leftTabbedPane);
+        }
+
+        for (File tempFile : tempFiles) {
+            assertTrue(EditorOperations.isDuplicate(tempFile, leftTabbedPane));
+        }
+
+        for (File tempFile : tempFiles) {
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
+        }
     }
 
     @Test
-    public void createCloseButton() {
+    public void testCreateTabHeader() {
     }
 
     @Test
-    public void closeTab() {
+    public void testCreateCloseButton() {
     }
 
     @Test
-    public void getFileIndex() {
+    public void testCloseTab() {
     }
 
     @Test
-    public void closeAllTabs() {
+    public void testGetFileIndex() {
     }
 
     @Test
-    public void closeOtherTabs() {
+    public void testCloseAllTabs() {
     }
 
     @Test
-    public void closeTabsToLeft() {
+    public void testCloseOtherTabs() {
     }
 
     @Test
-    public void closeTabsToRight() {
+    public void testCloseTabsToLeft() {
     }
 
     @Test
-    public void mergeTab() {
+    public void testCloseTabsToRight() {
     }
 
     @Test
-    public void splitTab() {
+    public void testMergeTab() {
+    }
+
+    @Test
+    public void testSplitTab() {
     }
 }
