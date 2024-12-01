@@ -75,7 +75,6 @@ public class IDEAppBuilder {
     public void initializeAutoComplete(AutoCompleteBST autocompleteBST, JTextArea codeEditor) {
         AutoCompletePopup suggestionPopup = new AutoCompletePopup();
         autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
-
         codeEditor.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -126,10 +125,6 @@ public class IDEAppBuilder {
         return leftEditorTabbedPane;
     }
 
-    /*public void openFile(File file) {
-        leftEditorTabbedPane.addTab(file);
-    }*/
-
     public void openFile(File file) {
         if (file != null && file.exists() && file.isFile()) {
             getLeftEditorTabbedPane().addTab(file);
@@ -137,13 +132,6 @@ public class IDEAppBuilder {
             System.err.println("Invalid file: " + (file != null ? file.getAbsolutePath() : "null"));
         }
     }
-
-
-//    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
-//        JPopupMenu popup = new JPopupMenu();
-//        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
-//        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
-//    }
 
     public File getDirectory() {
         return directory;

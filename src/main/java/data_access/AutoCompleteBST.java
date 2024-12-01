@@ -71,13 +71,13 @@ public class AutoCompleteBST {
 
         // Populate the tree with Java keywords
         String[] javaKeywords = {
-                "abstract", "assert", "boolean", "break", "byte", "case", "catch",
+                "ArrayList", "abstract", "assert", "boolean", "break", "byte", "case", "catch",
                 "char", "class", "continue", "default", "do", "double", "else",
-                "enum", "extends", "final", "finally", "float", "for", "goto",
+                "enum", "extends", "equals", "Exception", "final", "finally", "float", "for", "get", "goto",
                 "if", "implements", "import", "instanceof", "int", "interface",
-                "long", "native", "new", "package", "private", "protected",
-                "public", "return", "short", "static", "strictfp", "super",
-                "switch", "synchronized", "transient", "volatile", "while"
+                "length", "List", "long", "main", "native", "new", "package", "private", "protected",
+                "public", "remove", "return", "short", "static", "strictfp", "String", "super",
+                "switch", "synchronized", "transient", "volatile", "while", "@Override"
         };
 
         for (String keyword : javaKeywords) {
