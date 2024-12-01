@@ -1,5 +1,6 @@
 package view;
 
+import use_case.EditorOperations.EditorOperations;
 import use_case.FileManagement.DirectoryOperations;
 import use_case.FileManagement.FileOperations;
 
@@ -45,16 +46,18 @@ public class PopupMenuHandler {
         JMenuItem deleteFileItem = new JMenuItem("Delete");
         deleteFileItem.addActionListener(e -> {
             try {
-                new FileOperations(file).delete();
-                System.out.println("Deleted file: " + file.getAbsolutePath());
+                new FileOperations(file).delete(deletedFile -> {
+                    fileTreeObj.getAppBuilder().handleFileDeletion(deletedFile); // Close associated tabs
+                    System.out.println("Deleted file and closed associated tabs: " + deletedFile.getAbsolutePath());
+                });
 
-                // Clear stale reference
+                fileTreeObj.updateTree(fileTreeObj.getDirectory()); // Refresh tree
+
+                // Clear stale reference if applicable
                 if (file.equals(copiedFileOrDirectory)) {
                     copiedFileOrDirectory = null;
                     isCopyingDirectory = false;
                 }
-
-                fileTreeObj.updateTree(fileTreeObj.getDirectory());
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Failed to delete: " + ex.getMessage(), "Delete Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -136,20 +139,22 @@ public class PopupMenuHandler {
             }
         });
 
-        // Delete Directory Option
+        // Delete Method
         JMenuItem deleteDirItem = new JMenuItem("Delete");
         deleteDirItem.addActionListener(e -> {
             try {
-                new DirectoryOperations(directory).delete();
-                System.out.println("Deleted directory: " + directory.getAbsolutePath());
+                new FileOperations(directory).delete(deletedFile -> {
+                    fileTreeObj.getAppBuilder().handleFileDeletion(deletedFile); // Close associated tabs
+                    System.out.println("Deleted file and closed associated tabs: " + deletedFile.getAbsolutePath());
+                });
 
-                // Clear stale reference
+                fileTreeObj.updateTree(fileTreeObj.getDirectory()); // Refresh tree
+
+                // Clear stale reference if applicable
                 if (directory.equals(copiedFileOrDirectory)) {
                     copiedFileOrDirectory = null;
                     isCopyingDirectory = false;
                 }
-
-                fileTreeObj.updateTree(fileTreeObj.getDirectory());
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Failed to delete: " + ex.getMessage(), "Delete Error", JOptionPane.ERROR_MESSAGE);
             }

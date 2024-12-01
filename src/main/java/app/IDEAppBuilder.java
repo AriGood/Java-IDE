@@ -117,18 +117,10 @@ public class IDEAppBuilder {
     }
 
     public JTabbedPane makeEditorPanel() {
-        // make text area an instance variable with this function and create a getter and reference it for autocomp.
-//        editorObj = new EditorObj();
         leftEditorTabbedPane = new LeftIDEJTabbedPane(this);
-//        editorScrollPane = new JScrollPane(editorObj.getTextArea());
-//        editorScrollPane.setRowHeaderView(editorObj.getLineNums());
-//        editorTabbedPane.add("New Tab", editorScrollPane);
         return leftEditorTabbedPane;
     }
 
-    /*public void openFile(File file) {
-        leftEditorTabbedPane.addTab(file);
-    }*/
 
     public void openFile(File file) {
         if (file != null && file.exists() && file.isFile()) {
@@ -138,12 +130,6 @@ public class IDEAppBuilder {
         }
     }
 
-
-//    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
-//        JPopupMenu popup = new JPopupMenu();
-//        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
-//        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
-//    }
 
     public File getDirectory() {
         return directory;
@@ -176,40 +162,11 @@ public class IDEAppBuilder {
     }
 
     // CHANGED: Added handleFileDeletion to manage file deletion and associated tabs
+
     public void handleFileDeletion(File file) {
-        FileOperations fileOperations = new FileOperations(file);
-
-        // Use the overloaded delete method
-        fileOperations.delete(deletedFile -> {
-            closeTabForFile(deletedFile); // Ensure the tab is closed
-            System.out.println("Tab for file " + deletedFile.getName() + " closed.");
-        });
+        EditorOperations.closeAbstractTab(this, file); // Close associated tabs
     }
 
-    // CHANGED: Refactored tab closure logic into a reusable helper method
-    private void closeTabForFile(File file) {
-        if (leftEditorTabbedPane != null) {
-            int index = findTabIndex(leftEditorTabbedPane, file);
-            if (index != -1) {
-                leftEditorTabbedPane.remove(index); // Remove the tab
-            }
-        }
-        if (rightEditorTabbedPane != null) {
-            int index = findTabIndex(rightEditorTabbedPane, file);
-            if (index != -1) {
-                rightEditorTabbedPane.remove(index); // Remove the tab
-            }
-        }
-    }
-
-    private int findTabIndex(ParentIDEJTabbedPane tabbedPane, File file) {
-        for (int i = 0; i < tabbedPane.getEditorObjs().size(); i++) {
-            if (tabbedPane.getEditorObjs().get(i).getFile().equals(file)) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
     public RightIDEJTabbedPane getRightEditorTabbedPane() {
         return rightEditorTabbedPane;
