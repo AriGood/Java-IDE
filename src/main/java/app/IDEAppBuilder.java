@@ -100,6 +100,7 @@ public class IDEAppBuilder {
     }
 
     public void buildTree(File directory) {
+        directory = directory.getAbsoluteFile();
         fileTreeObj = new FileTreeObj(directory, this);
         fileScrollPane.setViewportView(fileTreeObj.getFileTree());
     }

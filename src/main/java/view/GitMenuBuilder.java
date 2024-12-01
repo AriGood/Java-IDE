@@ -35,6 +35,7 @@ public class GitMenuBuilder {
         addSetRemoteAction();
         addCloneRepositoryAction();
         addMergeBranchAction();
+        addOpenExistingRepositoryAction();
     }
 
     /**
@@ -63,13 +64,12 @@ public class GitMenuBuilder {
     public void addPushAction() {
         JMenuItem push = new JMenuItem("Push");
         push.addActionListener(e -> {
+            ensureRepositoryExists();
             try {
                 IDEAppBuilder.gitManager.pushChanges(getLogin());
                 JOptionPane.showMessageDialog(null, "Changes pushed successfully.");
-            } catch (GitAPIException ex) {
-                warningNoGit();
-            } catch (KeyException | LoginException | NoRemoteRepositoryException ex) {
-                warningNoLogin();
+            } catch (KeyException | LoginException | NoRemoteRepositoryException | GitAPIException ex) {
+                JOptionPane.showMessageDialog(null, "Cannot push changes" + ex.getMessage());
             }
         });
         gitMenu.add(push);
@@ -90,6 +90,15 @@ public class GitMenuBuilder {
             }
         });
         gitMenu.add(pull);
+    }
+
+    /**
+     * Adds the "Open Existing Repository" action to the Git menu.
+     */
+    public void addOpenExistingRepositoryAction() {
+        JMenuItem openExistingRepo = new JMenuItem("Open Existing Repository");
+        openExistingRepo.addActionListener(e -> handleOpenExistingRepository());
+        gitMenu.add(openExistingRepo);
     }
 
     /**
@@ -246,6 +255,26 @@ public class GitMenuBuilder {
             }
         } catch (GitAPIException ex) {
             warningNoGit();
+        }
+    }
+
+
+    private void handleOpenExistingRepository() {
+        // Open a directory chooser dialog to select an existing repository
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Select Existing Repository");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int returnValue = chooser.showOpenDialog(null);
+
+        // If the user selects a directory, attempt to open it as a Git repository
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedDirectory = chooser.getSelectedFile();
+            try {
+                IDEAppBuilder.gitManager.openRepository(selectedDirectory.getAbsolutePath());
+                JOptionPane.showMessageDialog(null, "Repository opened successfully.");
+            } catch (IOException | GitAPIException ex) {
+                JOptionPane.showMessageDialog(null, "Error opening repository: " + ex.getMessage());
+            }
         }
     }
 

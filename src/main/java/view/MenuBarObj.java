@@ -81,6 +81,18 @@ public class MenuBarObj {
             int option = directoryChooser.showOpenDialog(null);
             if (option == JFileChooser.APPROVE_OPTION) {
                 File selectedDirectory = directoryChooser.getSelectedFile();
+                int choice = JOptionPane.showConfirmDialog(null,
+                        "Would you like to open this as a git repository?","Git",JOptionPane.YES_NO_OPTION);
+                if (choice == JOptionPane.YES_OPTION) {
+                    try {
+                        assert selectedDirectory != null;
+                        IDEAppBuilder.gitManager.createRepository(JOptionPane.showInputDialog(null, "Enter remote URL:")
+                                ,selectedDirectory.getAbsolutePath());
+                        JOptionPane.showMessageDialog(null, "Repository opened successfully.");
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Error creating repository: " + ex.getMessage());
+                    }
+                }
                 IDEAppBuilder.buildTree(selectedDirectory); // Pass the selected directory
                 IDEAppBuilder.buildIDE(); // Rebuild the IDE with the new directory structure
             }
