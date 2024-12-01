@@ -1,4 +1,4 @@
-package use_case.PopupMenuOperations;
+package view;
 
 import app.IDEAppBuilder;
 import entity.LeftIDEJTabbedPane;
@@ -7,7 +7,6 @@ import entity.RightIDEJTabbedPane;
 import use_case.EditorOperations.EditorOperations;
 import use_case.FileManagement.DirectoryOperations;
 import use_case.FileManagement.FileOperations;
-import view.FileTreeObj;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
