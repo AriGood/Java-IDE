@@ -257,6 +257,14 @@ public class GitManager {
             currentDirectory = null;
         }
     }
+
+    public void setCurrentRepository(Git currentRepository) {
+        this.currentRepository = currentRepository;
+    }
+
+    public void setCurrentDirectory(File currentDirectory) {
+        this.currentDirectory = currentDirectory;
+    }
     public void setRemoteUrl(String remoteUrl) {
         this.remoteUrl = remoteUrl;
     }

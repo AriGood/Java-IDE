@@ -51,7 +51,7 @@ public class MenuBarObj {
                 JOptionPane.showMessageDialog(null, "File created successfully!");
 
                 // Check if Git integration is available
-                if (app.IDEAppBuilder.gitManager != null) {
+                if (IDEAppBuilder.gitManager != null) {
                     int gitOption = JOptionPane.showConfirmDialog(
                             null,
                             "Do you want to add this file to Git?",
@@ -63,7 +63,7 @@ public class MenuBarObj {
                         try {
                             List<String> file = new ArrayList<String>();
                             file.add(selectedFile.getAbsolutePath());
-                            app.IDEAppBuilder.gitManager.addFiles(file);
+                            IDEAppBuilder.gitManager.addFiles(file);
                             JOptionPane.showMessageDialog(null, "File added to Git repository.");
                         } catch (Exception ex) {
                             JOptionPane.showMessageDialog(null, "Error adding file to Git: " + ex.getMessage());
@@ -109,7 +109,7 @@ public class MenuBarObj {
         fileMenu.add(saveFile);
 
         // Add the File menu and Git menu to the menu bar
-        GitMenuBuilder git = new GitMenuBuilder();
+        GitMenuBuilder git = new GitMenuBuilder(IDEAppBuilder);
         JMenu gitMenu = git.build();
         menuBar.add(fileMenu);
         menuBar.add(gitMenu);

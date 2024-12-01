@@ -20,24 +20,6 @@ public class MainIDEApplication {
 
     /**
      * The main entry point of the application.
-     * <p>
-     * The program will show you the note currently saved in the system.
-     * You are able to edit it and then save it to the system. You can refresh
-     * to update the note to reflect what was saved most recently. This
-     * uses the API from lab, so there is one database storing the note,
-     * which means that if anyone updates the note, that is what you will
-     * see when you refresh.
-     * </p> <p>
-     * You can generalize the code to allow you to
-     * specify which "user" to save the note for, which will allow your team
-     * to store information specific to your team which is password-protected.
-     * The username and password used in this application are currently for
-     * user jonathan_calver2, but you can change that. As you did in lab 3,
-     * you will likely want to store password information locally rather than
-     * in your repo. Or you can require the user to enter their credentials
-     * in your application; it just depends on what your program's main
-     * functionality.
-     * </p>
      * @param args commandline arguments are ignored
      */
     public static void main(String[] args) {

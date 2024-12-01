@@ -21,15 +21,15 @@ import java.io.File;
  * Builder for the Note Application.
  */
 public class IDEAppBuilder {
-    public static final int HEIGHT = 600;
-    public static final int WIDTH = 800;
-    public static JScrollPane editorScrollPane;
-    public static GitManager gitManager = new GitManager();
+    public final int HEIGHT = 600;
+    public final int WIDTH = 800;
+    public JScrollPane editorScrollPane;
+    public GitManager gitManager = new GitManager();
+    public File directory;
 
     private JScrollPane terminalScrollPane;
     private AutoCompleteOperations autoCompleteOperations;
     private JScrollPane fileScrollPane;
-    private File directory;
     private EditorObj editorObj;
     private FileTreeObj fileTreeObj;
     private FileTreeGenerator fileTreeGenerator;
