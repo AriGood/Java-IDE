@@ -45,7 +45,8 @@ public class CredentialEncryption {
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             byte[] keyBytes = factory.generateSecret(spec).getEncoded();
             return new SecretKeySpec(keyBytes, "AES");
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+        }
+        catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new EncryptionException(e);
         }
     }
@@ -63,8 +64,9 @@ public class CredentialEncryption {
             javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES");
             cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, key);
             return cipher.doFinal(data.getBytes());
-        } catch (NoSuchPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | InvalidKeyException |
-                 BadPaddingException e) {
+        }
+        catch (NoSuchPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException | InvalidKeyException
+               | BadPaddingException e) {
             throw new EncryptionException(e);
         }
     }
@@ -78,11 +80,12 @@ public class CredentialEncryption {
      * @throws EncryptionException if the decryption process fails.
      */
     public static String decrypt(byte[] data, SecretKey key) throws EncryptionException {
-        try{
+        try {
             javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES");
             cipher.init(javax.crypto.Cipher.DECRYPT_MODE, key);
             return new String(cipher.doFinal(data));
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | InvalidKeyException | BadPaddingException e) {
+        }
+        catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | InvalidKeyException | BadPaddingException e) {
             throw new EncryptionException(e);
         }
     }
@@ -107,7 +110,7 @@ public class CredentialEncryption {
         return Base64.getDecoder().decode(data);
     }
 
-    public static class EncryptionException extends Exception{
+    public static class EncryptionException extends Exception {
         EncryptionException(Exception ex) {
             super(ex);
         }
