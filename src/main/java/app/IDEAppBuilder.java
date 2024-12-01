@@ -81,7 +81,10 @@ public class IDEAppBuilder {
             public void keyTyped(KeyEvent e) {
                 SwingUtilities.invokeLater(() -> {
                     List<String> suggestions = autoCompleteOperations.getSuggestions(codeEditor);
-                    suggestionPopup.showSuggestions(codeEditor, suggestions);
+//                    suggestionPopup.showSuggestions(codeEditor, suggestions);
+                    suggestionPopup.showSuggestions(codeEditor, suggestions, (textComponent, suggestion) -> {
+                        autoCompleteOperations.applySuggestion(textComponent, suggestion);
+                    });
                 });
             }
         });
