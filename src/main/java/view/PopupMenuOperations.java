@@ -81,6 +81,8 @@ public class PopupMenuOperations {
             try {
                 // Perform file deletion
                 new FileOperations(file).delete(deletedFile -> {
+                    fileTreeObj.getAppBuilder().handleFileDeletion(deletedFile); // Closes tabs
+                    System.out.println("Deleted file and closed associated tabs: " + deletedFile.getAbsolutePath());
                     // Update the file tree dynamically
                     DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTreeObj.getFileTree().getLastSelectedPathComponent();
                     if (selectedNode != null) {
@@ -95,6 +97,7 @@ public class PopupMenuOperations {
                 if (parentDirectory != null) {
                     parentDirectory.listFiles(); // Metadata refresh
                 }
+
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Failed to delete: " + ex.getMessage(),
                         "Delete Error", JOptionPane.ERROR_MESSAGE);
