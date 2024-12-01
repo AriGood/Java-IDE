@@ -40,10 +40,23 @@ public class GitManager {
         }
 
         this.currentDirectory = new File(directoryPath);
-        this.currentRepository = Git.cloneRepository()
-                .setURI(repoUrl)
-                .setDirectory(currentDirectory)
-                .call();
+        System.out.println("Cloning into: " + directoryPath);
+
+        try {
+            this.currentRepository = Git.cloneRepository()
+                    .setURI(repoUrl)
+                    .setDirectory(currentDirectory)
+                    .call();
+
+            if (currentRepository != null) {
+                System.out.println("Repository cloned successfully.");
+            } else {
+                System.out.println("Failed to clone repository, currentRepository is still null.");
+            }
+        } catch (GitAPIException e) {
+            System.out.println("Error during clone: " + e.getMessage());
+            throw e;
+        }
     }
 
     /**
@@ -82,6 +95,34 @@ public class GitManager {
 
         currentRepository.add().addFilepattern(".").call();
         currentRepository.commit().setMessage(message).call();
+    }
+
+    /**
+     * Open an existing Git repository in a specified directory.
+     *
+     * @param directoryPath The local directory that contains the existing Git repository.
+     * @throws IOException If there is an issue with accessing the directory.
+     * @throws GitAPIException If the directory is not a valid Git repository or cannot be opened.
+     */
+    public void openRepository(String directoryPath) throws IOException, GitAPIException {
+        if (directoryPath == null || directoryPath.isEmpty()) {
+            throw new IllegalArgumentException("Directory path cannot be null or empty.");
+        }
+
+        this.currentDirectory = new File(directoryPath);
+        if (!currentDirectory.exists() || !currentDirectory.isDirectory()) {
+            throw new IOException("The specified directory does not exist or is not a directory.");
+        }
+
+        // Check if the directory contains a .git folder, indicating it's a Git repository
+        File gitDir = new File(currentDirectory, ".git");
+        if (!gitDir.exists() || !gitDir.isDirectory()) {
+            throw new GitAPIException("The specified directory is not a valid Git repository.") {};
+        }
+
+        // Open the existing repository
+        this.currentRepository = Git.open(currentDirectory);
+        System.out.println("Repository opened: " + directoryPath);
     }
 
     /**
@@ -165,6 +206,7 @@ public class GitManager {
             currentRepository.add().addFilepattern(filePath).call();
         }
     }
+
 
     /**
      * Remove specific files from the repository.
