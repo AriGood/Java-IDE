@@ -41,33 +41,33 @@ public class FileOperations extends Operations {
     public void delete() {
         if (target.delete()) {
             System.out.println("Deleted file: " + target.getAbsolutePath());
-        } else {
-            System.err.println("Failed to delete file: " + target.getAbsolutePath());
-        }
-    }
 
-    // CHANGED: Overloaded delete method with a Consumer for post-deletion actions
-    public void delete(Consumer<File> postDeleteAction) {
-        if (target.delete()) {
-            System.out.println("Deleted file: " + target.getAbsolutePath());
-            if (postDeleteAction != null) {
-                postDeleteAction.accept(target); // Notify via delegate
+            // Trigger metadata refresh
+            File parentDirectory = target.getParentFile();
+            if (parentDirectory != null) {
+                parentDirectory.listFiles();
             }
         } else {
             System.err.println("Failed to delete file: " + target.getAbsolutePath());
         }
     }
 
-    /*@Override
-    public void delete() {
-        // Delete the file
+    public void delete(Consumer<File> postDeleteAction) {
         if (target.delete()) {
-            EditorOperations.closeAbstractTab(appBuilder, target);
             System.out.println("Deleted file: " + target.getAbsolutePath());
+            if (postDeleteAction != null) {
+                postDeleteAction.accept(target); // Notify about deletion
+            }
+
+            // Trigger metadata refresh
+            File parentDirectory = target.getParentFile();
+            if (parentDirectory != null) {
+                parentDirectory.listFiles();
+            }
         } else {
             System.err.println("Failed to delete file: " + target.getAbsolutePath());
         }
-    }*/
+    }
 
     @Override
     public void paste(File destination) {

@@ -37,7 +37,7 @@ public class FileTreeObj {
      * @return The JTree component.
      */
     private JTree createFileTree(File directory) {
-        DefaultMutableTreeNode rootNode = fileTreeGenerator.createNodesFromDirectory(directory);
+        DefaultMutableTreeNode rootNode = fileTreeGenerator.generateTree(directory);
         fileTree = new JTree(rootNode);
 
         // Handle tree selection changes
@@ -121,9 +121,15 @@ public class FileTreeObj {
      */
     public void updateTree(File newDirectory) {
         this.directory = newDirectory;
-        DefaultMutableTreeNode rootNode = fileTreeGenerator.updateTree(newDirectory);
+
+        // Generate a fresh tree structure from the current state of the file system
+        DefaultMutableTreeNode rootNode = fileTreeGenerator.generateTree(newDirectory);
+
+        // Update the JTree model with the new root
         ((DefaultTreeModel) fileTree.getModel()).setRoot(rootNode);
-        fileTree.expandRow(0); // Expand the root node to show the updated tree
+
+        // Expand the root node to make the structure visible
+        fileTree.expandRow(0);
     }
 
     public void chooseDirectory() {
@@ -149,5 +155,9 @@ public class FileTreeObj {
 
     public File getDirectory() {
         return directory;
+    }
+
+    public IDEAppBuilder getAppBuilder() {
+        return appBuilder;
     }
 }

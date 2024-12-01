@@ -10,6 +10,8 @@ import use_case.FileManagement.FileOperations;
 import view.FileTreeObj;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.io.File;
 
 public class PopupMenuOperations {
@@ -35,7 +37,7 @@ public class PopupMenuOperations {
             tabAction.addActionListener(e -> EditorOperations.mergeTab(tabbedPane.getSelectedIndex(), (RightIDEJTabbedPane) tabbedPane, appBuilder));
         } else {
             tabAction.setText("Split Tab");
-            tabAction.addActionListener(e -> EditorOperations.splitTab(tabbedPane.getSelectedIndex(),(LeftIDEJTabbedPane) tabbedPane, appBuilder));
+            tabAction.addActionListener(e -> EditorOperations.splitTab(tabbedPane.getSelectedIndex(), (LeftIDEJTabbedPane) tabbedPane, appBuilder));
         }
 
         popupMenu.add(closeAllTabs);
@@ -69,7 +71,8 @@ public class PopupMenuOperations {
                 isCopyingDirectory = false;
                 System.out.println("Copied file: " + file.getName());
             } else {
-                JOptionPane.showMessageDialog(null, "Cannot copy a deleted or invalid file.", "Copy Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Cannot copy a deleted or invalid file.",
+                        "Copy Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -77,18 +80,25 @@ public class PopupMenuOperations {
         JMenuItem deleteFileItem = new JMenuItem("Delete");
         deleteFileItem.addActionListener(e -> {
             try {
-                new FileOperations(file).delete();
-                System.out.println("Deleted file: " + file.getAbsolutePath());
+                // Perform file deletion
+                new FileOperations(file).delete(deletedFile -> {
+                    // Update the file tree dynamically
+                    DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTreeObj.getFileTree().getLastSelectedPathComponent();
+                    if (selectedNode != null) {
+                        DefaultTreeModel model = (DefaultTreeModel) fileTreeObj.getFileTree().getModel();
+                        model.removeNodeFromParent(selectedNode);
+                    }
+                    System.out.println("Deleted file and updated tree: " + deletedFile.getAbsolutePath());
+                });
 
-                // Clear stale reference
-                if (file.equals(copiedFileOrDirectory)) {
-                    copiedFileOrDirectory = null;
-                    isCopyingDirectory = false;
+                // Refresh the directory to ensure the system reflects the change
+                File parentDirectory = file.getParentFile();
+                if (parentDirectory != null) {
+                    parentDirectory.listFiles(); // Metadata refresh
                 }
-
-                fileTreeObj.updateTree(fileTreeObj.getDirectory());
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Failed to delete: " + ex.getMessage(), "Delete Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Failed to delete: " + ex.getMessage(),
+                        "Delete Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -103,7 +113,7 @@ public class PopupMenuOperations {
         JPopupMenu popupMenu = new JPopupMenu();
 
         // Create New File Option
-        JMenuItem newFileItem = new JMenuItem("New File");
+        JMenuItem newFileItem = new JMenuItem("New Text File");
         newFileItem.addActionListener(e -> {
             String fileName = JOptionPane.showInputDialog("Enter file name:");
             if (fileName != null && !fileName.trim().isEmpty()) {
@@ -111,11 +121,27 @@ public class PopupMenuOperations {
                 try {
                     if (newFile.createNewFile()) {
                         System.out.println("Created file: " + newFile.getName());
-                        fileTreeObj.updateTree(fileTreeObj.getDirectory()); // Update the tree
+
+                        // Dynamically add the new file node to the tree
+                        DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) fileTreeObj.getFileTree().getLastSelectedPathComponent();
+                        if (parentNode != null) {
+                            DefaultTreeModel model = (DefaultTreeModel) fileTreeObj.getFileTree().getModel();
+                            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(newFile.getName());
+                            model.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
+                        } else {
+                            // Fallback: Regenerate the entire tree for consistency
+                            fileTreeObj.updateTree(fileTreeObj.getDirectory());
+                        }
+
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "Failed to create file: File already exists.", "Error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Failed to create file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Failed to create file: "
+                            + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -142,7 +168,7 @@ public class PopupMenuOperations {
             }
         });
 
-        // Paste Option
+        // Paste Option for Directories
         JMenuItem pasteDirItem = new JMenuItem("Paste");
         pasteDirItem.addActionListener(e -> {
             if (copiedFileOrDirectory != null && copiedFileOrDirectory.exists()) {
@@ -153,7 +179,14 @@ public class PopupMenuOperations {
                         new FileOperations(copiedFileOrDirectory).copy(directory);
                     }
                     System.out.println("Pasted into: " + directory.getAbsolutePath());
-                    fileTreeObj.updateTree(fileTreeObj.getDirectory());
+
+                    // Dynamically add the new node to the tree instead of refreshing everything
+                    DefaultTreeModel model = (DefaultTreeModel) fileTreeObj.getFileTree().getModel();
+                    DefaultMutableTreeNode parentNode = findNodeByFile(fileTreeObj.getFileTree(), directory);
+                    if (parentNode != null) {
+                        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(copiedFileOrDirectory.getName());
+                        model.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
+                    }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Failed to paste: " + ex.getMessage(), "Paste Error", JOptionPane.ERROR_MESSAGE);
                 } finally {
@@ -194,5 +227,26 @@ public class PopupMenuOperations {
         popupMenu.add(deleteDirItem);
 
         return popupMenu;
+    }
+
+    private static DefaultMutableTreeNode findNodeByFile(JTree tree, File file) {
+        DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) tree.getModel().getRoot();
+        return findNodeByFileRecursive(rootNode, file);
+    }
+
+    private static DefaultMutableTreeNode findNodeByFileRecursive(DefaultMutableTreeNode currentNode, File file) {
+        if (currentNode.toString().equals(file.getName())) {
+            return currentNode;
+        }
+
+        for (int i = 0; i < currentNode.getChildCount(); i++) {
+            DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) currentNode.getChildAt(i);
+            DefaultMutableTreeNode result = findNodeByFileRecursive(childNode, file);
+            if (result != null) {
+                return result;
+            }
+        }
+
+        return null;
     }
 }

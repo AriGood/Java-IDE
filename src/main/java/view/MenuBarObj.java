@@ -69,9 +69,9 @@ public class MenuBarObj {
         });
 
         // Add items to the File menu
-        fileMenu.add(newFile);
+        //fileMenu.add(newFile);
         fileMenu.add(openDirectory);
-        fileMenu.add(saveFile);
+        //fileMenu.add(saveFile);
 
         // Add the File menu to the menu bar
         menuBar.add(fileMenu);
