@@ -2,7 +2,7 @@ package use_case.git;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.NoHeadException;
+import org.eclipse.jgit.errors.NoRemoteRepositoryException;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.eclipse.jgit.api.Status;
@@ -16,9 +16,11 @@ public class GitManager {
 
     private Git currentRepository;
     private File currentDirectory;
+    private String remoteUrl;
 
     public GitManager() {
         // Initialize without a repository
+        this.remoteUrl = null;
         this.currentRepository = null;
         this.currentDirectory = null;
     }
@@ -30,6 +32,13 @@ public class GitManager {
      * @throws GitAPIException if cloning fails
      */
     public void cloneRepository(String repoUrl, String directoryPath) throws GitAPIException {
+        if (repoUrl == null || repoUrl.isEmpty()) {
+            throw new IllegalArgumentException("Repository URL cannot be null or empty.");
+        }
+        if (directoryPath == null || directoryPath.isEmpty()) {
+            throw new IllegalArgumentException("Directory path cannot be null or empty.");
+        }
+
         this.currentDirectory = new File(directoryPath);
         this.currentRepository = Git.cloneRepository()
                 .setURI(repoUrl)
@@ -42,43 +51,54 @@ public class GitManager {
      * @param directoryPath The local directory to initialize as a Git repository
      * @throws GitAPIException if initialization fails
      */
-    public void createRepository(String directoryPath) throws GitAPIException {
+    public void createRepository(String directoryPath, String remote) throws GitAPIException {
+        if (directoryPath == null || directoryPath.isEmpty()) {
+            throw new IllegalArgumentException("Directory path cannot be null or empty.");
+        }
+
         this.currentDirectory = new File(directoryPath);
         this.currentRepository = Git.init()
                 .setDirectory(currentDirectory)
                 .call();
+
+        if (remote != null && !remote.isEmpty()) {
+            this.remoteUrl = remote;
+        }
     }
 
     /**
      * Commit changes in the current repository
+     *
      * @param message The commit message
-     * @return The commit object created
      * @throws GitAPIException if commit fails
      */
-    public RevCommit commitChanges(String message) throws GitAPIException {
+    public void commitChanges(String message) throws GitAPIException {
         if (currentRepository == null) {
             throw new IllegalStateException("No repository available to commit changes.");
         }
+        if (message == null || message.isEmpty()) {
+            throw new IllegalArgumentException("Commit message cannot be null or empty.");
+        }
 
         currentRepository.add().addFilepattern(".").call();
-        return currentRepository.commit().setMessage(message).call();
+        currentRepository.commit().setMessage(message).call();
     }
 
     /**
      * Push changes to a remote repository
-     * @param remoteUrl The remote repository URL
-     * @param username The username for authentication
-     * @param password The password for authentication
+     * @param credential The [username, password] for authentication
      * @throws GitAPIException if push fails
      */
-    public void pushChanges(String remoteUrl, String username, String password) throws GitAPIException {
+    public void pushChanges(String[] credential) throws GitAPIException, NoRemoteRepositoryException {
         if (currentRepository == null) {
             throw new IllegalStateException("No repository available to push changes.");
         }
+        if (credential == null || credential.length != 2 || credential[0] == null || credential[1] == null) {
+            throw new IllegalArgumentException("Credentials must contain both a username and a password.");
+        }
 
         currentRepository.push()
-                .setRemote(remoteUrl)
-                .setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password))
+                .setCredentialsProvider(new UsernamePasswordCredentialsProvider(credential[0], credential[1]))
                 .call();
     }
 
@@ -124,6 +144,7 @@ public class GitManager {
         return currentDirectory;
     }
 
+
     /**
      * Add specific files to the staging area.
      * @param filePaths List of file paths to add to staging.
@@ -133,8 +154,14 @@ public class GitManager {
         if (currentRepository == null) {
             throw new IllegalStateException("No repository available to add files.");
         }
+        if (filePaths == null || filePaths.isEmpty()) {
+            throw new IllegalArgumentException("File paths cannot be null or empty.");
+        }
 
         for (String filePath : filePaths) {
+            if (filePath == null || filePath.isEmpty()) {
+                throw new IllegalArgumentException("File path cannot be null or empty.");
+            }
             currentRepository.add().addFilepattern(filePath).call();
         }
     }
@@ -148,8 +175,14 @@ public class GitManager {
         if (currentRepository == null) {
             throw new IllegalStateException("No repository available to remove files.");
         }
+        if (filePaths == null || filePaths.isEmpty()) {
+            throw new IllegalArgumentException("File paths cannot be null or empty.");
+        }
 
         for (String filePath : filePaths) {
+            if (filePath == null || filePath.isEmpty()) {
+                throw new IllegalArgumentException("File path cannot be null or empty.");
+            }
             currentRepository.rm().addFilepattern(filePath).call();
         }
     }
@@ -223,5 +256,19 @@ public class GitManager {
             currentRepository = null;
             currentDirectory = null;
         }
+    }
+
+    public void setCurrentRepository(Git currentRepository) {
+        this.currentRepository = currentRepository;
+    }
+
+    public void setCurrentDirectory(File currentDirectory) {
+        this.currentDirectory = currentDirectory;
+    }
+    public void setRemoteUrl(String remoteUrl) {
+        this.remoteUrl = remoteUrl;
+    }
+    public String getRemoteUrl() {
+        return remoteUrl;
     }
 }
