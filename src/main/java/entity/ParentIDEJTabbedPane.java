@@ -1,19 +1,13 @@
 package entity;
 
 import app.IDEAppBuilder;
-import entity.EditorObj;
-import use_case.EditorOperations.EditorOperations;
-import use_case.FileManagement.FileOperations;
-import use_case.PopupMenuOperations.PopupMenuOperations;
+import view.PopupMenuOperations;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public abstract class ParentIDEJTabbedPane extends JTabbedPane {
 

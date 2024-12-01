@@ -17,13 +17,5 @@ public class RightIDEJTabbedPane extends ParentIDEJTabbedPane {
 
     public RightIDEJTabbedPane(IDEAppBuilder ideAppBuilder) {
         super(ideAppBuilder);
-
-        this.addChangeListener(e -> {
-            int currentIndex = getSelectedIndex();
-            if (currentIndex != -1) {
-                JTextArea currentTextArea = editorObjs.get(currentIndex).getTextArea();
-                ideAppBuilder.initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords(), currentTextArea);
-            }
-        });
     }
 }
