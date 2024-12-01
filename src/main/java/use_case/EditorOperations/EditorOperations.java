@@ -51,26 +51,26 @@ public class  EditorOperations {
         JScrollPane newScrollPane = new JScrollPane(editorObj.getTextArea());
         newScrollPane.setRowHeaderView(editorObj.getLineNums());
         tabbedPane.add(file.getName(), newScrollPane);
-        tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, createTabHeader(file.getName(), tabbedPane));
+        tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, createTabHeader(file, tabbedPane));
         tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
     }
 
-    public static JPanel createTabHeader(String title, ParentIDEJTabbedPane tabbedPane) {
+    public static JPanel createTabHeader(File file, ParentIDEJTabbedPane tabbedPane) {
         JPanel tabHeader = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel(title);
+        JLabel titleLabel = new JLabel(file.getName());
         tabHeader.setOpaque(false);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         tabHeader.add(titleLabel, BorderLayout.WEST);
-        tabHeader.add(createCloseButton(tabbedPane), BorderLayout.EAST);
+        tabHeader.add(createCloseButton(tabbedPane, file), BorderLayout.EAST);
         return tabHeader;
     }
 
-    private static JButton createCloseButton(ParentIDEJTabbedPane tabbedPane) {
+    public static JButton createCloseButton(ParentIDEJTabbedPane tabbedPane, File file) {
         JButton closeButton = new JButton("x");
         closeButton.setPreferredSize(new Dimension(15, 15));
         closeButton.setMargin(new Insets(0, 0, 5, 0));
         closeButton.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-        closeButton.addActionListener(e -> closeTab(tabbedPane.getSelectedIndex(), tabbedPane));
+        closeButton.addActionListener(e -> closeTab(getFileIndex(tabbedPane, file), tabbedPane));
         return closeButton;
     }
 
