@@ -1,6 +1,7 @@
 package data_access;
 
 public class BSTNode {
+
     String word;
     int frequency; //Track usage frequency
     BSTNode left, right;
