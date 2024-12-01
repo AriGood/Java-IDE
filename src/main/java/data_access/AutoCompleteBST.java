@@ -14,15 +14,6 @@ public class AutoCompleteBST {
         if (node == null) {
             return new BSTNode(word);
         }
-        // working with frequency
-//        if (word.equals(node.word)) {
-//            node.incrementFrequency(); // Increment frequency if word already exists
-//        } else if (word.compareTo(node.word) < 0) {
-//            node.left = insertRec(node.left, word);
-//        } else {
-//            node.right = insertRec(node.right, word);
-//        }
-        // Insert into the correct subtree based on alphabetical order
         if (word.compareTo(node.word) < 0) {
             node.left = insertRec(node.left, word);
         } else if (word.compareTo(node.word) > 0) {
@@ -30,18 +21,11 @@ public class AutoCompleteBST {
         }
         return node;
     }
-    //added a comment to make sure I can merge and pull.
 
     // Find suggestions for a given prefix
     public List<String> autocomplete(String prefix) {
         List<String> suggestions = new ArrayList<>();
         autocompleteRec(root, prefix, suggestions);
-
-//        matches.sort((n1, n2) -> Integer.compare(n2.frequency, n1.frequency)); // Sort by frequency descending
-//        List<String> suggestions = new ArrayList<>();
-//        for (BSTNode node : matches) {
-//            suggestions.add(node.word);
-//        }
         return suggestions;
     }
 
@@ -55,17 +39,14 @@ public class AutoCompleteBST {
             suggestions.add(node.word);
         }
 
-        // Recur down left and right subtrees based on prefix
-//        if (prefix.compareTo(node.word) <= 0) {
-//            autocompleteRec(node.left, prefix, suggestions);
-//        }
-//        if (prefix.compareTo(node.word) >= 0) {
-//            autocompleteRec(node.right, prefix, suggestions);
-//        }
         autocompleteRec(node.left, prefix, suggestions);
         autocompleteRec(node.right, prefix, suggestions);
     }
 
+    /**
+     * Builds an autocompleteBST populated with commonly used java words.
+     * @return autocompletebst.
+     */
     public static AutoCompleteBST buildWithJavaKeywords() {
         AutoCompleteBST autocompleteBST = new AutoCompleteBST();
 

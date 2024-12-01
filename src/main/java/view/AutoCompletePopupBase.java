@@ -10,13 +10,17 @@ public abstract class AutoCompletePopupBase {
      * @param suggestions The list of suggestions to display.
      * @param handler A handler to process the selection.
      */
-    public abstract void showSuggestions(JTextComponent textComponent, List<String> suggestions, SuggestionSelectionHandler handler);
+    public abstract void showSuggestions(JTextComponent textComponent, List<String> suggestions,
+                                         SuggestionSelectionHandler handler);
 
     /**
      * Hides the suggestion popup.
      */
     public abstract void hide();
 
+    /**
+     * Handles suggestions based on given input letter.
+     */
     @FunctionalInterface
     public interface SuggestionSelectionHandler {
         void onSuggestionSelected(JTextComponent textComponent, String suggestion);
