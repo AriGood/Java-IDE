@@ -2,7 +2,6 @@ package view;
 
 import app.IDEAppBuilder;
 import use_case.FileManagement.FileTreeGenerator;
-//import use_case.PopupMenuOperations.PopupMenuOperations;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;

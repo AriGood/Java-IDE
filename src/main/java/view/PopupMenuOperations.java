@@ -81,26 +81,27 @@ public class PopupMenuOperations {
             try {
                 // Perform file deletion
                 new FileOperations(file).delete(deletedFile -> {
-                    fileTreeObj.getAppBuilder().handleFileDeletion(deletedFile); // Closes tabs
+                    // Close tabs associated with the file
+                    fileTreeObj.getAppBuilder().handleFileDeletion(deletedFile);
                     System.out.println("Deleted file and closed associated tabs: " + deletedFile.getAbsolutePath());
-                    // Update the file tree dynamically
+
+                    // Update the tree UI dynamically
                     DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) fileTreeObj.getFileTree().getLastSelectedPathComponent();
                     if (selectedNode != null) {
                         DefaultTreeModel model = (DefaultTreeModel) fileTreeObj.getFileTree().getModel();
                         model.removeNodeFromParent(selectedNode);
+                        fileTreeObj.getFileTree().revalidate();
+                        fileTreeObj.getFileTree().repaint();
                     }
-                    System.out.println("Deleted file and updated tree: " + deletedFile.getAbsolutePath());
                 });
 
-                // Refresh the directory to ensure the system reflects the change
+                // Refresh parent directory metadata to ensure consistency
                 File parentDirectory = file.getParentFile();
-                if (parentDirectory != null) {
-                    parentDirectory.listFiles(); // Metadata refresh
+                if (parentDirectory != null && parentDirectory.exists()) {
+                    parentDirectory.listFiles();
                 }
-
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Failed to delete: " + ex.getMessage(),
-                        "Delete Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Failed to delete: " + ex.getMessage(), "Delete Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
