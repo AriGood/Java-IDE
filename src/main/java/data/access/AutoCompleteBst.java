@@ -1,18 +1,18 @@
-package data_access;
+package data.access;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutoCompleteBST {
-    private BSTNode root;
+public class AutoCompleteBst {
+    private bst_Node root;
 
     // Insert a new word into the BST
     public void insert(String word) {
         root = insertRec(root, word);
     }
-    private BSTNode insertRec(BSTNode node, String word) {
+    private bst_Node insertRec(bst_Node node, String word) {
         if (node == null) {
-            return new BSTNode(word);
+            return new bst_Node(word);
         }
         if (word.compareTo(node.word) < 0) {
             node.left = insertRec(node.left, word);
@@ -29,7 +29,7 @@ public class AutoCompleteBST {
         return suggestions;
     }
 
-    private void autocompleteRec(BSTNode node, String prefix, List<String> suggestions) {
+    private void autocompleteRec(bst_Node node, String prefix, List<String> suggestions) {
         if (node == null) {
             return;
         }
@@ -47,8 +47,8 @@ public class AutoCompleteBST {
      * Builds an autocompleteBST populated with commonly used java words.
      * @return autocompletebst.
      */
-    public static AutoCompleteBST buildWithJavaKeywords() {
-        AutoCompleteBST autocompleteBST = new AutoCompleteBST();
+    public static AutoCompleteBst buildWithJavaKeywords() {
+        AutoCompleteBst autocompleteBST = new AutoCompleteBst();
 
         // Populate the tree with Java keywords
         String[] javaKeywords = {

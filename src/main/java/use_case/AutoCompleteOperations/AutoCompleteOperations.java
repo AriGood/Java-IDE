@@ -1,14 +1,14 @@
 package use_case.AutoCompleteOperations;
 
-import data_access.AutoCompleteBST;
+import data.access.AutoCompleteBst;
 
 import javax.swing.text.JTextComponent;
 import java.util.List;
 
 public class AutoCompleteOperations extends AutoCompleteOperationsBase {
-    private final AutoCompleteBST autoCompleteBST;
+    private final AutoCompleteBst autoCompleteBST;
 
-    public AutoCompleteOperations(AutoCompleteBST autoCompleteBST) {
+    public AutoCompleteOperations(AutoCompleteBst autoCompleteBST) {
         this.autoCompleteBST = autoCompleteBST;
     }
 

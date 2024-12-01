@@ -1,6 +1,6 @@
 package app;
 
-import data_access.AutoCompleteBST;
+import data.access.AutoCompleteBst;
 import entity.EditorObj;
 import entity.LeftIDEJTabbedPane;
 import entity.RightIDEJTabbedPane;
@@ -74,7 +74,7 @@ public class IDEAppBuilder {
         frame.revalidate();
     }
 
-    public void initializeAutoComplete(AutoCompleteBST autocompleteBST, JTextArea codeEditor) {
+    public void initializeAutoComplete(AutoCompleteBst autocompleteBST, JTextArea codeEditor) {
         AutoCompletePopup suggestionPopup = new AutoCompletePopup();
         autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
         codeEditor.addKeyListener(new KeyAdapter() {

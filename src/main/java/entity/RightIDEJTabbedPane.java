@@ -1,16 +1,9 @@
 package entity;
 
 import app.IDEAppBuilder;
-import data_access.AutoCompleteBST;
-import use_case.FileManagement.FileOperations;
+import data.access.AutoCompleteBst;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RightIDEJTabbedPane extends ParentIDEJTabbedPane {
 
@@ -21,7 +14,7 @@ public class RightIDEJTabbedPane extends ParentIDEJTabbedPane {
             int currentIndex = getSelectedIndex();
             if (currentIndex != -1) {
                 JTextArea currentTextArea = editorObjs.get(currentIndex).getTextArea();
-                ideAppBuilder.initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords(), currentTextArea);
+                ideAppBuilder.initializeAutoComplete(AutoCompleteBst.buildWithJavaKeywords(), currentTextArea);
             }
         });
     }

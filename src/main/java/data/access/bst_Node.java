@@ -1,16 +1,20 @@
-package data_access;
+package data.access;
 
-public class BSTNode {
+/**
+ * Public class to build nodes for a BST.
+ */
+public class bst_Node {
 
     String word;
     int frequency; //Track usage frequency
-    BSTNode left, right;
+    bst_Node left, right;
 
-    public BSTNode(String word) {
+    public bst_Node(String word) {
         this.word = word;
-        this.frequency = 1; //Default frequency
+        this.frequency = 1;
         left = right = null;
     }
+
     public void incrementFrequency() {
         this.frequency++;
     }

@@ -1,7 +1,7 @@
 package entity;
 
 import app.IDEAppBuilder;
-import data_access.AutoCompleteBST;
+import data.access.AutoCompleteBst;
 
 import javax.swing.*;
 
@@ -14,7 +14,7 @@ public class LeftIDEJTabbedPane extends ParentIDEJTabbedPane {
             int currentIndex = getSelectedIndex();
             if (currentIndex != -1) {
                 JTextArea currentTextArea = editorObjs.get(currentIndex).getTextArea();
-                ideAppBuilder.initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords(), currentTextArea);
+                ideAppBuilder.initializeAutoComplete(AutoCompleteBst.buildWithJavaKeywords(), currentTextArea);
             }
         });
     }
