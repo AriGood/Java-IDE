@@ -44,6 +44,9 @@ public class EditorObj {
         return lineNums;
     }
 
+    public String getContent(){
+        return textArea.getText();
+    }
     public File getFile() {
         return file;
     }

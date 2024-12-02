@@ -11,6 +11,9 @@ import use_case.FileManagement.FileOperations;
 import use_case.FileManagement.FileTreeGenerator;
 import use_case.git.GitManager;
 import view.*;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.*;
@@ -19,6 +22,8 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+
+import static use_case.FileManagement.FileOperations.saveFile;
 
 /**
  * Builder for the Note Application.
@@ -49,7 +54,6 @@ public class IDEAppBuilder {
     public JFrame build() {
         final JFrame newFrame = new JFrame();
         frame = newFrame;
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setTitle("IDE Application");
         frame.setSize(WIDTH, HEIGHT);
 
@@ -57,6 +61,14 @@ public class IDEAppBuilder {
         frame.add(makeFilePanel(), BorderLayout.CENTER);
 
         frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                saveOpen();
+                frame.setVisible(false);
+                frame.dispose();
+            }
+        });
         return frame;
     }
 
@@ -64,7 +76,6 @@ public class IDEAppBuilder {
         frame.add(makeEditorPanel(), BorderLayout.CENTER);
 
         frame.add(makeTerminalPanel(), BorderLayout.SOUTH);
-
 
         leftRightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, fileScrollPane, leftEditorTabbedPane);
         leftRightSplitPane.setDividerLocation(300);
@@ -143,12 +154,19 @@ public class IDEAppBuilder {
         }
     }
 
+    public void saveOpen() {
+        if (leftEditorTabbedPane != null) {
+            for (EditorObj obj : leftEditorTabbedPane.editorObjs) {
+                saveFile(obj.getFile(), obj.getContent());
+            }
+        }
+        if (rightEditorTabbedPane != null) {
+            for (EditorObj obj : rightEditorTabbedPane.editorObjs) {
+                saveFile(obj.getFile(), obj.getContent());
+            }
+        }
+    }
 
-//    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
-//        JPopupMenu popup = new JPopupMenu();
-//        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
-//        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
-//    }
 
 
     public File getDirectory() {

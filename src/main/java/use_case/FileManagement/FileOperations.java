@@ -1,5 +1,6 @@
 package use_case.FileManagement;
 
+import entity.EditorObj;
 
 import java.io.*;
 import java.util.function.Consumer;

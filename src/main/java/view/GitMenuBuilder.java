@@ -48,6 +48,7 @@ public class GitMenuBuilder {
         commit.addActionListener(ActionListener -> {
             ensureRepositoryExists();
             try {
+                ideAppBuilder.saveOpen();
                 String message = JOptionPane.showInputDialog(null, "Enter commit message:");
                 if (message != null && !message.isEmpty()) {
                     ideAppBuilder.gitManager.commitChanges(message);
@@ -67,13 +68,13 @@ public class GitMenuBuilder {
     public void addPushAction() {
         JMenuItem push = new JMenuItem("Push");
         push.addActionListener(ActionListener -> {
+
             ensureRepositoryExists();
             try {
                 ideAppBuilder.gitManager.pushChanges(getLogin());
                 JOptionPane.showMessageDialog(null, "Changes pushed successfully.");
-            }
-            catch (KeyException | LoginException | NoRemoteRepositoryException | GitAPIException ex) {
-                JOptionPane.showMessageDialog(null, "Cannot push changes" + ex.getMessage());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Cannot push changes " + ex + ex.getLocalizedMessage());
             }
         });
         gitMenu.add(push);
@@ -272,14 +273,29 @@ public class GitMenuBuilder {
         // If the user selects a directory, attempt to open it as a Git repository
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedDirectory = chooser.getSelectedFile();
+            ideAppBuilder.buildTree(selectedDirectory);
+            ideAppBuilder.buildIDE();
+
             try {
-                ideAppBuilder.buildTree(selectedDirectory);
-                ideAppBuilder.buildIDE();
+                // Open the repository
                 ideAppBuilder.gitManager.openRepository(selectedDirectory.getAbsolutePath());
                 JOptionPane.showMessageDialog(null, "Repository opened successfully.");
+
+                // Get the remote URL from the Git configuration
+                String remoteUrl = ideAppBuilder.gitManager.getCurrentRepository()
+                        .getRepository()
+                        .getConfig()
+                        .getString("remote", "origin", "url");
+                if (remoteUrl != null && !remoteUrl.isEmpty()) {
+                    ideAppBuilder.gitManager.setRemoteUrl(remoteUrl);
+                    JOptionPane.showMessageDialog(null, "Remote URL: " + remoteUrl);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "No remote URL found in the repository configuration.");
+                }
             }
-            catch (IOException | GitAPIException ex) {
-                JOptionPane.showMessageDialog(null, "Error opening repository: " + ex.getMessage());
+             catch (IOException | GitAPIException ex) {
+                JOptionPane.showMessageDialog(null, "Error opening repository with git: " + ex.getMessage());
             }
         }
     }
