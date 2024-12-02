@@ -1,13 +1,13 @@
-**Java IDE**  
+# Java IDE  
 
-**Authors**  
+## Authors
 Ari Good, Maria Burcea, Dario Sanchez, Mariana Novoa, Yara Alkurdi  
 
-**Project Summary**   
+## Project Summary
 Create a Java IDE that can open, write and run files with Git and autocomplete functionality.   
 Designed to simplify the functionality and use of IDEs, allowing for emphasis on core features.   
 
-**Table of Contents** 
+## Table of Contents
 [Link Text](Features) **Features**
 
 
@@ -18,7 +18,7 @@ Designed to simplify the functionality and use of IDEs, allowing for emphasis on
 ### Usage Guide   
 ##### License   
 ###### Feedback    
-####### Contributions   
+###### Contributions   
 
 Team Members, GitHub usernames & corresponding user stories - Group 121
 
