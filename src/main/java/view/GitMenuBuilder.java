@@ -11,7 +11,6 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoRemoteRepositoryException;
 
 import app.IDEAppBuilder;
-import use_case.git.*;
 import use_case.git.CredentialUseCase;
 
 
@@ -72,7 +71,8 @@ public class GitMenuBuilder {
             try {
                 ideAppBuilder.gitManager.pushChanges(getLogin());
                 JOptionPane.showMessageDialog(null, "Changes pushed successfully.");
-            } catch (KeyException | LoginException | NoRemoteRepositoryException | GitAPIException ex) {
+            }
+            catch (KeyException | LoginException | NoRemoteRepositoryException | GitAPIException ex) {
                 JOptionPane.showMessageDialog(null, "Cannot push changes" + ex.getMessage());
             }
         });
@@ -206,29 +206,25 @@ public class GitMenuBuilder {
     }
 
     private String[] getLogin() throws KeyException, LoginException {
-        return CredentialUseCase.loadCredentials(SecureKeyManager.loadKey());
+        return CredentialUseCase.loadCredentials(use_case.git.SecureKeyManager.loadKey());
     }
 
     private void warningNoGit() {
         JOptionPane.showMessageDialog(null, "Warning: No Git repository open.");
     }
 
-    private void warningNoLogin() {
-        JOptionPane.showMessageDialog(null, "Warning: Not logged in.");
-    }
-
     private void handleLogin() {
         CredentialUseCase credentialUseCase = new CredentialUseCase();
         JPasswordField pf = new JPasswordField();
         try {
-            SecureKeyManager.saveKey();
+            use_case.git.SecureKeyManager.saveKey();
             String username = JOptionPane.showInputDialog("Enter username:");
             if (username != null && !username.isEmpty()) {
                 int passwordOption = JOptionPane.showConfirmDialog(null, pf, "Enter Password",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (passwordOption == JOptionPane.OK_OPTION) {
                     credentialUseCase.saveCredentials(username, new String(pf.getPassword()),
-                            SecureKeyManager.loadKey());
+                            use_case.git.SecureKeyManager.loadKey());
                     JOptionPane.showMessageDialog(null, "Login credentials saved successfully.");
                 }
             }
@@ -277,9 +273,12 @@ public class GitMenuBuilder {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedDirectory = chooser.getSelectedFile();
             try {
+                ideAppBuilder.buildTree(selectedDirectory);
+                ideAppBuilder.buildIDE();
                 ideAppBuilder.gitManager.openRepository(selectedDirectory.getAbsolutePath());
                 JOptionPane.showMessageDialog(null, "Repository opened successfully.");
-            } catch (IOException | GitAPIException ex) {
+            }
+            catch (IOException | GitAPIException ex) {
                 JOptionPane.showMessageDialog(null, "Error opening repository: " + ex.getMessage());
             }
         }

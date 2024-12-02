@@ -1,7 +1,7 @@
 package entity;
 
 import app.IDEAppBuilder;
-import data_access.AutoCompleteBST;
+import data.access.AutoCompleteBst;
 import use_case.EditorOperations.EditorOperations;
 import use_case.FileManagement.FileOperations;
 

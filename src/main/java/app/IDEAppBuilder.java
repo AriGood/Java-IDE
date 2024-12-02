@@ -1,11 +1,11 @@
 package app;
 
-import data_access.AutoCompleteBST;
+import data.access.AutoCompleteBst;
 import entity.EditorObj;
 import entity.LeftIDEJTabbedPane;
 import entity.ParentIDEJTabbedPane;
 import entity.RightIDEJTabbedPane;
-import use_case.AutoCompleteOperations.AutoCompleteOperations;
+import use_case.autocompleteoperations.AutoCompleteOperations;
 import use_case.EditorOperations.EditorOperations;
 import use_case.FileManagement.FileOperations;
 import use_case.FileManagement.FileTreeGenerator;
@@ -77,7 +77,7 @@ public class IDEAppBuilder {
         frame.revalidate();
     }
 
-    public void initializeAutoComplete(AutoCompleteBST autocompleteBST, JTextArea codeEditor) {
+    public void initializeAutoComplete(AutoCompleteBst autocompleteBST, JTextArea codeEditor) {
         AutoCompletePopup suggestionPopup = new AutoCompletePopup();
         autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
 
@@ -147,6 +147,7 @@ public class IDEAppBuilder {
 //        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
 //        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
 //    }
+
 
     public File getDirectory() {
         return directory;
