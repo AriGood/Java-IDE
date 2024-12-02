@@ -1,11 +1,12 @@
 package use_case.git;
 
-import entity.CredentialEncryption;
+import java.io.*;
+import java.security.GeneralSecurityException;
 
 import javax.crypto.SecretKey;
 import javax.security.auth.login.LoginException;
-import java.io.*;
-import java.security.GeneralSecurityException;
+
+import entity.CredentialEncryption;
 
 public class CredentialUseCase {
     private static final String CREDENTIALS_FILE = "credentials.dat";
