@@ -1,16 +1,16 @@
 package use_case.git;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoRemoteRepositoryException;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.eclipse.jgit.api.Status;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GitManager {
 
@@ -26,10 +26,11 @@ public class GitManager {
     }
 
     /**
-     * Clone a repository to a specified directory
+     * Clone a repository to a specified directory.
      * @param repoUrl The URL of the repository to clone
      * @param directoryPath The local directory to clone into
      * @throws GitAPIException if cloning fails
+     * @throws IllegalArgumentException if input is invalid
      */
     public void cloneRepository(String repoUrl, String directoryPath) throws GitAPIException {
         if (repoUrl == null || repoUrl.isEmpty()) {
@@ -60,8 +61,9 @@ public class GitManager {
     }
 
     /**
-     * Initialize a new repository in a specified directory
+     * Initialize a new repository in a specified directory.
      * @param directoryPath The local directory to initialize as a Git repository
+     * @param remote remote repo url
      * @throws GitAPIException if initialization fails
      */
     public void createRepository(String directoryPath, String remote) throws GitAPIException {
@@ -80,15 +82,12 @@ public class GitManager {
     }
 
     /**
-     * Commit changes in the current repository
-     *
+     * Commit changes in the current repository.
      * @param message The commit message
      * @throws GitAPIException if commit fails
+     * @throws IllegalArgumentException if commit message is null
      */
     public void commitChanges(String message) throws GitAPIException {
-        if (currentRepository == null) {
-            throw new IllegalStateException("No repository available to commit changes.");
-        }
         if (message == null || message.isEmpty()) {
             throw new IllegalArgumentException("Commit message cannot be null or empty.");
         }
@@ -103,6 +102,7 @@ public class GitManager {
      * @param directoryPath The local directory that contains the existing Git repository.
      * @throws IOException If there is an issue with accessing the directory.
      * @throws GitAPIException If the directory is not a valid Git repository or cannot be opened.
+     * @throws IllegalArgumentException if dir path is null
      */
     public void openRepository(String directoryPath) throws IOException, GitAPIException {
         if (directoryPath == null || directoryPath.isEmpty()) {
@@ -126,51 +126,37 @@ public class GitManager {
     }
 
     /**
-     * Push changes to a remote repository
+     * Push changes to a remote repository.
      * @param credential The [username, password] for authentication
      * @throws GitAPIException if push fails
+     * @throws NoRemoteRepositoryException if there is no remote
      */
     public void pushChanges(String[] credential) throws GitAPIException, NoRemoteRepositoryException {
-        if (currentRepository == null) {
-            throw new IllegalStateException("No repository available to push changes.");
-        }
-        if (credential == null || credential.length != 2 || credential[0] == null || credential[1] == null) {
-            throw new IllegalArgumentException("Credentials must contain both a username and a password.");
-        }
-
         currentRepository.push()
                 .setCredentialsProvider(new UsernamePasswordCredentialsProvider(credential[0], credential[1]))
                 .call();
     }
 
     /**
-     * Create a new branch in the current repository
+     * Create a new branch in the current repository.
      * @param branchName The name of the new branch
      * @throws GitAPIException if branch creation fails
      */
     public void createBranch(String branchName) throws GitAPIException {
-        if (currentRepository == null) {
-            throw new IllegalStateException("No repository available to create a branch.");
-        }
-
         currentRepository.branchCreate().setName(branchName).call();
     }
 
     /**
-     * Checkout an existing branch in the current repository
+     * Checkout an existing branch in the current repository.
      * @param branchName The name of the branch to checkout
      * @throws GitAPIException if checkout fails
      */
     public void checkoutBranch(String branchName) throws GitAPIException {
-        if (currentRepository == null) {
-            throw new IllegalStateException("No repository available to checkout a branch.");
-        }
-
         currentRepository.checkout().setName(branchName).call();
     }
 
     /**
-     * Get the current repository instance
+     * Get the current repository instance.
      * @return The current Git repository, or null if none is loaded
      */
     public Git getCurrentRepository() {
@@ -178,7 +164,7 @@ public class GitManager {
     }
 
     /**
-     * Get the current directory
+     * Get the current directory.
      * @return The current directory as a File
      */
     public File getCurrentDirectory() {
@@ -190,11 +176,9 @@ public class GitManager {
      * Add specific files to the staging area.
      * @param filePaths List of file paths to add to staging.
      * @throws GitAPIException if adding files fails.
+     * @throws IllegalArgumentException input path is wrong.
      */
-    public void addFiles(List<String> filePaths) throws GitAPIException {
-        if (currentRepository == null) {
-            throw new IllegalStateException("No repository available to add files.");
-        }
+    public void addFiles(List<String> filePaths) throws GitAPIException, IllegalArgumentException {
         if (filePaths == null || filePaths.isEmpty()) {
             throw new IllegalArgumentException("File paths cannot be null or empty.");
         }
@@ -212,11 +196,10 @@ public class GitManager {
      * Remove specific files from the repository.
      * @param filePaths List of file paths to remove.
      * @throws GitAPIException if removing files fails.
+     * @throws IllegalArgumentException if file path is null
      */
     public void removeFiles(List<String> filePaths) throws GitAPIException {
-        if (currentRepository == null) {
-            throw new IllegalStateException("No repository available to remove files.");
-        }
+
         if (filePaths == null || filePaths.isEmpty()) {
             throw new IllegalArgumentException("File paths cannot be null or empty.");
         }
@@ -235,9 +218,6 @@ public class GitManager {
      * @throws GitAPIException if status retrieval fails.
      */
     public Status getStatus() throws GitAPIException {
-        if (currentRepository == null) {
-            throw new IllegalStateException("No repository available to get status.");
-        }
 
         return currentRepository.status().call();
     }
@@ -249,10 +229,6 @@ public class GitManager {
      * @throws GitAPIException if commit retrieval fails.
      */
     public List<RevCommit> getCommitHistory(int maxCount) throws GitAPIException {
-        if (currentRepository == null) {
-            throw new IllegalStateException("No repository available to get commit history.");
-        }
-
         Iterable<RevCommit> commits = currentRepository.log().setMaxCount(maxCount).call();
         List<RevCommit> commitList = new ArrayList<>();
         for (RevCommit commit : commits) {
@@ -266,10 +242,6 @@ public class GitManager {
      * @throws GitAPIException if revert operation fails.
      */
     public void revertUnstagedChanges() throws GitAPIException {
-        if (currentRepository == null) {
-            throw new IllegalStateException("No repository available to revert changes.");
-        }
-
         currentRepository.checkout().setAllPaths(true).call();
     }
 
@@ -279,9 +251,6 @@ public class GitManager {
      * @throws GitAPIException if merge operation fails.
      */
     public void mergeBranch(String branchName) throws GitAPIException, IOException {
-        if (currentRepository == null) {
-            throw new IllegalStateException("No repository available to merge branches.");
-        }
 
         currentRepository.merge()
                 .include(currentRepository.getRepository().resolve(branchName))
@@ -289,7 +258,7 @@ public class GitManager {
     }
 
     /**
-     * Close the current repository if it is open
+     * Close the current repository if it is open.
      * @throws IOException if closing fails
      */
     public void closeRepository() throws IOException {
@@ -303,7 +272,6 @@ public class GitManager {
     public void setCurrentRepository(Git currentRepository) {
         this.currentRepository = currentRepository;
     }
-
     public void setCurrentDirectory(File currentDirectory) {
         this.currentDirectory = currentDirectory;
     }
