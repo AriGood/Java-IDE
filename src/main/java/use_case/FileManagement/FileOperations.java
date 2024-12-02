@@ -1,6 +1,7 @@
 package use_case.FileManagement;
 
-import javax.swing.*;
+import entity.EditorObj;
+
 import java.io.*;
 import java.util.logging.Logger;
 
