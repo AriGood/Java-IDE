@@ -16,7 +16,7 @@ Designed to simplify the functionality and use of IDEs, allowing for emphasis on
 [Contributions](#contributions)    
 
 ## Features  
-File managament: Open, create new files, delete files and save files   
+File management: Open, create new files, delete files and save files   
 Terminal: Run commands for macos and windows  
 Editor: Open and toggle between tabs, auto complete functionality, move and use cursor  
 
