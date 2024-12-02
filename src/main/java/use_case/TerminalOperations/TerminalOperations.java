@@ -64,19 +64,28 @@ public class TerminalOperations {
             return;
         }
 
-        String fullPath = currentDirectory.resolve(fileName).toString();
-        String className = fileName.replace(".java", "");
+        Path javaFilePath = currentDirectory.resolve(fileName);
+        if (!javaFilePath.toFile().exists()) {
+            callback.onError("Error: File not found: " + javaFilePath + "\n");
+            return;
+        }
 
-        String compileCommand = isWindows
-                ? "javac " + fullPath
-                : "bash -c javac " + fullPath;
-        String runCommand = isWindows
-                ? "java -cp " + currentDirectory + " " + className
-                : "bash -c java -cp " + currentDirectory + " " + className;
+        String className = javaFilePath.getFileName().toString().replace(".java", "");
+        Path parentDir = javaFilePath.getParent();
 
+        String compileCommand = "javac " + javaFilePath;
         executeProcess(compileCommand.split(" "), callback);
+
+        Path classFilePath = parentDir.resolve(className + ".class");
+        if (!classFilePath.toFile().exists()) {
+            callback.onError("Error: Compilation failed, .class file not generated.\n");
+            return;
+        }
+
+        String runCommand = "java -cp " + parentDir + " " + className;
         executeProcess(runCommand.split(" "), callback);
     }
+
 
     private void executeGeneralCommand(String command, CommandCallback callback)
             throws IOException, InterruptedException {
