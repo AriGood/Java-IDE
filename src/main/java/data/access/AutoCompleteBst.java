@@ -3,6 +3,9 @@ package data.access;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * New class that generates an AutoCompleteBst filled with suggest-able words.
+ */
 public class AutoCompleteBst {
     private bst_Node root;
 

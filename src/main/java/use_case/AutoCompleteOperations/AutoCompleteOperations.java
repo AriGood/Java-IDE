@@ -2,8 +2,8 @@ package use_case.AutoCompleteOperations;
 
 import data.access.AutoCompleteBst;
 
-import javax.swing.text.JTextComponent;
 import java.util.List;
+import javax.swing.text.JTextComponent;
 
 /**
  * New method and class that finalizes autocomplete before sending to pop up.
