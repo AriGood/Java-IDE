@@ -37,4 +37,4 @@ Anyone with access to this repository may use the code as they wish, project is 
 If you have feedback, please add a comment on this repository with reasonable technical feedback that is possible within the scope of this project. Please do not expect a response when submitting feedback. 
 
 ## Contributions   
-Contributions are closed to apporved contributors only for this project. You may fork this repo, although merge requests will be declined. 
+Contributions are closed to approved contributors only for this project. You may fork this repo, although merge requests will be declined. 
