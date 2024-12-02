@@ -14,20 +14,20 @@ public class FileTreeGenerator {
      * @param directory The root directory for the tree.
      * @return A DefaultMutableTreeNode representing the root of the tree.
      */
-    public DefaultMutableTreeNode createNodesFromDirectory(File directory) {
+    public DefaultMutableTreeNode generateTree(File directory) {
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(directory.getName());
         File[] files = directory.listFiles();
 
         if (files != null) {
-            Arrays.stream(files).forEach(file -> {
-                if (file.isDirectory()) {
-                    // Recursive call for subdirectories
-                    rootNode.add(createNodesFromDirectory(file));
-                } else {
-                    // Add a file as a leaf node
-                    rootNode.add(new DefaultMutableTreeNode(file.getName()));
-                }
-            });
+            Arrays.stream(files)
+                    .filter(File::exists) // Ensure only existing files are added
+                    .forEach(file -> {
+                        if (file.isDirectory()) {
+                            rootNode.add(generateTree(file)); // Recursive call for subdirectories
+                        } else {
+                            rootNode.add(new DefaultMutableTreeNode(file.getName())); // Add file as a leaf node
+                        }
+                    });
         }
         return rootNode;
     }

@@ -5,8 +5,8 @@ import java.awt.*;
 import java.io.File;
 
 public class EditorObj {
-    private JTextArea textArea;
-    private JTextArea lineNums;
+    private final JTextArea textArea;
+    private final JTextArea lineNums;
     private File file;
 
     public EditorObj() {
@@ -34,10 +34,6 @@ public class EditorObj {
 
     public void setFile (File file) {
         this.file = file;
-    }
-
-    public void updateTextArea(String newText) {
-        textArea.setText(newText);
     }
 
     public JTextArea getTextArea() {

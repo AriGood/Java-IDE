@@ -3,8 +3,11 @@ package app;
 import data_access.AutoCompleteBST;
 import entity.EditorObj;
 import entity.LeftIDEJTabbedPane;
+import entity.ParentIDEJTabbedPane;
 import entity.RightIDEJTabbedPane;
 import use_case.AutoCompleteOperations.AutoCompleteOperations;
+import use_case.EditorOperations.EditorOperations;
+import use_case.FileManagement.FileOperations;
 import use_case.FileManagement.FileTreeGenerator;
 import use_case.git.GitManager;
 import view.*;
@@ -77,6 +80,7 @@ public class IDEAppBuilder {
     public void initializeAutoComplete(AutoCompleteBST autocompleteBST, JTextArea codeEditor) {
         AutoCompletePopup suggestionPopup = new AutoCompletePopup();
         autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
+
         codeEditor.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -128,13 +132,21 @@ public class IDEAppBuilder {
         return leftEditorTabbedPane;
     }
 
+
     public void openFile(File file) {
         if (file != null && file.exists() && file.isFile()) {
-            getLeftEditorTabbedPane().addTab(file);
+            EditorOperations.addTab(file, leftEditorTabbedPane);
         } else {
             System.err.println("Invalid file: " + (file != null ? file.getAbsolutePath() : "null"));
         }
     }
+
+
+//    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
+//        JPopupMenu popup = new JPopupMenu();
+//        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
+//        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
+//    }
 
     public File getDirectory() {
         return directory;
@@ -165,6 +177,13 @@ public class IDEAppBuilder {
         frame.revalidate();
         frame.repaint();
     }
+
+    // CHANGED: Added handleFileDeletion to manage file deletion and associated tabs
+
+    public void handleFileDeletion(File file) {
+        EditorOperations.closeAbstractTab(this, file); // Close associated tabs
+    }
+
 
     public RightIDEJTabbedPane getRightEditorTabbedPane() {
         return rightEditorTabbedPane;
