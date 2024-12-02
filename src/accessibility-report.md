@@ -16,7 +16,8 @@
 #### Principle 7: Size and Space for Approach and Use 
 - This program does not require large space for running it. The program itself does not occupy much storage on a device and can be used like any other IDE on a computer.
 
-- 
+#### Program Marketing  
+Our program is marketed towards those who are starting to use technology and want to become more familiar with programming, without the use of a complicated IDE like IntelliJ or PyCharm. This simplified IDE allows users to practice coding and using Git functionality with a simplified interface. The simpler interface is marketed towards the older population that finds interfaces such as IntelliJ's too complicated and visually-daunting. This group of people may happen to be older adults (50+) who are interested in programming and software design, but want to start slowly with a simple interface. This could also be used by pre-teens who are learning to code and do not need a complex interface with unnecessary functionality. 
 
-
-
+#### Demographics of Note
+Our IDE is less likely to be used by a young adult demographic who already has experience with coding and software design, as the interface may be too simple for their needs. This program will also not be used by those with a visual impairment, as they cannot access the IDE. It will also not be used by those who have no computer usage experience, such as the elderly, who will find the manipulation of the computer interface, along with the IDE itself, too complex.   
