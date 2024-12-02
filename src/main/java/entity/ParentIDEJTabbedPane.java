@@ -14,7 +14,7 @@ import java.util.List;
 
 public abstract class ParentIDEJTabbedPane extends JTabbedPane {
 
-    protected List<EditorObj> editorObjs = new ArrayList<>();
+    public List<EditorObj> editorObjs = new ArrayList<>();
     protected IDEAppBuilder ideAppBuilder;
 
     public ParentIDEJTabbedPane(IDEAppBuilder appBuilder) {
