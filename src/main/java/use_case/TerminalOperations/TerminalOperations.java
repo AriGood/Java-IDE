@@ -8,9 +8,11 @@ import java.nio.file.Paths;
 
 public class TerminalOperations {
     private Path currentDirectory;
+    private final boolean isWindows;
 
     public TerminalOperations() {
         currentDirectory = Paths.get(System.getProperty("user.dir"));
+        isWindows = System.getProperty("os.name").toLowerCase().contains("win");
     }
 
     public interface CommandCallback {
@@ -36,12 +38,16 @@ public class TerminalOperations {
 
     private void clearTerminal(CommandCallback callback) throws IOException, InterruptedException {
         callback.onOutput(""); // Clear the terminal UI
-        executeProcess(new String[]{"bash", "-c", "clear"}, callback);
+        if (isWindows) {
+            executeProcess(new String[]{"cmd.exe", "/c", "cls"}, callback);
+        } else {
+            executeProcess(new String[]{"bash", "-c", "clear"}, callback);
+        }
     }
 
     private void changeDirectory(String command, CommandCallback callback) {
         String newDirectory = command.substring(3).trim();
-        Path newDirPath = Paths.get(newDirectory).toAbsolutePath();
+        Path newDirPath = currentDirectory.resolve(newDirectory).normalize();
 
         if (newDirPath.toFile().exists() && newDirPath.toFile().isDirectory()) {
             currentDirectory = newDirPath;
@@ -61,16 +67,24 @@ public class TerminalOperations {
         String fullPath = currentDirectory.resolve(fileName).toString();
         String className = fileName.replace(".java", "");
 
-        executeProcess(
-                new String[]{"bash", "-c", "javac " + fullPath + " && java -cp " + currentDirectory + " " + className},
-                callback
-        );
+        String compileCommand = isWindows
+                ? "javac " + fullPath
+                : "bash -c javac " + fullPath;
+        String runCommand = isWindows
+                ? "java -cp " + currentDirectory + " " + className
+                : "bash -c java -cp " + currentDirectory + " " + className;
+
+        executeProcess(compileCommand.split(" "), callback);
+        executeProcess(runCommand.split(" "), callback);
     }
 
     private void executeGeneralCommand(String command, CommandCallback callback)
             throws IOException, InterruptedException {
         callback.onOutput("> " + command + "\n");
-        executeProcess(new String[]{"bash", "-c", command}, callback);
+        String[] fullCommand = isWindows
+                ? new String[]{"cmd.exe", "/c", command}
+                : new String[]{"bash", "-c", command};
+        executeProcess(fullCommand, callback);
     }
 
     private void executeProcess(String[] command, CommandCallback callback) throws IOException, InterruptedException {
