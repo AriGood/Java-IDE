@@ -3,13 +3,11 @@ package app;
 import data.access.AutoCompleteBst;
 import entity.EditorObj;
 import entity.LeftIDEJTabbedPane;
-import entity.ParentIDEJTabbedPane;
 import entity.RightIDEJTabbedPane;
 import use_case.autocompleteoperations.AutoCompleteOperations;
 import use_case.EditorOperations.EditorOperations;
-import use_case.FileManagement.FileOperations;
 import use_case.FileManagement.FileTreeGenerator;
-import use_case.git.GitManager;
+import entity.GitManager;
 import view.*;
 
 import java.awt.event.WindowAdapter;
