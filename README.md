@@ -8,7 +8,7 @@ Create a Java IDE that can open, write and run files with Git and autocomplete f
 Designed to simplify the functionality and use of IDEs, allowing for emphasis on core features.   
 
 ## Table of Contents
-[Link Text](Features) **Features**
+[Features](#features) **Features**
 
 
 
