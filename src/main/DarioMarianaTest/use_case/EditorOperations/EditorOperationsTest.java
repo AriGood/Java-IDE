@@ -199,7 +199,7 @@ public class EditorOperationsTest {
 
         EditorOperations.closeAllTabs(leftTabbedPane);
         for (File tempFile : tempFiles) {
-            assertTrue(EditorOperations.isDuplicate(tempFile, leftTabbedPane));
+            assertFalse(EditorOperations.isDuplicate(tempFile, leftTabbedPane));
         }
 
         for (File tempFile : tempFiles) {
