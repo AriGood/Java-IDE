@@ -1,27 +1,30 @@
 package view;
 
-import app.IDEAppBuilder;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.errors.NoRemoteRepositoryException;
-import use_case.git.CredentialUseCase;
-import use_case.git.SecureKeyManager;
-
-import javax.security.auth.login.LoginException;
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.KeyException;
+import javax.security.auth.login.LoginException;
+import javax.swing.*;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.NoRemoteRepositoryException;
+
+import app.IDEAppBuilder;
+import use_case.git.*;
+import use_case.git.CredentialUseCase;
+
 
 public class GitMenuBuilder {
     private final JMenu gitMenu;
-    private final IDEAppBuilder IDEAppBuilder;
-
+    private final IDEAppBuilder ideAppBuilder;
 
     /**
      * Initializes the builder for the Git menu.
+     * @param newIdeAppBuilder current Ide window
      */
-    public GitMenuBuilder(IDEAppBuilder newIDEAppBuilder) {
-        this.IDEAppBuilder = newIDEAppBuilder;
+    public GitMenuBuilder(IDEAppBuilder newIdeAppBuilder) {
+        this.ideAppBuilder = newIdeAppBuilder;
 
         this.gitMenu = new JMenu("Git");
 
@@ -43,12 +46,12 @@ public class GitMenuBuilder {
      */
     public void addCommitAction() {
         JMenuItem commit = new JMenuItem("Commit");
-        commit.addActionListener(e -> {
+        commit.addActionListener(ActionListener -> {
             ensureRepositoryExists();
             try {
                 String message = JOptionPane.showInputDialog(null, "Enter commit message:");
                 if (message != null && !message.isEmpty()) {
-                    IDEAppBuilder.gitManager.commitChanges(message);
+                    ideAppBuilder.gitManager.commitChanges(message);
                     JOptionPane.showMessageDialog(null, "Changes committed successfully.");
                 }
             }
@@ -64,10 +67,10 @@ public class GitMenuBuilder {
      */
     public void addPushAction() {
         JMenuItem push = new JMenuItem("Push");
-        push.addActionListener(e -> {
+        push.addActionListener(ActionListener -> {
             ensureRepositoryExists();
             try {
-                IDEAppBuilder.gitManager.pushChanges(getLogin());
+                ideAppBuilder.gitManager.pushChanges(getLogin());
                 JOptionPane.showMessageDialog(null, "Changes pushed successfully.");
             } catch (KeyException | LoginException | NoRemoteRepositoryException | GitAPIException ex) {
                 JOptionPane.showMessageDialog(null, "Cannot push changes" + ex.getMessage());
@@ -81,10 +84,10 @@ public class GitMenuBuilder {
      */
     public void addPullAction() {
         JMenuItem pull = new JMenuItem("Pull");
-        pull.addActionListener(e -> {
+        pull.addActionListener(ActionListener -> {
             ensureRepositoryExists();
             try {
-                IDEAppBuilder.gitManager.getCurrentRepository().pull().call();
+                ideAppBuilder.gitManager.getCurrentRepository().pull().call();
                 JOptionPane.showMessageDialog(null, "Repository pulled successfully.");
             } catch (GitAPIException ex) {
                 warningNoGit();
@@ -98,7 +101,7 @@ public class GitMenuBuilder {
      */
     public void addOpenExistingRepositoryAction() {
         JMenuItem openExistingRepo = new JMenuItem("Open Existing Repository");
-        openExistingRepo.addActionListener(e -> handleOpenExistingRepository());
+        openExistingRepo.addActionListener(ActionListener -> handleOpenExistingRepository());
         gitMenu.add(openExistingRepo);
     }
 
@@ -107,7 +110,7 @@ public class GitMenuBuilder {
      */
     public void addLoginAction() {
         JMenuItem login = new JMenuItem("Login");
-        login.addActionListener(e -> handleLogin());
+        login.addActionListener(ActionListener -> handleLogin());
         gitMenu.add(login);
     }
 
@@ -116,7 +119,7 @@ public class GitMenuBuilder {
      */
     public void addCreateBranchAction() {
         JMenuItem createBranch = new JMenuItem("Create Branch");
-        createBranch.addActionListener(e -> handleBranchCreation());
+        createBranch.addActionListener(ActionListener -> handleBranchCreation());
         gitMenu.add(createBranch);
     }
 
@@ -125,7 +128,7 @@ public class GitMenuBuilder {
      */
     public void addCheckoutBranchAction() {
         JMenuItem checkoutBranch = new JMenuItem("Checkout Branch");
-        checkoutBranch.addActionListener(e -> handleBranchCheckout());
+        checkoutBranch.addActionListener(ActionListener -> handleBranchCheckout());
         gitMenu.add(checkoutBranch);
     }
 
@@ -134,7 +137,7 @@ public class GitMenuBuilder {
      */
     public void addSetRemoteAction() {
         JMenuItem setRemote = new JMenuItem("Set Remote URL");
-        setRemote.addActionListener(e -> handleSetRemoteUrl());
+        setRemote.addActionListener(ActionListener -> handleSetRemoteUrl());
         gitMenu.add(setRemote);
     }
 
@@ -143,7 +146,7 @@ public class GitMenuBuilder {
      */
     public void addCloneRepositoryAction() {
         JMenuItem cloneRepository = new JMenuItem("Clone Repository");
-        cloneRepository.addActionListener(e -> handleCloneRepository());
+        cloneRepository.addActionListener(ActionListener -> handleCloneRepository());
         gitMenu.add(cloneRepository);
     }
 
@@ -152,7 +155,7 @@ public class GitMenuBuilder {
      */
     public void addMergeBranchAction() {
         JMenuItem mergeBranch = new JMenuItem("Merge Branch");
-        mergeBranch.addActionListener(e -> handleMergeBranch());
+        mergeBranch.addActionListener(ActionListener -> handleMergeBranch());
         gitMenu.add(mergeBranch);
     }
 
@@ -168,7 +171,7 @@ public class GitMenuBuilder {
     // Helper Methods
 
     private void ensureRepositoryExists() {
-        if (IDEAppBuilder.gitManager.getCurrentRepository() == null) {
+        if (ideAppBuilder.gitManager.getCurrentRepository() == null) {
             int choice = JOptionPane.showConfirmDialog(null,
                     "No repository found. Would you like to create a new one?",
                     "Create Repository", JOptionPane.YES_NO_OPTION);
@@ -179,7 +182,7 @@ public class GitMenuBuilder {
                         "Would you like to make the current directory a git repository?",
                         "current directory", JOptionPane.YES_NO_OPTION);
                 if (choice1 == JOptionPane.YES_OPTION) {
-                    selectedDirectory = IDEAppBuilder.directory;
+                    selectedDirectory = ideAppBuilder.directory;
                 }
                 else {
                     JFileChooser chooser = new JFileChooser();
@@ -191,11 +194,11 @@ public class GitMenuBuilder {
                     }
                 }
                 try {
-                    IDEAppBuilder.gitManager.createRepository(JOptionPane.showInputDialog(null, "Enter remote URL:")
+                    ideAppBuilder.gitManager.createRepository(JOptionPane.showInputDialog(null, "Enter remote URL:")
                             ,selectedDirectory.getAbsolutePath());
                     JOptionPane.showMessageDialog(null, "New repository created successfully.");
                 }
-                catch (Exception ex) {
+                catch (GitAPIException ex) {
                     JOptionPane.showMessageDialog(null, "Error creating repository: " + ex.getMessage());
                 }
             }
@@ -203,7 +206,7 @@ public class GitMenuBuilder {
     }
 
     private String[] getLogin() throws KeyException, LoginException {
-        return (CredentialUseCase.loadCredentials(SecureKeyManager.loadKey()));
+        return CredentialUseCase.loadCredentials(SecureKeyManager.loadKey());
     }
 
     private void warningNoGit() {
@@ -230,7 +233,7 @@ public class GitMenuBuilder {
                 }
             }
         }
-        catch (Exception ex) {
+        catch (GeneralSecurityException ex) {
             JOptionPane.showMessageDialog(null, "Invalid login. Please try again.");
         }
     }
@@ -240,10 +243,11 @@ public class GitMenuBuilder {
         try {
             String branchName = JOptionPane.showInputDialog(null, "Enter new branch name:");
             if (branchName != null && !branchName.isEmpty()) {
-                IDEAppBuilder.gitManager.createBranch(branchName);
+                ideAppBuilder.gitManager.createBranch(branchName);
                 JOptionPane.showMessageDialog(null, "Branch created successfully.");
             }
-        } catch (GitAPIException ex) {
+        }
+        catch (GitAPIException ex) {
             warningNoGit();
         }
     }
@@ -253,14 +257,14 @@ public class GitMenuBuilder {
         try {
             String branchName = JOptionPane.showInputDialog(null, "Enter branch name to checkout:");
             if (branchName != null && !branchName.isEmpty()) {
-                IDEAppBuilder.gitManager.checkoutBranch(branchName);
+                ideAppBuilder.gitManager.checkoutBranch(branchName);
                 JOptionPane.showMessageDialog(null, "Switched to branch: " + branchName);
             }
-        } catch (GitAPIException ex) {
+        }
+        catch (GitAPIException ex) {
             warningNoGit();
         }
     }
-
 
     private void handleOpenExistingRepository() {
         // Open a directory chooser dialog to select an existing repository
@@ -273,7 +277,7 @@ public class GitMenuBuilder {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedDirectory = chooser.getSelectedFile();
             try {
-                IDEAppBuilder.gitManager.openRepository(selectedDirectory.getAbsolutePath());
+                ideAppBuilder.gitManager.openRepository(selectedDirectory.getAbsolutePath());
                 JOptionPane.showMessageDialog(null, "Repository opened successfully.");
             } catch (IOException | GitAPIException ex) {
                 JOptionPane.showMessageDialog(null, "Error opening repository: " + ex.getMessage());
@@ -283,14 +287,10 @@ public class GitMenuBuilder {
 
     private void handleSetRemoteUrl() {
         ensureRepositoryExists();
-        try {
-            String remoteUrl = JOptionPane.showInputDialog(null, "Enter remote URL:");
-            if (remoteUrl != null && !remoteUrl.isEmpty()) {
-                IDEAppBuilder.gitManager.setRemoteUrl(remoteUrl);
-                JOptionPane.showMessageDialog(null, "Remote URL set successfully.");
-            }
-        } catch (Exception ex) {
-            warningNoGit();
+        String remoteUrl = JOptionPane.showInputDialog(null, "Enter remote URL:");
+        if (remoteUrl != null && !remoteUrl.isEmpty()) {
+            ideAppBuilder.gitManager.setRemoteUrl(remoteUrl);
+            JOptionPane.showMessageDialog(null, "Remote URL set successfully.");
         }
     }
 
@@ -304,13 +304,14 @@ public class GitMenuBuilder {
                 int returnValue = chooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
                     File selectedDirectory = chooser.getSelectedFile();
-                    IDEAppBuilder.gitManager.cloneRepository(repoUrl, selectedDirectory.getAbsolutePath());
+                    ideAppBuilder.gitManager.cloneRepository(repoUrl, selectedDirectory.getAbsolutePath());
                     JOptionPane.showMessageDialog(null, "Repository cloned successfully.");
-                    IDEAppBuilder.buildTree(selectedDirectory);
-                    IDEAppBuilder.buildIDE();
+                    ideAppBuilder.buildTree(selectedDirectory);
+                    ideAppBuilder.buildIDE();
                 }
             }
-        } catch (GitAPIException ex) {
+        }
+        catch (GitAPIException ex) {
             JOptionPane.showMessageDialog(null, "Error cloning repository: " + ex.getMessage());
         }
     }
@@ -320,12 +321,14 @@ public class GitMenuBuilder {
         try {
             String branchName = JOptionPane.showInputDialog(null, "Enter branch name to merge into current branch:");
             if (branchName != null && !branchName.isEmpty()) {
-                IDEAppBuilder.gitManager.mergeBranch(branchName);
+                ideAppBuilder.gitManager.mergeBranch(branchName);
                 JOptionPane.showMessageDialog(null, "Branch merged successfully.");
             }
-        } catch (GitAPIException ex) {
+        }
+        catch (GitAPIException ex) {
             warningNoGit();
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error during merge: " + ex.getMessage());
         }
     }
