@@ -1,9 +1,13 @@
 package view;
 
-import javax.swing.text.JTextComponent;
 import java.util.List;
 
-public abstract class AutoCompletePopupBase {
+import javax.swing.text.JTextComponent;
+
+/**
+ * New abstract class.
+ */
+public abstract class AbstractAutoCompletePopupBase {
     /**
      * Displays suggestions in the UI.
      * @param textComponent The text component for the suggestions.
@@ -23,6 +27,11 @@ public abstract class AutoCompletePopupBase {
      */
     @FunctionalInterface
     public interface SuggestionSelectionHandler {
+        /**
+         * New void function.
+         * @param textComponent .
+         * @param suggestion .
+         */
         void onSuggestionSelected(JTextComponent textComponent, String suggestion);
     }
 }

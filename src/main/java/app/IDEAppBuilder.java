@@ -1,10 +1,13 @@
 package app;
 
-import data_access.AutoCompleteBST;
+import data.access.AutoCompleteBst;
 import entity.EditorObj;
 import entity.LeftIDEJTabbedPane;
+import entity.ParentIDEJTabbedPane;
 import entity.RightIDEJTabbedPane;
-import use_case.AutoCompleteOperations.AutoCompleteOperations;
+import use_case.autocompleteoperations.AutoCompleteOperations;
+import use_case.EditorOperations.EditorOperations;
+import use_case.FileManagement.FileOperations;
 import use_case.FileManagement.FileTreeGenerator;
 import use_case.git.GitManager;
 import view.*;
@@ -85,9 +88,10 @@ public class IDEAppBuilder {
         frame.revalidate();
     }
 
-    public void initializeAutoComplete(AutoCompleteBST autocompleteBST, JTextArea codeEditor) {
+    public void initializeAutoComplete(AutoCompleteBst autocompleteBST, JTextArea codeEditor) {
         AutoCompletePopup suggestionPopup = new AutoCompletePopup();
         autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
+
         codeEditor.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -139,9 +143,12 @@ public class IDEAppBuilder {
         return leftEditorTabbedPane;
     }
 
+
     public void openFile(File file) {
         if (file != null && file.exists() && file.isFile()) {
-            getLeftEditorTabbedPane().addTab(file);
+            if (rightEditorTabbedPane == null ||!EditorOperations.isDuplicate(file, rightEditorTabbedPane)) {
+                EditorOperations.addTab(file, leftEditorTabbedPane);
+            }
         } else {
             System.err.println("Invalid file: " + (file != null ? file.getAbsolutePath() : "null"));
         }
@@ -159,6 +166,8 @@ public class IDEAppBuilder {
             }
         }
     }
+
+
 
     public File getDirectory() {
         return directory;
@@ -189,6 +198,13 @@ public class IDEAppBuilder {
         frame.revalidate();
         frame.repaint();
     }
+
+    // CHANGED: Added handleFileDeletion to manage file deletion and associated tabs
+
+    public void handleFileDeletion(File file) {
+        EditorOperations.closeAbstractTab(this, file); // Close associated tabs
+    }
+
 
     public RightIDEJTabbedPane getRightEditorTabbedPane() {
         return rightEditorTabbedPane;

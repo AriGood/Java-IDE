@@ -16,7 +16,7 @@ package app;
  * view. Your team may wish to bring back the ViewManager or make your own implementation of supporting
  * switching between views depending on your project.
  */
-public class MainIDEApplication {
+public class MainIdeApplication {
 
     /**
      * The main entry point of the application.
