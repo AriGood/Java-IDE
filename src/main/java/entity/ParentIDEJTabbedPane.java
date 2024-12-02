@@ -1,7 +1,7 @@
 package entity;
 
 import app.IDEAppBuilder;
-import data_access.AutoCompleteBST;
+import data.access.AutoCompleteBst;
 import view.PopupMenuOperations;
 
 import javax.swing.*;
@@ -38,7 +38,7 @@ public abstract class ParentIDEJTabbedPane extends JTabbedPane {
             int currentIndex = getSelectedIndex();
             if (currentIndex != -1) {
                 JTextArea currentTextArea = editorObjs.get(currentIndex).getTextArea();
-                ideAppBuilder.initializeAutoComplete(AutoCompleteBST.buildWithJavaKeywords(), currentTextArea);
+                ideAppBuilder.initializeAutoComplete(AutoCompleteBst.buildWithJavaKeywords(), currentTextArea);
             }
         });
     }
