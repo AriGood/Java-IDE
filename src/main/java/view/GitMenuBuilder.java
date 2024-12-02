@@ -51,7 +51,8 @@ public class GitMenuBuilder {
                     IDEAppBuilder.gitManager.commitChanges(message);
                     JOptionPane.showMessageDialog(null, "Changes committed successfully.");
                 }
-            } catch (GitAPIException ex) {
+            }
+            catch (GitAPIException ex) {
                 warningNoGit();
             }
         });
@@ -174,12 +175,13 @@ public class GitMenuBuilder {
 
             if (choice == JOptionPane.YES_OPTION) {
                 File selectedDirectory = null;
-                int choice_1 = JOptionPane.showConfirmDialog(null,
+                int choice1 = JOptionPane.showConfirmDialog(null,
                         "Would you like to make the current directory a git repository?",
                         "current directory", JOptionPane.YES_NO_OPTION);
-                if (choice_1 == JOptionPane.YES_OPTION) {
+                if (choice1 == JOptionPane.YES_OPTION) {
                     selectedDirectory = IDEAppBuilder.directory;
-                }else {
+                }
+                else {
                     JFileChooser chooser = new JFileChooser();
                     chooser.setDialogTitle("Select Directory for New Repository");
                     chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -189,11 +191,11 @@ public class GitMenuBuilder {
                     }
                 }
                 try {
-                    assert selectedDirectory != null;
                     IDEAppBuilder.gitManager.createRepository(JOptionPane.showInputDialog(null, "Enter remote URL:")
                             ,selectedDirectory.getAbsolutePath());
                     JOptionPane.showMessageDialog(null, "New repository created successfully.");
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error creating repository: " + ex.getMessage());
                 }
             }
@@ -227,7 +229,8 @@ public class GitMenuBuilder {
                     JOptionPane.showMessageDialog(null, "Login credentials saved successfully.");
                 }
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Invalid login. Please try again.");
         }
     }
@@ -303,7 +306,7 @@ public class GitMenuBuilder {
                     File selectedDirectory = chooser.getSelectedFile();
                     IDEAppBuilder.gitManager.cloneRepository(repoUrl, selectedDirectory.getAbsolutePath());
                     JOptionPane.showMessageDialog(null, "Repository cloned successfully.");
-                    IDEAppBuilder.buildTree(selectedDirectory); // Pass the selected directory
+                    IDEAppBuilder.buildTree(selectedDirectory);
                     IDEAppBuilder.buildIDE();
                 }
             }

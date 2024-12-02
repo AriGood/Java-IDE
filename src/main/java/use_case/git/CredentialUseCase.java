@@ -1,10 +1,12 @@
 package use_case.git;
 
-import entity.CredentialEncryption;
+import java.io.*;
+import java.security.GeneralSecurityException;
 
 import javax.crypto.SecretKey;
 import javax.security.auth.login.LoginException;
-import java.io.*;
+
+import entity.CredentialEncryption;
 
 public class CredentialUseCase {
     private static final String CREDENTIALS_FILE = "credentials.dat";
@@ -15,12 +17,17 @@ public class CredentialUseCase {
      * @param username The username to save.
      * @param password The password to save.
      * @param secretKey The SecretKey used for encryption.
-     * @throws Exception If an error occurs during encryption or saving.
+     * @throws GeneralSecurityException If an error occurs during encryption or saving.
      */
-    public void saveCredentials(String username, String password, SecretKey secretKey) throws Exception {
-        String credentials = username + ":" + password;
-        byte[] encryptedData = CredentialEncryption.encrypt(credentials, secretKey);
-        saveToFile(encryptedData);
+    public void saveCredentials(String username, String password, SecretKey secretKey) throws GeneralSecurityException {
+        try {
+            String credentials = username + ":" + password;
+            byte[] encryptedData = CredentialEncryption.encrypt(credentials, secretKey);
+            saveToFile(encryptedData);
+        }
+        catch (CredentialEncryption.EncryptionException | IOException ex) {
+            throw new GeneralSecurityException(ex);
+        }
     }
 
     /**
@@ -31,14 +38,14 @@ public class CredentialUseCase {
      * @throws LoginException If an error occurs during decryption or loading.
      */
     public static String[] loadCredentials(SecretKey secretKey) throws LoginException {
-        try{
+        try {
             byte[] encryptedData = readFromFile();
             String decryptedData = CredentialEncryption.decrypt(encryptedData, secretKey);
             return decryptedData.split(":");
-        } catch (Exception e) {
+        }
+        catch (CredentialEncryption.EncryptionException | IOException ex) {
             throw new LoginException();
         }
-
     }
 
     /**
@@ -58,8 +65,9 @@ public class CredentialUseCase {
      *
      * @return The data read from the file.
      * @throws IOException If an error occurs during reading.
+     * @throws FileNotFoundException if no file is found.
      */
-    private static byte[] readFromFile() throws IOException {
+    private static byte[] readFromFile() throws IOException, FileNotFoundException {
         File file = new File(CredentialUseCase.CREDENTIALS_FILE);
         if (!file.exists()) {
             throw new FileNotFoundException("File " + CredentialUseCase.CREDENTIALS_FILE + " not found.");
