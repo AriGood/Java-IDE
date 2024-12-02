@@ -135,7 +135,9 @@ public class IDEAppBuilder {
 
     public void openFile(File file) {
         if (file != null && file.exists() && file.isFile()) {
-            EditorOperations.addTab(file, leftEditorTabbedPane);
+            if (rightEditorTabbedPane == null ||!EditorOperations.isDuplicate(file, rightEditorTabbedPane)) {
+                EditorOperations.addTab(file, leftEditorTabbedPane);
+            }
         } else {
             System.err.println("Invalid file: " + (file != null ? file.getAbsolutePath() : "null"));
         }

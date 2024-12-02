@@ -106,8 +106,8 @@ public class  EditorOperations {
     public static void closeOtherTabs(int index, ParentIDEJTabbedPane tabbedPane) {
         if (index != -1) {
             EditorObj keepEditor = tabbedPane.getEditorObjs().get(index);
-            closeAllTabs(tabbedPane);
-            addTab(keepEditor.getFile(), tabbedPane);
+            closeTabsToLeft(index, tabbedPane);
+            closeTabsToRight(0, tabbedPane);
         }
     }
 
