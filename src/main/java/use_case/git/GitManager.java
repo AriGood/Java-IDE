@@ -14,6 +14,8 @@ import org.eclipse.jgit.api.Status;
 
 public class GitManager {
 
+    public static final String DIR_NULL_OR_EMPTY = "Directory path cannot be null or empty.";
+    public static final String REPOSITORY_NULL_OR_EMPTY = "Repository URL cannot be null or empty.";
     private Git currentRepository;
     private File currentDirectory;
     private String remoteUrl;
@@ -34,10 +36,10 @@ public class GitManager {
      */
     public void cloneRepository(String repoUrl, String directoryPath) throws GitAPIException {
         if (repoUrl == null || repoUrl.isEmpty()) {
-            throw new IllegalArgumentException("Repository URL cannot be null or empty.");
+            throw new IllegalArgumentException(REPOSITORY_NULL_OR_EMPTY);
         }
         if (directoryPath == null || directoryPath.isEmpty()) {
-            throw new IllegalArgumentException("Directory path cannot be null or empty.");
+            throw new IllegalArgumentException(DIR_NULL_OR_EMPTY);
         }
 
         this.currentDirectory = new File(directoryPath);
@@ -68,7 +70,7 @@ public class GitManager {
      */
     public void createRepository(String directoryPath, String remote) throws GitAPIException {
         if (directoryPath == null || directoryPath.isEmpty()) {
-            throw new IllegalArgumentException("Directory path cannot be null or empty.");
+            throw new IllegalArgumentException(DIR_NULL_OR_EMPTY);
         }
 
         this.currentDirectory = new File(directoryPath);
@@ -106,7 +108,7 @@ public class GitManager {
      */
     public void openRepository(String directoryPath) throws IOException, GitAPIException {
         if (directoryPath == null || directoryPath.isEmpty()) {
-            throw new IllegalArgumentException("Directory path cannot be null or empty.");
+            throw new IllegalArgumentException(DIR_NULL_OR_EMPTY);
         }
 
         this.currentDirectory = new File(directoryPath);
