@@ -8,17 +8,13 @@ Create a Java IDE that can open, write and run files with Git and autocomplete f
 Designed to simplify the functionality and use of IDEs, allowing for emphasis on core features.   
 
 ## Table of Contents
-[Features](#features) **Features**
+[Features](#features)   
+[Installation Instructions](installation-instructions)   
+[Usage Guide](usage-guide)  
+[Feedback](feedback)  
+[Contributions](contributions)  
 
-
-
-
-# Features   
-## Installation Instructions   
-### Usage Guide   
-##### License   
-###### Feedback    
-###### Contributions   
+   
 
 Team Members, GitHub usernames & corresponding user stories - Group 121
 
