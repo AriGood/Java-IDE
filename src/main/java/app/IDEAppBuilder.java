@@ -148,6 +148,7 @@ public class IDEAppBuilder {
 //        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
 //    }
 
+
     public File getDirectory() {
         return directory;
     }
