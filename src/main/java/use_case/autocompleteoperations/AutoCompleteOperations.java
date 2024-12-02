@@ -1,14 +1,15 @@
-package use_case.AutoCompleteOperations;
-
-import data.access.AutoCompleteBst;
+package use_case.autocompleteoperations;
 
 import java.util.List;
+
 import javax.swing.text.JTextComponent;
+
+import data.access.AutoCompleteBst;
 
 /**
  * New method and class that finalizes autocomplete before sending to pop up.
  */
-public class AutoCompleteOperations extends AutoCompleteOperationsBase {
+public class AutoCompleteOperations extends AbstractAutoCompleteOperationsBase {
     private final AutoCompleteBst autoCompleteBst;
 
     public AutoCompleteOperations(AutoCompleteBst autoCompleteBst) {

@@ -1,12 +1,13 @@
-package use_case.AutoCompleteOperations;
+package use_case.autocompleteoperations;
 
-import javax.swing.text.JTextComponent;
 import java.util.List;
 
+import javax.swing.text.JTextComponent;
+
 /**
- * New abstract class that initializes autcomplete methods.
+ * New abstract class that initializes autocomplete methods.
  */
-public abstract class AutoCompleteOperationsBase {
+public abstract class AbstractAutoCompleteOperationsBase {
     /**
      * Retrieves suggestions based on input text.
      * @param textComponent The text to use for generating suggestions.

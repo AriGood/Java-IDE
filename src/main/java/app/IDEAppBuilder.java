@@ -4,7 +4,7 @@ import data.access.AutoCompleteBst;
 import entity.EditorObj;
 import entity.LeftIDEJTabbedPane;
 import entity.RightIDEJTabbedPane;
-import use_case.AutoCompleteOperations.AutoCompleteOperations;
+import use_case.autocompleteoperations.AutoCompleteOperations;
 import use_case.FileManagement.FileTreeGenerator;
 import use_case.git.GitManager;
 import view.*;

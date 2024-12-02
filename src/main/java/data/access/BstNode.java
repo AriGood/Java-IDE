@@ -3,14 +3,14 @@ package data.access;
 /**
  * Public class to build nodes for a BST.
  */
-public class bst_Node {
+public class BstNode {
 
     String word;
     int frequency;
-    bst_Node left;
-    bst_Node right;
+    BstNode left;
+    BstNode right;
 
-    public bst_Node(String word) {
+    public BstNode(String word) {
         this.word = word;
         this.frequency = 1;
         left = null;

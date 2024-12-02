@@ -1,11 +1,15 @@
 package view;
 
+import java.awt.*;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
-import java.util.List;
-import java.awt.*;
 
-public class AutoCompletePopup extends AutoCompletePopupBase{
+/**
+ * New class to show autocomplete pop ups.
+ */
+public class AutoCompletePopup extends AbstractAutoCompletePopupBase {
     private final JPopupMenu popup;
 
     public AutoCompletePopup() {
@@ -35,9 +39,11 @@ public class AutoCompletePopup extends AutoCompletePopupBase{
         if (!suggestions.isEmpty()) {
             Point caretPos = textComponent.getCaret().getMagicCaretPosition();
             if (caretPos != null) {
-                popup.show(textComponent, caretPos.x, caretPos.y + 20); // Offset for visibility
+                popup.show(textComponent, caretPos.x, caretPos.y + 20);
+                // Offset for visibility
             }
-        } else {
+        }
+        else {
             popup.setVisible(false);
         }
     }
