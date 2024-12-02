@@ -1,4 +1,4 @@
-package use_case.git;
+package entity;
 
 import java.io.File;
 import java.io.IOException;

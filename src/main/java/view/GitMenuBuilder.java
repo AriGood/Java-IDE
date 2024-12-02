@@ -8,7 +8,6 @@ import javax.security.auth.login.LoginException;
 import javax.swing.*;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.errors.NoRemoteRepositoryException;
 
 import app.IDEAppBuilder;
 import use_case.git.CredentialUseCase;
