@@ -63,3 +63,4 @@ Yara Alkurdi - yaraalkurdi:
 Jessica, while developing her Java program, wants to use a terminal within her IDE to run commands, navigate between directories, and view output directly in a terminal UI. This helps her efficiently interact with her project's environment without leaving the IDE.
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Test
