@@ -9,11 +9,11 @@ Designed to simplify the functionality and use of IDEs, allowing for emphasis on
 
 ## Table of Contents
 [Features](#features)   
-[Installation Instructions](installation-instructions)   
-[Usage Guide](usage-guide) 
-[License](license)
-[Feedback](feedback)  
-[Contributions](contributions)  
+[Installation Instructions](installation-instructions)     
+[Usage Guide](usage-guide)   
+[License](license)  
+[Feedback](feedback)    
+[Contributions](contributions)    
 
 ## Features  
 File managament: Open, create new files, delete files and save files   
