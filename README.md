@@ -23,7 +23,7 @@ Editor: Open and toggle between tabs, auto complete functionality, move and use 
 ## Installation Instructions  
 1. Fork this repository and clone the code to open with version control on your device with Intellij.  
 2. Download all packages within the files and use JDK-22 and JUnit 4.   
-3. Software is comptaible with all macos and windows operating systems that can operate IntelliJ.   
+3. Software is compatible with all macos and windows operating systems that can operate IntelliJ.   
 4. Common issues include using the incorrect SDK and not downloading all the packages, including java swing*.   
 
 ## Usage Guide  
