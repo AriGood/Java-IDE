@@ -1,40 +1,25 @@
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-TODO LIST
+**Java IDE**  
 
-Fri 8 Nov
+**Authors**  
+Ari Good, Maria Burcea, Dario Sanchez, Mariana Novoa, Yara Alkurdi  
 
-    [] Use cases described for each user story and user interations identified (each interaction becomes an Interactor with a Controller and Presenter)
-    [] All the Views sketched by hand (or using a software tool like Figma or your favourite drawing program)
-    [] A first "team use case" implemented, tested, and pushed to repo
-        Your team should have a minimal program which you can demo for your TA in the following lab 
-    [] Entities decided on: what's the data you need to manipulate from your problem domain?
-    [] Be able to make calls to the API your team has chosen.
+**Project Summary**   
+Create a Java IDE that can open, write and run files with Git and autocomplete functionality.   
+Designed to simplify the functionality and use of IDEs, allowing for emphasis on core features.   
 
-Fri 15 Nov
+**Table of Contents** 
+[Link Text](Features) **Features**
 
-    [] All View and View Model code written except for actionPerformed methods
-        Pair program for this so that two people know the details of each View and View Model.
-    [] In-memory data access objects created although perhaps not yet implemented to facilitate testing
-    [] Builder written that creates the views — run the program and make sure each view looks okay (you might edit the build method between runs to show a different view or create multiple main classes / methods)
-    [] Code for individual use cases begun with at least one unit test per Interactor
 
-Fri 22 Nov
 
-    [] Use cases mostly complete and test coverage over 75% for code in the Use Case and Entity layers
-        You don't need to test your Controllers, Presenters, Views, View Models, or Data Access objects
-    [] Be ready to demo your latest program to your TA in the next lab to get final feedback ahead of presentations!
 
-Fri 29 Nov
+# Features   
+## Installation Instructions   
+### Usage Guide   
+##### License   
+###### Feedback    
+####### Contributions   
 
-    [] Team code review done to ensure Clean Architecture and that all user stories are implemented — refactor as needed!
-    [] 100% test coverage for code in the Use Case and Entity layers.
-    [] Team presentation drafted and practiced
-
-Mon 2 Dec, Tue 3 Dec
-
-    [] Team presentations during lab time (Tue is Makeup Monday)
-        More details to be posted, but be ready to talk about and demonstrate the user story you were responsible for implementing + your team's overall experience     working on the project together!
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Team Members, GitHub usernames & corresponding user stories - Group 121
 
 Team story:
