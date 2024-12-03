@@ -1,0 +1,15 @@
+public class MainIdeApplication {
+
+//TODO: Finish implementing the application
+
+
+    /**
+     * The main entry point of the application.
+     * @param args commandline arguments are ignored
+     */
+    public static void main(String[] args) {
+        final IDEAppBuilder builder = new IDEAppBuilder();
+        builder.build().setVisible(true);
+
+    }
+}

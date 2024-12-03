@@ -1,41 +1,37 @@
 package app;
 
-import data.access.AutoCompleteBst;
-import entity.EditorObj;
-import entity.LeftIDEJTabbedPane;
-import entity.ParentIDEJTabbedPane;
-import entity.RightIDEJTabbedPane;
-import use_case.autocompleteoperations.AutoCompleteOperations;
-import use_case.EditorOperations.EditorOperations;
-import use_case.FileManagement.FileOperations;
-import use_case.FileManagement.FileTreeGenerator;
-import use_case.git.GitManager;
-import view.*;
-import java.util.List;
-
-import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.List;
+
+import javax.swing.*;
+
+import data.access.AutoCompleteBst;
+import entity.LeftIDEJTabbedPane;
+import entity.RightIDEJTabbedPane;
+import use_case.EditorOperations.EditorOperations;
+import use_case.autocompleteoperations.AutoCompleteOperations;
+import use_case.git.GitManager;
+import view.AutoCompletePopup;
+import view.FileTreeObj;
+import view.MenuBarObj;
+import view.TerminalObj;
 
 /**
  * Builder for the Note Application.
  */
-public class IDEAppBuilder {
+public class IdeAppBuilder {
     public final int HEIGHT = 600;
     public final int WIDTH = 800;
-    public JScrollPane editorScrollPane;
     public GitManager gitManager = new GitManager();
     public File directory;
 
     private JScrollPane terminalScrollPane;
     private AutoCompleteOperations autoCompleteOperations;
     private JScrollPane fileScrollPane;
-    private EditorObj editorObj;
     private FileTreeObj fileTreeObj;
-    private FileTreeGenerator fileTreeGenerator;
     private JFrame frame;
     private JSplitPane leftRightSplitPane;
 
@@ -47,8 +43,7 @@ public class IDEAppBuilder {
      * @return the JFrame for the application
      */
     public JFrame build() {
-        final JFrame newFrame = new JFrame();
-        frame = newFrame;
+        frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setTitle("IDE Application");
         frame.setSize(WIDTH, HEIGHT);
@@ -103,9 +98,9 @@ public class IDEAppBuilder {
         return fileScrollPane;
     }
 
-    public void buildTree(File directory) {
-        directory = directory.getAbsoluteFile();
-        fileTreeObj = new FileTreeObj(directory, this);
+    public void buildTree(File newDirectory) {
+        this.directory = newDirectory.getAbsoluteFile();
+        fileTreeObj = new FileTreeObj(this.directory, this);
         fileScrollPane.setViewportView(fileTreeObj.getFileTree());
     }
 
@@ -115,7 +110,6 @@ public class IDEAppBuilder {
         return menuBarObj.getMenuBar();
     }
 
-
     private JScrollPane makeTerminalPanel() {
         TerminalObj terminalWindow = new TerminalObj();
         terminalScrollPane = new JScrollPane(terminalWindow);
@@ -123,15 +117,9 @@ public class IDEAppBuilder {
     }
 
     public JTabbedPane makeEditorPanel() {
-        // make text area an instance variable with this function and create a getter and reference it for autocomp.
-//        editorObj = new EditorObj();
         leftEditorTabbedPane = new LeftIDEJTabbedPane(this);
-//        editorScrollPane = new JScrollPane(editorObj.getTextArea());
-//        editorScrollPane.setRowHeaderView(editorObj.getLineNums());
-//        editorTabbedPane.add("New Tab", editorScrollPane);
         return leftEditorTabbedPane;
     }
-
 
     public void openFile(File file) {
         if (file != null && file.exists() && file.isFile()) {
@@ -143,14 +131,6 @@ public class IDEAppBuilder {
         }
     }
 
-
-//    public void initializeAutoComplete(AutoCompleteBST autocompleteBST) {
-//        JPopupMenu popup = new JPopupMenu();
-//        autoCompleteOperations = new AutoCompleteOperations(autocompleteBST);
-//        autoCompleteOperations.enableAutoComplete(tabManagement,codeEditor, popup);
-//    }
-
-
     public File getDirectory() {
         return directory;
     }
@@ -161,10 +141,6 @@ public class IDEAppBuilder {
 
     public JScrollPane getTerminalScrollPane() {
         return terminalScrollPane;
-    }
-
-    public JScrollPane getEditorScrollPane() {
-        return editorScrollPane;
     }
 
     public void splitEditor(JSplitPane newSplit) {
@@ -187,7 +163,6 @@ public class IDEAppBuilder {
         EditorOperations.closeAbstractTab(this, file); // Close associated tabs
     }
 
-
     public RightIDEJTabbedPane getRightEditorTabbedPane() {
         return rightEditorTabbedPane;
     }
@@ -195,7 +170,6 @@ public class IDEAppBuilder {
     public LeftIDEJTabbedPane getLeftEditorTabbedPane() {
         return leftEditorTabbedPane;
     }
-
 
     public JSplitPane getLeftRightSplitPane() {
         return leftRightSplitPane;
