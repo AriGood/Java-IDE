@@ -1,3 +1,6 @@
+/**
+ * Unit tests for EditorOperations functionalities including tab management, file handling, and editor operations.
+ */
 package use_caseTest.EditorOperationsTest;
 
 import app.IdeAppBuilder;
@@ -16,6 +19,11 @@ import static org.junit.Assert.*;
 
 public class EditorOperationsTest {
 
+    /**
+     * Utility method to create and initialize an IdeAppBuilder instance for testing.
+     *
+     * @return a fully built instance of IdeAppBuilder
+     */
     private IdeAppBuilder makeTestBuilder() {
         IdeAppBuilder app = new IdeAppBuilder();
         app.build();
@@ -24,6 +32,12 @@ public class EditorOperationsTest {
         return app;
     }
 
+    /**
+     * Test for closing a tab associated with a file on the left tabbed pane.
+     * Ensures correct tab and duplication behavior.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testCloseAbstractTabLeft() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
@@ -51,6 +65,12 @@ public class EditorOperationsTest {
         }
     }
 
+    /**
+     * Test for closing a tab associated with a file on the right tabbed pane.
+     * Verifies duplication checks and proper tab removal.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testCloseAbstractTabRight() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
@@ -78,6 +98,12 @@ public class EditorOperationsTest {
         }
     }
 
+    /**
+     * Test for verifying duplicate files within a specified tabbed pane.
+     * Ensures accurate identification of duplicate tabs.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testIsDuplicate() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
@@ -101,6 +127,12 @@ public class EditorOperationsTest {
 
     }
 
+    /**
+     * Test for adding tabs to a tabbed pane. Confirms tabs are properly added
+     * and duplicates identified accurately.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testAddTab() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
@@ -125,6 +157,12 @@ public class EditorOperationsTest {
         }
     }
 
+    /**
+     * Test for closing individual tabs. Ensures correct removal of tabs
+     * from tabbed panes and duplication checks.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testCloseTab() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
@@ -156,6 +194,12 @@ public class EditorOperationsTest {
         }
     }
 
+    /**
+     * Test for retrieving the index of a file in a specified tabbed pane.
+     * Ensures accurate indexing of tabs.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testGetFileIndex() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
@@ -185,6 +229,12 @@ public class EditorOperationsTest {
         }
     }
 
+    /**
+     * Test for closing all tabs in a tabbed pane. Verifies complete tab
+     * removal and updates to duplication checks.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testCloseAllTabs() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
@@ -210,6 +260,12 @@ public class EditorOperationsTest {
         }
     }
 
+    /**
+     * Test for closing all tabs except one in a tabbed pane. Confirms other
+     * tabs are removed and only the specified tab remains.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testCloseOtherTabs() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
@@ -235,6 +291,12 @@ public class EditorOperationsTest {
         }
     }
 
+    /**
+     * Test for closing tabs to the left of a specified index in a tabbed pane.
+     * Ensures accurate tab closure and duplication updates.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testCloseTabsToLeft() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
@@ -260,6 +322,12 @@ public class EditorOperationsTest {
         }
     }
 
+    /**
+     * Test for closing tabs to the right of a specified index in a tabbed pane.
+     * Confirms tabs are removed correctly based on index.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testCloseTabsToRight() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
@@ -285,6 +353,12 @@ public class EditorOperationsTest {
         }
     }
 
+    /**
+     * Test for merging a tab from one tabbed pane into another. Validates
+     * proper transfer and duplication checks.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testMergeTab() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
@@ -317,6 +391,12 @@ public class EditorOperationsTest {
         }
     }
 
+    /**
+     * Test for splitting a tab from one tabbed pane into another. Ensures tab
+     * is moved correctly and duplicates updated.
+     *
+     * @throws IOException if file handling operations fail
+     */
     @Test
     public void testSplitTab() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
