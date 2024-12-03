@@ -7,7 +7,7 @@ import entity.RightIDEJTabbedPane;
 import use_case.autocompleteoperations.AutoCompleteOperations;
 import use_case.EditorOperations.EditorOperations;
 import use_case.FileManagement.FileTreeGenerator;
-import entity.GitManager;
+import use_case.git.GitManager;
 import view.*;
 
 import java.awt.event.WindowAdapter;
