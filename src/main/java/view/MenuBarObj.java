@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.swing.*;
 
-import app.IDEAppBuilder;
+import app.IdeAppBuilder;
 import use_case.FileManagement.FileOperations;
 
 /**
@@ -14,16 +14,16 @@ import use_case.FileManagement.FileOperations;
  */
 public class MenuBarObj {
     private final JMenuBar menuBar;
-    private final IDEAppBuilder ideAppBuilder;
+    private final IdeAppBuilder ideAppBuilder;
 
     /**
      * Constructor to initialize the MenuBarObj with a given IdeAppBuilder.
      *
-     * @param newIDEAppBuilder The IdeAppBuilder instance to integrate with.
+     * @param newIdeAppBuilder The IdeAppBuilder instance to integrate with.
      */
-    public MenuBarObj(IDEAppBuilder newIDEAppBuilder) {
+    public MenuBarObj(IdeAppBuilder newIdeAppBuilder) {
         this.menuBar = new JMenuBar();
-        this.ideAppBuilder = newIDEAppBuilder;
+        this.ideAppBuilder = newIdeAppBuilder;
     }
 
     /**

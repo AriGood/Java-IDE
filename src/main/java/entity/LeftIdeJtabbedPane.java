@@ -1,10 +1,10 @@
 package entity;
 
-import app.IDEAppBuilder;
+import app.IdeAppBuilder;
 
 public class LeftIdeJtabbedPane extends ParentIdeJtabbedPane {
 
-    public LeftIdeJtabbedPane(IDEAppBuilder ideAppBuilder) {
+    public LeftIdeJtabbedPane(IdeAppBuilder ideAppBuilder) {
         super(ideAppBuilder);
     }
 }

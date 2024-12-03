@@ -1,26 +1,13 @@
 package app;
 
-import data.access.AutoCompleteBst;
-import entity.EditorObj;
-import entity.LeftIDEJTabbedPane;
-import entity.RightIDEJTabbedPane;
-import use_case.autocompleteoperations.AutoCompleteOperations;
-import use_case.EditorOperations.EditorOperations;
-import use_case.FileManagement.FileTreeGenerator;
-import entity.GitManager;
-import view.*;
+import static use_case.FileManagement.FileOperations.saveFile;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.List;
-
-import javax.swing.*;
-
-import java.awt.*;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
 
@@ -35,22 +22,21 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import data.access.AutoCompleteBst;
+import entity.EditorObj;
+import entity.GitManager;
 import entity.LeftIdeJtabbedPane;
 import entity.RightIdeJtabbedPane;
 import use_case.EditorManagement.EditorOperations;
 import use_case.autocompleteoperations.AutoCompleteOperations;
-import use_case.git.GitManager;
 import view.AutoCompletePopup;
 import view.FileTreeObj;
 import view.MenuBarObj;
 import view.TerminalObj;
 
-import static use_case.FileManagement.FileOperations.saveFile;
-
 /**
  * Builder for the IDE Application.
  */
-public class IDEAppBuilder {
+public class IdeAppBuilder {
     public static final int HEIGHT = 600;
     public static final int WIDTH = 800;
     public static final int LEFT_RIGHT_DIVIDER = 300;
@@ -209,18 +195,16 @@ public class IDEAppBuilder {
 
     public void saveOpen() {
         if (leftEditorTabbedPane != null) {
-            for (EditorObj obj : leftEditorTabbedPane.editorObjs) {
+            for (EditorObj obj : leftEditorTabbedPane.getEditorObjs()) {
                 saveFile(obj.getFile(), obj.getContent());
             }
         }
         if (rightEditorTabbedPane != null) {
-            for (EditorObj obj : rightEditorTabbedPane.editorObjs) {
+            for (EditorObj obj : rightEditorTabbedPane.getEditorObjs()) {
                 saveFile(obj.getFile(), obj.getContent());
             }
         }
     }
-
-
 
     /**
      * Returns this IDE's working directory.

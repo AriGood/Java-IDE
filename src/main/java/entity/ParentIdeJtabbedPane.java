@@ -9,16 +9,16 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import app.IDEAppBuilder;
+import app.IdeAppBuilder;
 import data.access.AutoCompleteBst;
 import view.PopupMenuHandler;
 
 public abstract class ParentIdeJtabbedPane extends JTabbedPane {
 
-    private static IDEAppBuilder ideAppBuilder;
+    private static IdeAppBuilder ideAppBuilder;
     private List<EditorObj> editorObjs = new ArrayList<>();
 
-    public ParentIdeJtabbedPane(IDEAppBuilder appBuilder) {
+    public ParentIdeJtabbedPane(IdeAppBuilder appBuilder) {
         this.ideAppBuilder = appBuilder;
 
         this.addMouseListener(new MouseAdapter() {
@@ -65,7 +65,7 @@ public abstract class ParentIdeJtabbedPane extends JTabbedPane {
      * Returns the IdeAppBuilder associated with this instance of ParentIdeJtabbedPane.
      * @return IdeAppBuilder for this ParentIdeJtabbedPane.
      */
-    public IDEAppBuilder getIdeAppBuilder() {
+    public IdeAppBuilder getIdeAppBuilder() {
         return ideAppBuilder;
     }
 }
