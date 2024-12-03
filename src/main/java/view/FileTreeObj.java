@@ -1,6 +1,6 @@
 package view;
 
-import app.IDEAppBuilder;
+import app.IdeAppBuilder;
 import use_case.FileManagement.FileTreeGenerator;
 
 import javax.swing.*;
@@ -11,7 +11,7 @@ import java.io.File;
 
 public class FileTreeObj {
     private final FileTreeGenerator fileTreeGenerator; // Generates tree structure
-    private final IDEAppBuilder appBuilder; // For file-opening functionality
+    private final IdeAppBuilder appBuilder; // For file-opening functionality
     private final FileTreeObj fileTreeObj = this; // Manages right-click menus
     private File directory; // Root directory of the tree
     private JTree fileTree; // UI component representing the tree
@@ -22,7 +22,7 @@ public class FileTreeObj {
      * @param directory  The root directory of the file tree.
      * @param appBuilder The app builder instance for file handling.
      */
-    public FileTreeObj(File directory, IDEAppBuilder appBuilder) {
+    public FileTreeObj(File directory, IdeAppBuilder appBuilder) {
         this.directory = directory;
         this.fileTreeGenerator = new FileTreeGenerator();
         this.appBuilder = appBuilder;
@@ -156,7 +156,7 @@ public class FileTreeObj {
         return directory;
     }
 
-    public IDEAppBuilder getAppBuilder() {
+    public IdeAppBuilder getAppBuilder() {
         return appBuilder;
     }
 }

@@ -1,4 +1,4 @@
-package org.use_case.git;
+package use_caseTest.git;
 
 import org.junit.After;
 import org.junit.Before;

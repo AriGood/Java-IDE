@@ -1,6 +1,6 @@
 package use_case.EditorOperations;
 
-import app.IDEAppBuilder;
+import app.IdeAppBuilder;
 import entity.EditorObj;
 import entity.LeftIDEJTabbedPane;
 import entity.ParentIDEJTabbedPane;
@@ -13,7 +13,7 @@ import java.io.File;
 
 public class  EditorOperations {
 
-    public static void closeAbstractTab(IDEAppBuilder ideAppBuilder, File file) {
+    public static void closeAbstractTab(IdeAppBuilder ideAppBuilder, File file) {
         EditorObj editorObj = new EditorObj();
         editorObj.setFile(file);
         if (isDuplicate(file, ideAppBuilder.getLeftEditorTabbedPane())) {
@@ -75,7 +75,7 @@ public class  EditorOperations {
     }
 
     public static void closeTab(int index, ParentIDEJTabbedPane tabbedPane) {
-        IDEAppBuilder ideAppBuilder = tabbedPane.getIdeAppBuilder();
+        IdeAppBuilder ideAppBuilder = tabbedPane.getIdeAppBuilder();
         EditorObj editorObj = tabbedPane.getEditorObjs().get(index);
         FileOperations.saveFile(editorObj.getFile(), editorObj.getTextArea().getText());
         tabbedPane.remove(index);
@@ -124,7 +124,7 @@ public class  EditorOperations {
         }
     }
 
-    public static void mergeTab(int selectedIndex, RightIDEJTabbedPane tabbedPane, IDEAppBuilder ideAppBuilder) {
+    public static void mergeTab(int selectedIndex, RightIDEJTabbedPane tabbedPane, IdeAppBuilder ideAppBuilder) {
         tabbedPane.setSelectedIndex(selectedIndex);
         EditorObj editorObj = tabbedPane.getEditorObjs().get(selectedIndex);
         EditorOperations.closeTab(selectedIndex, tabbedPane);
@@ -139,7 +139,7 @@ public class  EditorOperations {
 
     }
 
-    public static void splitTab(int selectedIndex, LeftIDEJTabbedPane tabbedPane, IDEAppBuilder ideAppBuilder) {
+    public static void splitTab(int selectedIndex, LeftIDEJTabbedPane tabbedPane, IdeAppBuilder ideAppBuilder) {
         EditorObj editorObj = tabbedPane.getEditorObjs().get(selectedIndex);
         RightIDEJTabbedPane newTabbedPane = new RightIDEJTabbedPane(ideAppBuilder);
         EditorOperations.addTab(editorObj.getFile(), newTabbedPane);

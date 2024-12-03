@@ -1,6 +1,6 @@
 package entity;
 
-import app.IDEAppBuilder;
+import app.IdeAppBuilder;
 import data.access.AutoCompleteBst;
 import use_case.EditorOperations.EditorOperations;
 import use_case.FileManagement.FileOperations;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class RightIDEJTabbedPane extends ParentIDEJTabbedPane {
 
-    public RightIDEJTabbedPane(IDEAppBuilder ideAppBuilder) {
+    public RightIDEJTabbedPane(IdeAppBuilder ideAppBuilder) {
         super(ideAppBuilder);
     }
 }

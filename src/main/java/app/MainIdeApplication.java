@@ -23,7 +23,7 @@ public class MainIdeApplication {
      * @param args commandline arguments are ignored
      */
     public static void main(String[] args) {
-        final IDEAppBuilder builder = new IDEAppBuilder();
+        final IdeAppBuilder builder = new IdeAppBuilder();
         builder.build().setVisible(true);
 
     }

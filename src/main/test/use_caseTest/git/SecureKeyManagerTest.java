@@ -1,4 +1,4 @@
-package org.use_case.git;
+package use_caseTest.git;
 
 import org.junit.Test;
 import use_case.git.SecureKeyManager;

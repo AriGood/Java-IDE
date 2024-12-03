@@ -1,6 +1,6 @@
 package entity;
 
-import app.IDEAppBuilder;
+import app.IdeAppBuilder;
 import data.access.AutoCompleteBst;
 import view.PopupMenuOperations;
 
@@ -13,9 +13,9 @@ import java.util.List;
 public abstract class ParentIDEJTabbedPane extends JTabbedPane {
 
     protected List<EditorObj> editorObjs = new ArrayList<>();
-    protected static IDEAppBuilder ideAppBuilder;
+    protected static IdeAppBuilder ideAppBuilder;
 
-    public ParentIDEJTabbedPane(IDEAppBuilder appBuilder) {
+    public ParentIDEJTabbedPane(IdeAppBuilder appBuilder) {
         this.ideAppBuilder = appBuilder;
 
         this.addMouseListener(new MouseAdapter() {
@@ -54,7 +54,7 @@ public abstract class ParentIDEJTabbedPane extends JTabbedPane {
         return editorObjs;
     }
 
-    public IDEAppBuilder getIdeAppBuilder() {
+    public IdeAppBuilder getIdeAppBuilder() {
         return ideAppBuilder;
     }
 }

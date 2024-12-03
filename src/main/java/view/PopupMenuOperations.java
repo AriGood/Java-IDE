@@ -1,6 +1,6 @@
 package view;
 
-import app.IDEAppBuilder;
+import app.IdeAppBuilder;
 import entity.LeftIDEJTabbedPane;
 import entity.ParentIDEJTabbedPane;
 import entity.RightIDEJTabbedPane;
@@ -17,7 +17,7 @@ public class PopupMenuOperations {
     private static File copiedFileOrDirectory;
     private static boolean isCopyingDirectory;
 
-    public static JPopupMenu createTabPopup(ParentIDEJTabbedPane tabbedPane, IDEAppBuilder appBuilder) {
+    public static JPopupMenu createTabPopup(ParentIDEJTabbedPane tabbedPane, IdeAppBuilder appBuilder) {
 
         JPopupMenu popupMenu = new JPopupMenu();
 
