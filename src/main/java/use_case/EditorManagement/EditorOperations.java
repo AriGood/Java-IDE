@@ -19,7 +19,10 @@ import entity.ParentIdeJtabbedPane;
 import entity.RightIdeJtabbedPane;
 import use_case.FileManagement.FileOperations;
 
-public class EditorOperations {
+/**
+ * Utility class for handling methods and operations for the editor and its tabs.
+ */
+public final class EditorOperations {
 
     private static final int WIDTH = 15;
     private static final int HEIGHT = 15;
@@ -27,7 +30,7 @@ public class EditorOperations {
     private static final int LEFT_RIGHT_MARGIN = 10;
 
     private EditorOperations() {
-        throw new UnsupportedOperationException("EditorManagement is a utility class and cannot be instantiated.");
+        throw new UnsupportedOperationException("EditorOperations is a utility class and cannot be instantiated.");
     }
 
     /**
