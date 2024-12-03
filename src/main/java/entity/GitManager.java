@@ -1,4 +1,4 @@
-package use_case.git;
+package entity;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,7 @@ import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoRemoteRepositoryException;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 public class GitManager {
@@ -87,16 +88,34 @@ public class GitManager {
      * Commit changes in the current repository.
      * @param message The commit message
      * @throws GitAPIException if commit fails
-     * @throws IllegalArgumentException if commit message is null
+     * @throws IllegalArgumentException if commit message is null or empty
      */
     public void commitChanges(String message) throws GitAPIException {
         if (message == null || message.isEmpty()) {
             throw new IllegalArgumentException("Commit message cannot be null or empty.");
         }
 
-        currentRepository.add().addFilepattern(".").call();
-        currentRepository.commit().setMessage(message).call();
+        try {
+            // Stage all changes (modified, added, deleted files)
+            currentRepository.add().addFilepattern(".").call();
+
+            // Get the repository status to ensure there are changes to commit
+            Status status = currentRepository.status().call();
+
+            if (!status.hasUncommittedChanges()) {
+                System.out.println("No changes to commit.");
+                return;
+            }
+
+            // Commit the changes with the provided message
+            currentRepository.commit().setMessage(message).call();
+            System.out.println("Changes committed successfully.");
+        } catch (GitAPIException e) {
+            System.err.println("Error committing changes: " + e.getMessage());
+            throw e;
+        }
     }
+
 
     /**
      * Open an existing Git repository in a specified directory.
@@ -132,12 +151,38 @@ public class GitManager {
      * @param credential The [username, password] for authentication
      * @throws GitAPIException if push fails
      * @throws NoRemoteRepositoryException if there is no remote
+     * @throws IllegalStateException if there is no repo
+     * @throws IllegalArgumentException if login fails
+     * @throws Exception if something else breaks TODO don't do this
      */
-    public void pushChanges(String[] credential) throws GitAPIException, NoRemoteRepositoryException {
-        currentRepository.push()
-                .setCredentialsProvider(new UsernamePasswordCredentialsProvider(credential[0], credential[1]))
-                .call();
+    public void pushChanges(String[] credential) throws Exception, GitAPIException, IllegalStateException, IllegalArgumentException {
+        if (currentRepository == null) {
+            throw new IllegalStateException("No repository is currently opened. Open or clone a repository first.");
+        }
+
+        if (remoteUrl == null || remoteUrl.isEmpty()) {
+            throw new IllegalStateException("No remote URL configured for the repository.");
+        }
+
+        if (credential == null || credential.length < 2 || credential[0].isEmpty() || credential[1].isEmpty()) {
+            throw new IllegalArgumentException("Invalid credentials. Provide both username and password.");
+        }
+
+        try {
+            Iterable<PushResult> results = currentRepository.push()
+                    .setCredentialsProvider(new UsernamePasswordCredentialsProvider(credential[0], credential[1]))
+                    .call();
+
+            for (PushResult result : results) {
+                System.out.println("Push messages: " + result.getMessages());
+            }
+            System.out.println("Push operation completed.");
+        } catch (GitAPIException e) {
+            System.err.println("Error during push: " + e.getMessage());
+            throw e;
+        }
     }
+
 
     /**
      * Create a new branch in the current repository.

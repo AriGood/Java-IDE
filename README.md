@@ -23,7 +23,7 @@ Editor: Open and toggle between tabs, auto complete functionality, move and use 
 ## Installation Instructions  
 1. Fork this repository and clone the code to open with version control on your device with Intellij.  
 2. Download all packages within the files and use JDK-22 and JUnit 4.   
-3. Software is comptaible with all macos and windows operating systems that can operate IntelliJ.   
+3. Software is compatible with all macos and windows operating systems that can operate IntelliJ.   
 4. Common issues include using the incorrect SDK and not downloading all the packages, including java swing*.   
 
 ## Usage Guide  
@@ -37,4 +37,4 @@ Anyone with access to this repository may use the code as they wish, project is 
 If you have feedback, please add a comment on this repository with reasonable technical feedback that is possible within the scope of this project. Please do not expect a response when submitting feedback. 
 
 ## Contributions   
-Contributions are closed to apporved contributors only for this project. You may fork this repo, although merge requests will be declined. 
+Contributions are closed to approved contributors only for this project. You may fork this repo, although merge requests will be declined. 

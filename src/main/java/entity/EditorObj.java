@@ -68,6 +68,10 @@ public class EditorObj {
         return lineNums;
     }
 
+    public String getContent() {
+        return textArea.getText();
+    }
+
     /**
      * Returns the File Associated with this EditorObj.
      * @return File associated with this EditorObj

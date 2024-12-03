@@ -1,20 +1,24 @@
 package view;
 
-import app.IDEAppBuilder;
-import use_case.FileManagement.FileTreeGenerator;
+import java.io.File;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
-import java.io.File;
 
+import app.IDEAppBuilder;
+import use_case.FileManagement.FileTreeGenerator;
+
+/**
+ * Class to generate a tree structure from a directory.
+ */
 public class FileTreeObj {
-    private final FileTreeGenerator fileTreeGenerator; // Generates tree structure
-    private final IDEAppBuilder appBuilder; // For file-opening functionality
-    private final FileTreeObj fileTreeObj = this; // Manages right-click menus
-    private File directory; // Root directory of the tree
-    private JTree fileTree; // UI component representing the tree
+    private final FileTreeGenerator fileTreeGenerator;
+    private final IDEAppBuilder appBuilder;
+    private final FileTreeObj fileTreeO = this;
+    private File directory;
+    private JTree fileTree;
 
     /**
      * Constructor for FileTreeObj.
@@ -61,7 +65,8 @@ public class FileTreeObj {
             if (selectedFile.exists() && selectedFile.isFile()) {
                 // Example action: Open the file in the editor
                 appBuilder.openFile(selectedFile);
-            } else {
+            }
+            else {
                 System.out.println("Selected node is not a valid file.");
             }
         });
@@ -102,9 +107,12 @@ public class FileTreeObj {
 
                 if (selectedFile.exists()) {
                     if (selectedFile.isFile()) {
-                        PopupMenuHandler.createFilePopupMenu(selectedFile, fileTreeObj).show(e.getComponent(), e.getX(), e.getY());
-                    } else if (selectedFile.isDirectory()) {
-                        PopupMenuHandler.createDirectoryPopupMenu(selectedFile, fileTreeObj).show(e.getComponent(), e.getX(), e.getY());
+                        PopupMenuHandler.createFilePopupMenu(selectedFile, fileTreeO).show(e.getComponent(),
+                                e.getX(), e.getY());
+                    }
+                    else if (selectedFile.isDirectory()) {
+                        PopupMenuHandler.createDirectoryPopupMenu(selectedFile, fileTreeO).show(e.getComponent(),
+                                e.getX(), e.getY());
                     }
                 }
             }
@@ -131,12 +139,11 @@ public class FileTreeObj {
         fileTree.expandRow(0);
     }
 
+    /**
+     * Method that chooses directory.
+     */
     public void chooseDirectory() {
         JFileChooser fileChooser = new JFileChooser();
-
-        //TODO Remove this when done.
-//        //The next line is only to make testing easier by setting the default directory to where I keep my Files - Dario
-//        //Feel free to use your path for testing
         fileChooser.setCurrentDirectory(new File("D:\\Users\\dario\\IdeaProjects\\puentesd"));
 
         fileChooser.setDialogTitle("Select a Project to Open");

@@ -3,7 +3,11 @@ package use_case.FileManagement;
 import java.io.File;
 import java.io.IOException;
 
-public class DirectoryOperations extends Operations{
+/**
+ * DirectoryOperations.
+ * This class handles operations related to directories like copy, paste, create.
+ */
+public class DirectoryOperations extends Operations {
     public DirectoryOperations(File target) {
         super(target);
     }
@@ -24,7 +28,8 @@ public class DirectoryOperations extends Operations{
                 for (File file : files) {
                     if (file.isDirectory()) {
                         new DirectoryOperations(file).copy(newDir);
-                    } else {
+                    }
+                    else {
                         new FileOperations(file).copy(newDir);
                     }
                 }
@@ -35,7 +40,8 @@ public class DirectoryOperations extends Operations{
             // Refresh file system metadata
             destination.listFiles();
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.err.println("Failed to copy directory: " + target.getAbsolutePath());
             e.printStackTrace();
         }
@@ -50,7 +56,8 @@ public class DirectoryOperations extends Operations{
             for (File file : files) {
                 if (file.isDirectory()) {
                     new DirectoryOperations(file).delete();
-                } else {
+                }
+                else {
                     new FileOperations(file).delete();
                 }
             }
@@ -59,7 +66,8 @@ public class DirectoryOperations extends Operations{
         // Delete the directory itself
         if (target.delete()) {
             System.out.println("Deleted directory: " + target.getAbsolutePath());
-        } else {
+        }
+        else {
             System.err.println("Failed to delete directory: " + target.getAbsolutePath());
         }
     }

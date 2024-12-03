@@ -67,8 +67,7 @@ public final class AutoCompleteBst {
         AutoCompleteBst autocompleteBst = new AutoCompleteBst();
 
         // Populate the tree with Java keywords
-        String[] javaKeywords = {
-                "ArrayList", "abstract", "assert", "boolean", "break", "byte", "case", "catch",
+        String[] javaKeywords = {"ArrayList", "abstract", "assert", "boolean", "break", "byte", "case", "catch",
                 "char", "class", "continue", "default", "do", "double", "else", "enum", "extends", "equals",
                 "Exception", "final", "finally", "float", "for", "get", "goto",
                 "if", "implements", "import", "instanceof", "int", "interface",

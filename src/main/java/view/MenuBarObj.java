@@ -1,13 +1,17 @@
 package view;
 
-import app.IDEAppBuilder;
-import use_case.FileManagement.FileOperations;
-
-import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.*;
+
+import app.IDEAppBuilder;
+import use_case.FileManagement.FileOperations;
+
+/**
+ * Class MenuBarObj to generate the menu bar object.
+ */
 public class MenuBarObj {
     private final JMenuBar menuBar;
     private final IDEAppBuilder ideAppBuilder;
@@ -77,15 +81,17 @@ public class MenuBarObj {
             if (option == JFileChooser.APPROVE_OPTION) {
                 File selectedDirectory = directoryChooser.getSelectedFile();
                 int choice = JOptionPane.showConfirmDialog(null,
-                        "Would you like to open this as a git repository?","Git",JOptionPane.YES_NO_OPTION);
+                        "Would you like to open this as a git repository?", "Git",
+                        JOptionPane.YES_NO_OPTION);
                 if (choice == JOptionPane.YES_OPTION) {
                     try {
-                        ideAppBuilder.getGitManager().createRepository(JOptionPane.showInputDialog(null, "Enter remote URL:")
-                                ,selectedDirectory.getAbsolutePath());
+                        ideAppBuilder.getGitManager().createRepository(JOptionPane.showInputDialog(null,
+                                        "Enter remote URL:"), selectedDirectory.getAbsolutePath());
                         JOptionPane.showMessageDialog(null, "Repository opened successfully.");
                     }
                     catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, "Error creating repository: " + ex.getMessage());
+                        JOptionPane.showMessageDialog(null,
+                                "Error creating repository: " + ex.getMessage());
                     }
                 }
                 ideAppBuilder.buildTree(selectedDirectory);

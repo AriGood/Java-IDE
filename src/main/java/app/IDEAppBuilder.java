@@ -1,5 +1,22 @@
 package app;
 
+import data.access.AutoCompleteBst;
+import entity.EditorObj;
+import entity.LeftIDEJTabbedPane;
+import entity.RightIDEJTabbedPane;
+import use_case.autocompleteoperations.AutoCompleteOperations;
+import use_case.EditorOperations.EditorOperations;
+import use_case.FileManagement.FileTreeGenerator;
+import entity.GitManager;
+import view.*;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.List;
+
+import javax.swing.*;
+
+import java.awt.*;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
@@ -27,6 +44,8 @@ import view.AutoCompletePopup;
 import view.FileTreeObj;
 import view.MenuBarObj;
 import view.TerminalObj;
+
+import static use_case.FileManagement.FileOperations.saveFile;
 
 /**
  * Builder for the IDE Application.
@@ -64,6 +83,14 @@ public class IDEAppBuilder {
         frame.add(makeFilePanel(), BorderLayout.CENTER);
 
         frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                saveOpen();
+                frame.setVisible(false);
+                frame.dispose();
+            }
+        });
         return frame;
     }
 
@@ -179,6 +206,21 @@ public class IDEAppBuilder {
             System.err.println(message);
         }
     }
+
+    public void saveOpen() {
+        if (leftEditorTabbedPane != null) {
+            for (EditorObj obj : leftEditorTabbedPane.editorObjs) {
+                saveFile(obj.getFile(), obj.getContent());
+            }
+        }
+        if (rightEditorTabbedPane != null) {
+            for (EditorObj obj : rightEditorTabbedPane.editorObjs) {
+                saveFile(obj.getFile(), obj.getContent());
+            }
+        }
+    }
+
+
 
     /**
      * Returns this IDE's working directory.

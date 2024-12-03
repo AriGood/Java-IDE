@@ -1,13 +1,20 @@
 package use_case.FileManagement;
 
-
 import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
+/**
+ * FileOperations.
+ *
+ * <p>This method is FileMOperations
+ */
 public class FileOperations extends Operations {
 
-    private static final Logger logger = Logger.getLogger(FileOperations.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(FileOperations.class.getName());
 
     public FileOperations(File target) {
         super(target);
@@ -31,7 +38,8 @@ public class FileOperations extends Operations {
             // Refresh file system metadata
             destination.listFiles();
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             System.err.println("Failed to copy file: " + target.getAbsolutePath());
             e.printStackTrace();
         }
@@ -45,26 +53,33 @@ public class FileOperations extends Operations {
             // Trigger metadata refresh for parent directory
             File parentDirectory = target.getParentFile();
             if (parentDirectory != null && parentDirectory.exists()) {
-                parentDirectory.listFiles(); // Refresh the metadata
+                parentDirectory.listFiles();
             }
-        } else {
+        }
+        else {
             System.err.println("Failed to delete file: " + target.getAbsolutePath());
         }
     }
 
+    /**
+     * FileMenuOperations.
+     *
+     * @param postDeleteAction is the post delete action.
+     */
     public void delete(Consumer<File> postDeleteAction) {
         if (target.delete()) {
             System.out.println("Deleted file: " + target.getAbsolutePath());
             if (postDeleteAction != null) {
-                postDeleteAction.accept(target); // Notify about deletion
+                postDeleteAction.accept(target);
             }
 
             // Trigger metadata refresh for parent directory
             File parentDirectory = target.getParentFile();
             if (parentDirectory != null && parentDirectory.exists()) {
-                parentDirectory.listFiles(); // Refresh the metadata
+                parentDirectory.listFiles();
             }
-        } else {
+        }
+        else {
             System.err.println("Failed to delete file: " + target.getAbsolutePath());
         }
     }
@@ -74,7 +89,6 @@ public class FileOperations extends Operations {
         System.out.println("Pasting file to " + destination.getAbsolutePath());
         copy(destination);
     }
-
 
     /**
      * This function saves the provided content to the specified file.
@@ -86,12 +100,19 @@ public class FileOperations extends Operations {
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(content);
 
-            logger.info("File saved successfully: " + file.getAbsolutePath());
-        } catch (IOException e) {
+            LOGGER.info("File saved successfully: " + file.getAbsolutePath());
+        }
+        catch (IOException e) {
             view.DisplayErrors.displayFileSaveError(e);
         }
     }
 
+    /**
+     * FileContent method.
+     * This method retrieves the content from a file.
+     * @param file is the file where content is retrieved from.
+     * @return String of content.
+     */
     public static String fileContent(File file) {
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -99,7 +120,8 @@ public class FileOperations extends Operations {
             while ((line = reader.readLine()) != null) {
                 content.append(line).append("\n");
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             view.DisplayErrors.displayFileLoadError(e);
         }
         return content.toString();
