@@ -1,10 +1,10 @@
 package use_caseTest.EditorOperationsTest;
 
 import app.IdeAppBuilder;
-import entity.LeftIDEJTabbedPane;
-import entity.RightIDEJTabbedPane;
+import entity.LeftIdeJtabbedPane;
+import entity.RightIdeJtabbedPane;
 import org.junit.Test;
-import use_case.EditorOperations.EditorOperations;
+import use_case.EditorManagement.EditorOperations;
 
 import javax.swing.*;
 import java.io.File;
@@ -19,7 +19,7 @@ public class EditorOperationsTest {
     private IdeAppBuilder makeTestBuilder() {
         IdeAppBuilder app = new IdeAppBuilder();
         app.build();
-        app.buildIDE();
+        app.buildIde();
 
         return app;
     }
@@ -27,8 +27,8 @@ public class EditorOperationsTest {
     @Test
     public void testCloseAbstractTabLeft() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
-        RightIDEJTabbedPane rightTabbedPane = new RightIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
+        RightIdeJtabbedPane rightTabbedPane = new RightIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
         for (int i = 0; i < 5; i++) {
@@ -54,8 +54,8 @@ public class EditorOperationsTest {
     @Test
     public void testCloseAbstractTabRight() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
-        RightIDEJTabbedPane rightTabbedPane = new RightIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
+        RightIdeJtabbedPane rightTabbedPane = new RightIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
         for (int i = 0; i < 5; i++) {
@@ -81,7 +81,7 @@ public class EditorOperationsTest {
     @Test
     public void testIsDuplicate() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
         for (int i = 0; i < 5; i++) {
@@ -104,7 +104,7 @@ public class EditorOperationsTest {
     @Test
     public void testAddTab() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
         for (int i = 0; i < 5; i++) {
@@ -128,8 +128,8 @@ public class EditorOperationsTest {
     @Test
     public void testCloseTab() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
-        RightIDEJTabbedPane rightTabbedPane = new RightIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
+        RightIdeJtabbedPane rightTabbedPane = new RightIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
         for (int i = 0; i < 4; i++) {
@@ -159,8 +159,8 @@ public class EditorOperationsTest {
     @Test
     public void testGetFileIndex() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
-        RightIDEJTabbedPane rightTabbedPane = new RightIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
+        RightIdeJtabbedPane rightTabbedPane = new RightIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
         for (int i = 0; i < 4; i++) {
@@ -188,7 +188,7 @@ public class EditorOperationsTest {
     @Test
     public void testCloseAllTabs() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
         for (int i = 0; i < 5; i++) {
@@ -213,7 +213,7 @@ public class EditorOperationsTest {
     @Test
     public void testCloseOtherTabs() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
         for (int i = 0; i < 5; i++) {
@@ -238,7 +238,7 @@ public class EditorOperationsTest {
     @Test
     public void testCloseTabsToLeft() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
         for (int i = 0; i < 5; i++) {
@@ -263,7 +263,7 @@ public class EditorOperationsTest {
     @Test
     public void testCloseTabsToRight() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
         for (int i = 0; i < 5; i++) {
@@ -288,8 +288,8 @@ public class EditorOperationsTest {
     @Test
     public void testMergeTab() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
-        RightIDEJTabbedPane rightTabbedPane = new RightIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
+        RightIdeJtabbedPane rightTabbedPane = new RightIdeJtabbedPane(app);
         JSplitPane newSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftTabbedPane, rightTabbedPane);
         app.splitEditor(newSplitPane);
 
@@ -320,7 +320,7 @@ public class EditorOperationsTest {
     @Test
     public void testSplitTab() throws IOException {
         IdeAppBuilder app = makeTestBuilder();
-        LeftIDEJTabbedPane leftTabbedPane = new LeftIDEJTabbedPane(app);
+        LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
         for (int i = 0; i < 5; i++) {

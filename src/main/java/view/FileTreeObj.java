@@ -102,9 +102,9 @@ public class FileTreeObj {
 
                 if (selectedFile.exists()) {
                     if (selectedFile.isFile()) {
-                        PopupMenuOperations.createFilePopupMenu(selectedFile, fileTreeObj).show(e.getComponent(), e.getX(), e.getY());
+                        PopupMenuHandler.createFilePopupMenu(selectedFile, fileTreeObj).show(e.getComponent(), e.getX(), e.getY());
                     } else if (selectedFile.isDirectory()) {
-                        PopupMenuOperations.createDirectoryPopupMenu(selectedFile, fileTreeObj).show(e.getComponent(), e.getX(), e.getY());
+                        PopupMenuHandler.createDirectoryPopupMenu(selectedFile, fileTreeObj).show(e.getComponent(), e.getX(), e.getY());
                     }
                 }
             }

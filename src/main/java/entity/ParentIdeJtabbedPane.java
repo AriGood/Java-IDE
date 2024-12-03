@@ -1,21 +1,24 @@
 package entity;
 
-import app.IdeAppBuilder;
-import data.access.AutoCompleteBst;
-import view.PopupMenuOperations;
-
-import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ParentIDEJTabbedPane extends JTabbedPane {
+import javax.swing.JPopupMenu;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 
-    protected List<EditorObj> editorObjs = new ArrayList<>();
-    protected static IdeAppBuilder ideAppBuilder;
+import app.IdeAppBuilder;
+import data.access.AutoCompleteBst;
+import view.PopupMenuHandler;
 
-    public ParentIDEJTabbedPane(IdeAppBuilder appBuilder) {
+public abstract class ParentIdeJtabbedPane extends JTabbedPane {
+
+    private static IdeAppBuilder ideAppBuilder;
+    private List<EditorObj> editorObjs = new ArrayList<>();
+
+    public ParentIdeJtabbedPane(IdeAppBuilder appBuilder) {
         this.ideAppBuilder = appBuilder;
 
         this.addMouseListener(new MouseAdapter() {
@@ -34,7 +37,7 @@ public abstract class ParentIDEJTabbedPane extends JTabbedPane {
             }
         });
 
-        this.addChangeListener(e -> {
+        this.addChangeListener(autoCompleteListener -> {
             int currentIndex = getSelectedIndex();
             if (currentIndex != -1) {
                 JTextArea currentTextArea = editorObjs.get(currentIndex).getTextArea();
@@ -43,17 +46,25 @@ public abstract class ParentIDEJTabbedPane extends JTabbedPane {
         });
     }
 
-    private void showPopupMenu(MouseEvent e) {
-        JPopupMenu popupMenu = PopupMenuOperations.createTabPopup(this, ideAppBuilder);
+    private void showPopupMenu(MouseEvent tabPopUpListener) {
+        JPopupMenu popupMenu = PopupMenuHandler.createTabPopup(this, ideAppBuilder);
         if (popupMenu != null) {
-            popupMenu.show(e.getComponent(), e.getX(), e.getY());
+            popupMenu.show(tabPopUpListener.getComponent(), tabPopUpListener.getX(), tabPopUpListener.getY());
         }
     }
 
+    /**
+     * Returns the list of EditorObjs associated with each tab.
+     * @return {@code List<EditorObj>} of each tab's EditorObj.
+     */
     public List<EditorObj> getEditorObjs() {
         return editorObjs;
     }
 
+    /**
+     * Returns the IdeAppBuilder associated with this instance of ParentIdeJtabbedPane.
+     * @return IdeAppBuilder for this ParentIdeJtabbedPane.
+     */
     public IdeAppBuilder getIdeAppBuilder() {
         return ideAppBuilder;
     }

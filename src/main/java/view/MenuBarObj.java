@@ -46,7 +46,7 @@ public class MenuBarObj {
                 FileOperations.saveFile(selectedFile, "");
                 JOptionPane.showMessageDialog(null, "File created successfully!");
 
-                if (ideAppBuilder.gitManager != null) {
+                if (ideAppBuilder.getGitManager() != null) {
                     int gitOption = JOptionPane.showConfirmDialog(
                             null,
                             "Do you want to add this file to Git?",
@@ -58,7 +58,7 @@ public class MenuBarObj {
                         try {
                             List<String> file = new ArrayList<String>();
                             file.add(selectedFile.getAbsolutePath());
-                            ideAppBuilder.gitManager.addFiles(file);
+                            ideAppBuilder.getGitManager().addFiles(file);
                             JOptionPane.showMessageDialog(null, "File added to Git repository.");
                         } 
                         catch (Exception ex) {
@@ -80,7 +80,7 @@ public class MenuBarObj {
                         "Would you like to open this as a git repository?","Git",JOptionPane.YES_NO_OPTION);
                 if (choice == JOptionPane.YES_OPTION) {
                     try {
-                        ideAppBuilder.gitManager.createRepository(JOptionPane.showInputDialog(null, "Enter remote URL:")
+                        ideAppBuilder.getGitManager().createRepository(JOptionPane.showInputDialog(null, "Enter remote URL:")
                                 ,selectedDirectory.getAbsolutePath());
                         JOptionPane.showMessageDialog(null, "Repository opened successfully.");
                     }
@@ -89,7 +89,7 @@ public class MenuBarObj {
                     }
                 }
                 ideAppBuilder.buildTree(selectedDirectory);
-                ideAppBuilder.buildIDE();
+                ideAppBuilder.buildIde();
             }
         });
 
