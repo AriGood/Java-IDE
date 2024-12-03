@@ -1,8 +1,9 @@
 package use_case.FileManagement;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.File;
 import java.util.Arrays;
+
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * Class to generate a tree structure from a directory.
@@ -20,12 +21,13 @@ public class FileTreeGenerator {
 
         if (files != null) {
             Arrays.stream(files)
-                    .filter(File::exists) // Ensure only existing files are added
+                    .filter(File::exists)
                     .forEach(file -> {
                         if (file.isDirectory()) {
-                            rootNode.add(generateTree(file)); // Recursive call for subdirectories
-                        } else {
-                            rootNode.add(new DefaultMutableTreeNode(file.getName())); // Add file as a leaf node
+                            rootNode.add(generateTree(file));
+                        }
+                        else {
+                            rootNode.add(new DefaultMutableTreeNode(file.getName()));
                         }
                     });
         }
