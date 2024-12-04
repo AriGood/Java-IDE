@@ -23,11 +23,11 @@ import javax.swing.WindowConstants;
 
 import data.access.AutoCompleteBst;
 import entity.EditorObj;
-import entity.GitManager;
 import entity.LeftIdeJtabbedPane;
 import entity.RightIdeJtabbedPane;
 import use_case.EditorManagement.EditorOperations;
 import use_case.autocompleteoperations.AutoCompleteOperations;
+import use_case.git.GitManager;
 import view.AutoCompletePopup;
 import view.FileTreeObj;
 import view.MenuBarObj;
@@ -36,7 +36,7 @@ import view.TerminalObj;
 /**
  * Builder for the IDE Application.
  */
-public class IDEAppBuilder {
+public class IdeAppBuilder {
     public static final int HEIGHT = 600;
     public static final int WIDTH = 800;
     public static final int LEFT_RIGHT_DIVIDER = 300;

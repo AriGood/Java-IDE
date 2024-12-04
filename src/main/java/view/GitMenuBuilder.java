@@ -7,23 +7,22 @@ import java.security.KeyException;
 import javax.security.auth.login.LoginException;
 import javax.swing.*;
 
+import app.IdeAppBuilder;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.errors.NoRemoteRepositoryException;
 
-import app.IDEAppBuilder;
 import use_case.git.CredentialUseCase;
 
 
 public class GitMenuBuilder {
     private final JMenu gitMenu;
-    private final IDEAppBuilder ideAppBuilder;
+    private final IdeAppBuilder ideAppBuilder;
 
     /**
      * Initializes the builder for the Git menu.
-     * @param newIDEAppBuilder current Ide window
+     * @param newIdeAppBuilder current Ide window
      */
-    public GitMenuBuilder(IDEAppBuilder newIDEAppBuilder) {
-        this.ideAppBuilder = newIDEAppBuilder;
+    public GitMenuBuilder(IdeAppBuilder newIdeAppBuilder) {
+        this.ideAppBuilder = newIdeAppBuilder;
 
         this.gitMenu = new JMenu("Git");
 

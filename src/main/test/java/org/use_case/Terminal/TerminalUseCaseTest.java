@@ -1,14 +1,15 @@
 package main.test.java.org.use_case.Terminal;
 
-import org.junit.jupiter.api.Test;
+
+import org.junit.Test;
 import use_case.TerminalOperations.TerminalOperations;
 import view.TerminalObj;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TerminalUseCaseTest {
 

@@ -9,7 +9,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import app.IDEAppBuilder;
+import app.IdeAppBuilder;
 import entity.LeftIdeJtabbedPane;
 import entity.ParentIdeJtabbedPane;
 import entity.RightIdeJtabbedPane;
@@ -36,7 +36,7 @@ public final class PopupMenuHandler {
      * @param appBuilder The main application builder containing IDE components.
      * @return A JPopupMenu instance for tab management.
      */
-    public static JPopupMenu createTabPopup(ParentIdeJtabbedPane tabbedPane, IDEAppBuilder appBuilder) {
+    public static JPopupMenu createTabPopup(ParentIdeJtabbedPane tabbedPane, IdeAppBuilder appBuilder) {
         
         JMenuItem closeAllTabs = new JMenuItem("Close All Tabs");
         closeAllTabs.addActionListener(closeAllListener -> EditorOperations.closeAllTabs(tabbedPane));
@@ -77,7 +77,7 @@ public final class PopupMenuHandler {
      * @param appBuilder The main application builder.
      * @param tabAction The menu item for merge/split actions.
      */
-    private static void addTypeDependentListener(ParentIdeJtabbedPane tabbedPane, IDEAppBuilder appBuilder,
+    private static void addTypeDependentListener(ParentIdeJtabbedPane tabbedPane, IdeAppBuilder appBuilder,
                                                  JMenuItem tabAction) {
         if (tabbedPane instanceof RightIdeJtabbedPane) {
             tabAction.setText("Merge Tab");
