@@ -1,5 +1,8 @@
 package entity;
 
+import use_case.git.CredentialUseCase;
+import use_case.git.SecureKeyManager;
+
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

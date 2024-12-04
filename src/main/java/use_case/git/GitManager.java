@@ -1,4 +1,4 @@
-package entity;
+package use_case.git;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,6 @@ import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.errors.NoRemoteRepositoryException;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -44,8 +43,6 @@ public class GitManager {
         }
 
         this.currentDirectory = new File(directoryPath);
-        System.out.println("Cloning into: " + directoryPath);
-
         try {
             this.currentRepository = Git.cloneRepository()
                     .setURI(repoUrl)
@@ -150,12 +147,10 @@ public class GitManager {
      * Push changes to a remote repository.
      * @param credential The [username, password] for authentication
      * @throws GitAPIException if push fails
-     * @throws NoRemoteRepositoryException if there is no remote
      * @throws IllegalStateException if there is no repo
      * @throws IllegalArgumentException if login fails
-     * @throws Exception if something else breaks TODO don't do this
      */
-    public void pushChanges(String[] credential) throws Exception, GitAPIException, IllegalStateException, IllegalArgumentException {
+    public void pushChanges(String[] credential) throws GitAPIException, IllegalStateException, IllegalArgumentException {
         if (currentRepository == null) {
             throw new IllegalStateException("No repository is currently opened. Open or clone a repository first.");
         }

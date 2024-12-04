@@ -7,6 +7,7 @@ import javax.crypto.SecretKey;
 import javax.security.auth.login.LoginException;
 
 import entity.CredentialEncryption;
+import view.GitMenuBuilder;
 
 public class CredentialUseCase {
     private static final String CREDENTIALS_FILE = "credentials.dat";
