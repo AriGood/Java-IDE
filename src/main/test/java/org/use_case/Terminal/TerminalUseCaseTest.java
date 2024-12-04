@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 public class TerminalUseCaseTest {
 
@@ -60,7 +60,7 @@ public class TerminalUseCaseTest {
 
         // Verify the output message
         String result = outputStream.toString().trim();
-        assertTrue(result.contains("Changed directory to"), "Output should indicate directory change.");
+        assertTrue("Output should indicate directory change.", result.contains("Changed directory to"));
     }
 
     @Test
@@ -85,7 +85,7 @@ public class TerminalUseCaseTest {
 
         // Verify the error message
         String result = outputStream.toString().trim();
-        assertTrue(result.contains("Error"), "Output should indicate an error for an invalid command.");
+        assertTrue("Output should indicate an error for an invalid command.", result.contains("Error"));
     }
 
     @Test
@@ -110,7 +110,8 @@ public class TerminalUseCaseTest {
 
         // Verify that the output contains expected messages
         String result = outputStream.toString().trim();
-        assertTrue(result.contains("Error") || result.contains("Sample"), "Output should indicate success or an error for 'run' command.");
+        assertTrue("Output should indicate success or an error for 'run' command.",
+                result.contains("Error") || result.contains("Sample"));
     }
 }
 
