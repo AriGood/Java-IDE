@@ -3,7 +3,7 @@
  */
 package use_caseTest.EditorOperationsTest;
 
-import app.IdeAppBuilder;
+import app.IDEAppBuilder;
 import entity.LeftIdeJtabbedPane;
 import entity.RightIdeJtabbedPane;
 import org.junit.Test;
@@ -20,12 +20,12 @@ import static org.junit.Assert.*;
 public class EditorOperationsTest {
 
     /**
-     * Utility method to create and initialize an IdeAppBuilder instance for testing.
+     * Utility method to create and initialize an IDEAppBuilder instance for testing.
      *
-     * @return a fully built instance of IdeAppBuilder
+     * @return a fully built instance of IDEAppBuilder
      */
-    private IdeAppBuilder makeTestBuilder() {
-        IdeAppBuilder app = new IdeAppBuilder();
+    private IDEAppBuilder makeTestBuilder() {
+        IDEAppBuilder app = new IDEAppBuilder();
         app.build();
         app.buildIde();
 
@@ -40,7 +40,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testCloseAbstractTabLeft() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
         RightIdeJtabbedPane rightTabbedPane = new RightIdeJtabbedPane(app);
 
@@ -73,7 +73,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testCloseAbstractTabRight() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
         RightIdeJtabbedPane rightTabbedPane = new RightIdeJtabbedPane(app);
 
@@ -106,7 +106,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testIsDuplicate() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
@@ -135,7 +135,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testAddTab() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
@@ -165,7 +165,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testCloseTab() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
         RightIdeJtabbedPane rightTabbedPane = new RightIdeJtabbedPane(app);
 
@@ -202,7 +202,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testGetFileIndex() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
         RightIdeJtabbedPane rightTabbedPane = new RightIdeJtabbedPane(app);
 
@@ -237,7 +237,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testCloseAllTabs() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
@@ -268,7 +268,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testCloseOtherTabs() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
@@ -299,7 +299,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testCloseTabsToLeft() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
@@ -330,7 +330,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testCloseTabsToRight() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];
@@ -361,7 +361,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testMergeTab() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
         RightIdeJtabbedPane rightTabbedPane = new RightIdeJtabbedPane(app);
         JSplitPane newSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftTabbedPane, rightTabbedPane);
@@ -399,7 +399,7 @@ public class EditorOperationsTest {
      */
     @Test
     public void testSplitTab() throws IOException {
-        IdeAppBuilder app = makeTestBuilder();
+        IDEAppBuilder app = makeTestBuilder();
         LeftIdeJtabbedPane leftTabbedPane = new LeftIdeJtabbedPane(app);
 
         File[] tempFiles = new File[5];

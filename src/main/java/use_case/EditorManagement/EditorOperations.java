@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
-import app.IdeAppBuilder;
+import app.IDEAppBuilder;
 import entity.EditorObj;
 import entity.LeftIdeJtabbedPane;
 import entity.ParentIdeJtabbedPane;
@@ -40,7 +40,7 @@ public final class EditorOperations {
      * @param ideAppBuilder the application builder containing the editor tabbed panes
      * @param file the file whose tab is to be closed
      */
-    public static void closeAbstractTab(IdeAppBuilder ideAppBuilder, File file) {
+    public static void closeAbstractTab(IDEAppBuilder ideAppBuilder, File file) {
         EditorObj editorObj = new EditorObj();
         editorObj.setFile(file);
         if (isDuplicate(file, ideAppBuilder.getLeftEditorTabbedPane())) {
@@ -139,7 +139,7 @@ public final class EditorOperations {
     public static void closeTab(int index, ParentIdeJtabbedPane tabbedPane) {
         EditorObj editorObj = tabbedPane.getEditorObjs().get(index);
         FileOperations.saveFile(editorObj.getFile(), editorObj.getTextArea().getText());
-        IdeAppBuilder ideAppBuilder = tabbedPane.getIdeAppBuilder();
+        IDEAppBuilder ideAppBuilder = tabbedPane.getIdeAppBuilder();
         tabbedPane.remove(index);
         tabbedPane.getEditorObjs().remove(index);
         if (tabbedPane.getEditorObjs().isEmpty() && tabbedPane instanceof RightIdeJtabbedPane) {
@@ -225,7 +225,7 @@ public final class EditorOperations {
      * @param tabbedPane the right tabbed pane from which to merge the tab
      * @param ideAppBuilder the application builder that manages the editor panes
      */
-    public static void mergeTab(int selectedIndex, RightIdeJtabbedPane tabbedPane, IdeAppBuilder ideAppBuilder) {
+    public static void mergeTab(int selectedIndex, RightIdeJtabbedPane tabbedPane, IDEAppBuilder ideAppBuilder) {
         tabbedPane.setSelectedIndex(selectedIndex);
         EditorObj editorObj = tabbedPane.getEditorObjs().get(selectedIndex);
         EditorOperations.closeTab(selectedIndex, tabbedPane);
@@ -248,7 +248,7 @@ public final class EditorOperations {
      * @param tabbedPane the left tabbed pane containing the tab
      * @param ideAppBuilder the application builder that manages the editor panes
      */
-    public static void splitTab(int selectedIndex, LeftIdeJtabbedPane tabbedPane, IdeAppBuilder ideAppBuilder) {
+    public static void splitTab(int selectedIndex, LeftIdeJtabbedPane tabbedPane, IDEAppBuilder ideAppBuilder) {
         EditorObj editorObj = tabbedPane.getEditorObjs().get(selectedIndex);
         RightIdeJtabbedPane newTabbedPane = new RightIdeJtabbedPane(ideAppBuilder);
         EditorOperations.addTab(editorObj.getFile(), newTabbedPane);

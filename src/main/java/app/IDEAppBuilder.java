@@ -36,7 +36,7 @@ import view.TerminalObj;
 /**
  * Builder for the IDE Application.
  */
-public class IdeAppBuilder {
+public class IDEAppBuilder {
     public static final int HEIGHT = 600;
     public static final int WIDTH = 800;
     public static final int LEFT_RIGHT_DIVIDER = 300;

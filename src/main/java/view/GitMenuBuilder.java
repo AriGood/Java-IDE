@@ -9,20 +9,20 @@ import javax.swing.*;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 
-import app.IdeAppBuilder;
+import app.IDEAppBuilder;
 import use_case.git.CredentialUseCase;
 
 
 public class GitMenuBuilder {
     private final JMenu gitMenu;
-    private final IdeAppBuilder ideAppBuilder;
+    private final IDEAppBuilder ideAppBuilder;
 
     /**
      * Initializes the builder for the Git menu.
-     * @param newIdeAppBuilder current Ide window
+     * @param newIDEAppBuilder current Ide window
      */
-    public GitMenuBuilder(IdeAppBuilder newIdeAppBuilder) {
-        this.ideAppBuilder = newIdeAppBuilder;
+    public GitMenuBuilder(IDEAppBuilder newIDEAppBuilder) {
+        this.ideAppBuilder = newIDEAppBuilder;
 
         this.gitMenu = new JMenu("Git");
 

@@ -7,7 +7,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
-import app.IdeAppBuilder;
+import app.IDEAppBuilder;
 import use_case.FileManagement.FileTreeGenerator;
 
 /**
@@ -15,7 +15,7 @@ import use_case.FileManagement.FileTreeGenerator;
  */
 public class FileTreeObj {
     private final FileTreeGenerator fileTreeGenerator;
-    private final IdeAppBuilder appBuilder;
+    private final IDEAppBuilder appBuilder;
     private final FileTreeObj fileTreeO = this;
     private File directory;
     private JTree fileTree;
@@ -26,7 +26,7 @@ public class FileTreeObj {
      * @param directory  The root directory of the file tree.
      * @param appBuilder The app builder instance for file handling.
      */
-    public FileTreeObj(File directory, IdeAppBuilder appBuilder) {
+    public FileTreeObj(File directory, IDEAppBuilder appBuilder) {
         this.directory = directory;
         this.fileTreeGenerator = new FileTreeGenerator();
         this.appBuilder = appBuilder;
@@ -163,7 +163,7 @@ public class FileTreeObj {
         return directory;
     }
 
-    public IdeAppBuilder getAppBuilder() {
+    public IDEAppBuilder getAppBuilder() {
         return appBuilder;
     }
 }
